@@ -1,13 +1,18 @@
 import uuid
+from datetime import timedelta
 
-from fastapi import APIRouter, Depends, HTTPException, Response
+import pyotp
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Response
 from sqlalchemy import delete, select
 from sqlalchemy.orm import Session
 
+from app.config import settings
 from app.database import get_db
 from app.deps import get_current_user, get_roles, require_admin
 from app.models import Role, User, UserRole
-from app.schemas import PasswordChange, UserCreate, UserOut, UserUpdate
+from app.otp import OtpStart, finish_setup, start_setup
+from app.routers.account import send_link
+from app.schemas import OtpConfirm, OtpPassword, PasswordChange, UserCreate, UserInvite, UserOut, UserUpdate
 from app.security import hash_password, verify_password
 
 router = APIRouter(prefix="/users", tags=["users"])
@@ -16,7 +21,20 @@ router = APIRouter(prefix="/users", tags=["users"])
 def to_out(db: Session, user: User) -> UserOut:
     out = UserOut.model_validate(user)
     out.roles = get_roles(db, user.id)
+    out.pending = user.hashed_password is None
     return out
+
+
+def send_admin_link(kind: str, user: User, tasks: BackgroundTasks) -> None:
+    hours = settings.admin_link_hours
+    send_link(kind, user, timedelta(hours=hours), f"{hours} h", tasks)
+
+
+def check_password_and_otp(user: User, data: OtpPassword) -> None:
+    if not user.hashed_password or not verify_password(data.password, user.hashed_password):
+        raise HTTPException(status_code=400, detail="Passwort falsch")
+    if user.otp_enabled and not (data.otp and pyotp.TOTP(user.otp_secret).verify(data.otp)):
+        raise HTTPException(status_code=400, detail="OTP-Code falsch")
 
 
 def set_roles(db: Session, user: User, names: list[str], actor_id: uuid.UUID) -> None:
@@ -125,5 +143,73 @@ def deactivate_user(user_id: uuid.UUID, admin: User = Depends(require_admin), db
         raise HTTPException(status_code=400, detail="Eigenen Benutzer nicht deaktivierbar")
     user.active = False
     user.last_modified_by = admin.id
+    db.commit()
+    return Response(status_code=204)
+
+
+@router.post("/invite", response_model=UserOut, status_code=201)
+def invite_user(
+    data: UserInvite,
+    tasks: BackgroundTasks,
+    admin: User = Depends(require_admin),
+    db: Session = Depends(get_db),
+):
+    user = User(
+        username=f"invited-{uuid.uuid4().hex[:12]}",
+        email=data.email,
+        first_name=data.first_name,
+        last_name=data.last_name,
+        created_by=admin.id,
+    )
+    db.add(user)
+    db.flush()
+    set_roles(db, user, data.roles, admin.id)
+    db.commit()
+    send_admin_link("invite", user, tasks)
+    return to_out(db, user)
+
+
+@router.post("/{user_id}/reset-password", status_code=204)
+def admin_reset_password(
+    user_id: uuid.UUID,
+    tasks: BackgroundTasks,
+    _: User = Depends(require_admin),
+    db: Session = Depends(get_db),
+) -> Response:
+    user = get_or_404(db, user_id)
+    send_admin_link("invite" if user.hashed_password is None else "admin_reset", user, tasks)
+    return Response(status_code=204)
+
+
+@router.post("/{user_id}/reset-otp", status_code=204)
+def admin_reset_otp(
+    user_id: uuid.UUID,
+    tasks: BackgroundTasks,
+    _: User = Depends(require_admin),
+    db: Session = Depends(get_db),
+) -> Response:
+    send_admin_link("otp_reset", get_or_404(db, user_id), tasks)
+    return Response(status_code=204)
+
+
+@router.post("/me/otp/start", response_model=OtpStart)
+def otp_start(data: OtpPassword, user: User = Depends(get_current_user)):
+    check_password_and_otp(user, data)
+    return start_setup(user)
+
+
+@router.post("/me/otp/confirm", status_code=204)
+def otp_confirm(data: OtpConfirm, user: User = Depends(get_current_user), db: Session = Depends(get_db)) -> Response:
+    finish_setup(user, data.setup_token, data.code)
+    db.commit()
+    return Response(status_code=204)
+
+
+@router.post("/me/otp/disable", status_code=204)
+def otp_disable(data: OtpPassword, user: User = Depends(get_current_user), db: Session = Depends(get_db)) -> Response:
+    check_password_and_otp(user, data)
+    user.otp_enabled = False
+    user.otp_secret = None
+    user.last_modified_by = user.id
     db.commit()
     return Response(status_code=204)

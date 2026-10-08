@@ -11,6 +11,7 @@ from app.database import get_db
 from app.models import Role, User, UserRole
 
 bearer = HTTPBearer()
+optional_bearer = HTTPBearer(auto_error=False)
 
 
 def get_roles(db: Session, user_id: uuid.UUID) -> list[str]:
@@ -29,6 +30,8 @@ def get_current_user(creds=Depends(bearer), db: Session = Depends(get_db)) -> Us
         payload = jwt.decode(creds.credentials, settings.secret_key, algorithms=["HS256"])
         user_id = uuid.UUID(payload["sub"])
     except (jwt.PyJWTError, KeyError, ValueError):
+        raise unauthorized
+    if "purpose" in payload:
         raise unauthorized
     user = db.get(User, user_id)
     if user is None or not user.active or user.blocked:
@@ -49,5 +52,10 @@ require_admin = require_roles("admin")
 require_editor = require_roles("admin", "user")
 
 
-def read_access() -> None:
-    """Lesezugriff ist derzeit öffentlich; hier auf get_current_user umstellen, um Login zu verlangen."""
+def read_access(creds=Depends(optional_bearer), db: Session = Depends(get_db)) -> None:
+    """Lesezugriff auf die Stammdaten: öffentlich oder nur angemeldet (PUBLIC_SEARCH)."""
+    if settings.public_search:
+        return
+    if creds is None:
+        raise HTTPException(status_code=401, detail="Nicht angemeldet")
+    get_current_user(creds, db)

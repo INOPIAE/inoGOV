@@ -27,6 +27,23 @@ class PasswordChange(BaseModel):
     new_password: str = Field(min_length=8, max_length=128)
 
 
+class UserInvite(BaseModel):
+    email: EmailStr
+    first_name: str | None = Field(default=None, max_length=50)
+    last_name: str | None = Field(default=None, max_length=50)
+    roles: list[str] = ["user"]
+
+
+class OtpPassword(BaseModel):
+    password: str
+    otp: str | None = None
+
+
+class OtpConfirm(BaseModel):
+    setup_token: str
+    code: str
+
+
 class UserOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
@@ -38,4 +55,5 @@ class UserOut(BaseModel):
     active: bool
     blocked: bool
     otp_enabled: bool
+    pending: bool = False
     roles: list[str] = []

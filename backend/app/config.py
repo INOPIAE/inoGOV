@@ -17,6 +17,25 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int = 60
     lockout_tiers: str = "3:3,5:10,10:60"
 
+    app_name: str = "inoGOV"
+    copyright_name: str = "inoGOV"
+    public_search: bool = True
+    frontend_url: str = "http://localhost:5173"
+    cors_origins: str = "http://localhost:5173"
+    password_reset_minutes: int = 60
+    admin_link_hours: int = 24
+
+    smtp_server: str = ""
+    smtp_port: int = 587
+    smtp_user: str = ""
+    smtp_password: str = ""
+    smtp_from_email: str = "noreply@localhost"
+    smtp_from_name: str = "inoGOV"
+
+    @property
+    def cors_origin_list(self) -> list[str]:
+        return [o.strip() for o in self.cors_origins.split(",") if o.strip()]
+
     @property
     def lockout_tier_list(self) -> list[tuple[int, int]]:
         return parse_tiers(self.lockout_tiers)

@@ -1,0 +1,42 @@
+/* Zentrale Farbkonfiguration: hier anpassen, Bootstrap-Variablen werden überschrieben. */
+:root {
+  --ino-primary: #1f5f8b;
+  --ino-primary-hover: #174a6d;
+  --ino-primary-rgb: 31, 95, 139;
+  --ino-header-bg: #1f5f8b;
+  --ino-header-fg: #ffffff;
+  --ino-nav-bg: #f1f4f7;
+  --ino-nav-link: #28333d;
+  --ino-nav-active-bg: #d9e6f0;
+  --ino-nav-active-fg: #174a6d;
+  --ino-footer-bg: #e6ebf0;
+  --ino-footer-fg: #44505b;
+  --ino-body-bg: #ffffff;
+
+  --bs-primary: var(--ino-primary);
+  --bs-primary-rgb: var(--ino-primary-rgb);
+  --bs-link-color: var(--ino-primary);
+  --bs-link-color-rgb: var(--ino-primary-rgb);
+  --bs-link-hover-color: var(--ino-primary-hover);
+  --bs-body-bg: var(--ino-body-bg);
+}
+
+.btn-primary {
+  --bs-btn-bg: var(--ino-primary);
+  --bs-btn-border-color: var(--ino-primary);
+  --bs-btn-hover-bg: var(--ino-primary-hover);
+  --bs-btn-hover-border-color: var(--ino-primary-hover);
+  --bs-btn-active-bg: var(--ino-primary-hover);
+  --bs-btn-active-border-color: var(--ino-primary-hover);
+  --bs-btn-disabled-bg: var(--ino-primary);
+  --bs-btn-disabled-border-color: var(--ino-primary);
+}
+
+.btn-outline-primary {
+  --bs-btn-color: var(--ino-primary);
+  --bs-btn-border-color: var(--ino-primary);
+  --bs-btn-hover-bg: var(--ino-primary);
+  --bs-btn-hover-border-color: var(--ino-primary);
+  --bs-btn-active-bg: var(--ino-primary);
+  --bs-btn-active-border-color: var(--ino-primary);
+}

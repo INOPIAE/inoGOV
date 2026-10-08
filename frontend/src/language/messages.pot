@@ -1,0 +1,512 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+
+#: src/components/SideNav.vue
+msgid "API documentation"
+msgstr ""
+
+#: src/components/SideNav.vue src/views/InfoView.vue
+msgid "About us"
+msgstr ""
+
+#: src/views/UsersView.vue
+msgid "Active"
+msgstr ""
+
+#: src/components/NamesEditor.vue src/views/ManageKartenView.vue
+msgid "Add"
+msgstr ""
+
+#: src/views/ManageKreiseView.vue src/views/ManageOrteView.vue
+msgid "Addition"
+msgstr ""
+
+#: src/views/HomeView.vue
+msgid "All districts"
+msgstr ""
+
+#: src/views/ResetPasswordView.vue src/views/SetupAccountView.vue
+msgid "At least 8 characters."
+msgstr ""
+
+#: src/composables/useErrors.js
+msgid "Authentication failed."
+msgstr ""
+
+#: src/views/ForgotPasswordView.vue
+msgid "Back to login"
+msgstr ""
+
+#: src/views/UsersView.vue
+msgid "Blocked"
+msgstr ""
+
+#: src/views/AccountView.vue src/views/UsersView.vue
+msgid "Cancel"
+msgstr ""
+
+#: src/views/AccountView.vue
+msgid "Change password"
+msgstr ""
+
+#: src/views/ManageKreiseView.vue src/views/ManageOrteView.vue
+msgid "Comment"
+msgstr ""
+
+#: src/components/OtpSetup.vue
+msgid "Confirm"
+msgstr ""
+
+#: src/views/AccountView.vue src/views/SetupAccountView.vue
+msgid "Continue"
+msgstr ""
+
+#: src/views/HomeView.vue
+msgid "Coordinates"
+msgstr ""
+
+#: src/components/OtpSetup.vue
+msgid "Copied"
+msgstr ""
+
+#: src/components/OtpSetup.vue
+msgid "Copy"
+msgstr ""
+
+#: src/views/AccountView.vue
+msgid "Current one-time code"
+msgstr ""
+
+#: src/views/AccountView.vue
+msgid "Current password"
+msgstr ""
+
+#: src/views/ManageKreiseView.vue src/views/ManageOrteView.vue
+msgid "Delete"
+msgstr ""
+
+#: src/views/AccountView.vue
+msgid "Disable OTP"
+msgstr ""
+
+#: src/views/HomeView.vue src/views/ManageOrteView.vue
+msgid "District"
+msgstr ""
+
+#: src/views/ManageKreiseView.vue
+msgid "District name"
+msgstr ""
+
+#: src/views/ManageKreiseView.vue
+msgid "District names"
+msgstr ""
+
+#: src/components/SideNav.vue src/views/ManageKreiseView.vue
+msgid "Districts"
+msgstr ""
+
+#: src/views/UsersView.vue
+msgid "Edit"
+msgstr ""
+
+#: src/views/UsersView.vue
+msgid "Edit user"
+msgstr ""
+
+#: src/views/AccountView.vue src/views/ForgotPasswordView.vue src/views/UsersView.vue
+msgid "Email address"
+msgstr ""
+
+#: src/views/UsersView.vue
+msgid "Email with a link has been sent."
+msgstr ""
+
+#: src/components/OtpSetup.vue
+msgid "Enter a new code from the app to finish the setup"
+msgstr ""
+
+#: src/views/UsersView.vue
+msgid "First name"
+msgstr ""
+
+#: src/views/LoginView.vue
+msgid "Forgot your password?"
+msgstr ""
+
+#: src/views/ManageKartenView.vue
+msgid "Grid square"
+msgstr ""
+
+#: src/views/ForgotPasswordView.vue
+msgid "If the address is known, an email with a link has been sent."
+msgstr ""
+
+#: src/components/SideNav.vue src/views/InfoView.vue
+msgid "Imprint"
+msgstr ""
+
+#: src/views/UsersView.vue
+msgid "Inactive"
+msgstr ""
+
+#: src/components/SideNav.vue
+msgid "Information"
+msgstr ""
+
+#: src/views/InfoView.vue
+msgid "Information about the project and its operators will be published here."
+msgstr ""
+
+#: src/views/AccountView.vue
+msgid "Interface language"
+msgstr ""
+
+#: src/composables/useErrors.js
+msgid "Invalid input."
+msgstr ""
+
+#: src/views/UsersView.vue
+msgid "Invitation sent."
+msgstr ""
+
+#: src/views/UsersView.vue
+msgid "Invite"
+msgstr ""
+
+#: src/views/UsersView.vue
+msgid "Invite new user"
+msgstr ""
+
+#: src/views/UsersView.vue
+msgid "Invited"
+msgstr ""
+
+#: src/components/AppHeader.vue src/components/NamesEditor.vue
+msgid "Language"
+msgstr ""
+
+#: src/views/UsersView.vue
+msgid "Last name"
+msgstr ""
+
+#: src/views/ManageOrteView.vue
+msgid "Latitude"
+msgstr ""
+
+#: src/views/HomeView.vue
+msgid "Links"
+msgstr ""
+
+#: src/components/SideNav.vue src/views/LoginView.vue src/views/OtpLinkView.vue src/views/ResetPasswordView.vue
+msgid "Log in"
+msgstr ""
+
+#: src/components/SideNav.vue
+msgid "Log out"
+msgstr ""
+
+#: src/views/ManageOrteView.vue
+msgid "Longitude"
+msgstr ""
+
+#: src/components/SideNav.vue
+msgid "Main navigation"
+msgstr ""
+
+#: src/components/SideNav.vue
+msgid "Management"
+msgstr ""
+
+#: src/views/HomeView.vue src/views/ManageKartenView.vue
+msgid "Map"
+msgstr ""
+
+#: src/components/SideNav.vue src/views/HomeView.vue src/views/ManageKartenView.vue
+msgid "Maps"
+msgstr ""
+
+#: src/components/SideNav.vue src/views/AccountView.vue
+msgid "My account"
+msgstr ""
+
+#: src/views/ManageKreiseView.vue
+msgid "New district"
+msgstr ""
+
+#: src/views/AccountView.vue src/views/ResetPasswordView.vue
+msgid "New password"
+msgstr ""
+
+#: src/views/ManageOrteView.vue
+msgid "New place"
+msgstr ""
+
+#: src/views/HomeView.vue
+msgid "Next"
+msgstr ""
+
+#: src/views/ManageKartenView.vue
+msgid "No map references yet."
+msgstr ""
+
+#: src/views/HomeView.vue
+msgid "No places found."
+msgstr ""
+
+#: src/composables/useErrors.js
+msgid "Not found."
+msgstr ""
+
+#: src/components/AppFooter.vue
+msgid "Not signed in"
+msgstr ""
+
+#: src/views/AccountView.vue
+msgid "OTP has been disabled."
+msgstr ""
+
+#: src/views/AccountView.vue src/views/OtpLinkView.vue
+msgid "OTP has been set up."
+msgstr ""
+
+#: src/views/AccountView.vue
+msgid "OTP is enabled."
+msgstr ""
+
+#: src/views/AccountView.vue
+msgid "OTP is not enabled."
+msgstr ""
+
+#: src/views/LoginView.vue
+msgid "One-time code"
+msgstr ""
+
+#: src/views/AccountView.vue
+msgid "One-time code (OTP)"
+msgstr ""
+
+#: src/views/AccountView.vue src/views/LoginView.vue src/views/SetupAccountView.vue
+msgid "Password"
+msgstr ""
+
+#: src/views/AccountView.vue
+msgid "Password or code is wrong."
+msgstr ""
+
+#: src/views/HomeView.vue
+msgid "Place"
+msgstr ""
+
+#: src/views/HomeView.vue src/views/ManageKartenView.vue src/views/ManageOrteView.vue
+msgid "Place name"
+msgstr ""
+
+#: src/views/ManageOrteView.vue
+msgid "Place names"
+msgstr ""
+
+#: src/components/SideNav.vue src/views/ManageOrteView.vue
+msgid "Places"
+msgstr ""
+
+#: src/views/HomeView.vue
+msgid "Previous"
+msgstr ""
+
+#: src/components/SideNav.vue src/views/InfoView.vue
+msgid "Privacy"
+msgstr ""
+
+#: src/components/OtpSetup.vue
+msgid "QR code for the authenticator app"
+msgstr ""
+
+#: src/views/ManageKreiseView.vue
+msgid "Really delete this district?"
+msgstr ""
+
+#: src/views/ManageOrteView.vue
+msgid "Really delete this place?"
+msgstr ""
+
+#: src/components/NamesEditor.vue src/views/ManageKartenView.vue
+msgid "Remove"
+msgstr ""
+
+#: src/views/AccountView.vue src/views/ResetPasswordView.vue src/views/SetupAccountView.vue
+msgid "Repeat password"
+msgstr ""
+
+#: src/views/UsersView.vue
+msgid "Resend invitation"
+msgstr ""
+
+#: src/views/AccountView.vue src/views/UsersView.vue
+msgid "Reset OTP"
+msgstr ""
+
+#: src/views/ForgotPasswordView.vue src/views/UsersView.vue
+msgid "Reset password"
+msgstr ""
+
+#: src/views/UsersView.vue
+msgid "Resetting sends the user an email with a link."
+msgstr ""
+
+#: src/views/AccountView.vue src/views/UsersView.vue
+msgid "Roles"
+msgstr ""
+
+#: src/views/ManageKreiseView.vue src/views/ManageOrteView.vue src/views/ResetPasswordView.vue src/views/UsersView.vue
+msgid "Save"
+msgstr ""
+
+#: src/views/ManageKreiseView.vue
+msgid "Save the district first, then add names."
+msgstr ""
+
+#: src/views/ManageOrteView.vue
+msgid "Save the place first, then add names."
+msgstr ""
+
+#: src/views/ManageKreiseView.vue src/views/ManageOrteView.vue src/views/UsersView.vue
+msgid "Saved."
+msgstr ""
+
+#: src/components/OtpSetup.vue
+msgid "Scan the QR code with your authenticator app or enter the key manually."
+msgstr ""
+
+#: src/views/HomeView.vue src/views/ManageKartenView.vue src/views/ManageKreiseView.vue src/views/ManageOrteView.vue
+msgid "Search"
+msgstr ""
+
+#: src/components/SideNav.vue src/views/HomeView.vue
+msgid "Search places"
+msgstr ""
+
+#: src/components/OtpSetup.vue
+msgid "Secret key"
+msgstr ""
+
+#: src/views/ForgotPasswordView.vue
+msgid "Send link"
+msgstr ""
+
+#: src/views/ResetPasswordView.vue
+msgid "Set a new password"
+msgstr ""
+
+#: src/views/AccountView.vue src/views/OtpLinkView.vue src/views/SetupAccountView.vue
+msgid "Set up OTP"
+msgstr ""
+
+#: src/views/SetupAccountView.vue
+msgid "Set up your account"
+msgstr ""
+
+#: src/components/AppFooter.vue
+msgid "Signed in as %{user} (%{roles})"
+msgstr ""
+
+#: src/views/SetupAccountView.vue
+msgid "Skip"
+msgstr ""
+
+#: src/views/UsersView.vue
+msgid "Status"
+msgstr ""
+
+#: src/components/OtpSetup.vue
+msgid "The code is wrong or the setup has expired."
+msgstr ""
+
+#: src/views/LoginView.vue
+msgid "The code or the credentials are wrong."
+msgstr ""
+
+#: src/views/AccountView.vue
+msgid "The current password is wrong."
+msgstr ""
+
+#: src/views/InfoView.vue
+msgid "The legal notice will be published here."
+msgstr ""
+
+#: src/views/ResetPasswordView.vue src/views/SetupAccountView.vue
+msgid "The passwords do not match."
+msgstr ""
+
+#: src/views/InfoView.vue
+msgid "The privacy policy will be published here."
+msgstr ""
+
+#: src/composables/useErrors.js
+msgid "The request was rejected. Please check your input or the link."
+msgstr ""
+
+#: src/composables/useErrors.js
+msgid "The server cannot be reached."
+msgstr ""
+
+#: src/views/LoginView.vue
+msgid "This account is blocked."
+msgstr ""
+
+#: src/composables/useErrors.js
+msgid "This entry already exists."
+msgstr ""
+
+#: src/views/OtpLinkView.vue src/views/ResetPasswordView.vue src/views/SetupAccountView.vue
+msgid "This link is invalid or has expired."
+msgstr ""
+
+#: src/components/AppHeader.vue
+msgid "Toggle navigation"
+msgstr ""
+
+#: src/composables/useErrors.js
+msgid "Too many failed attempts. Please try again later."
+msgstr ""
+
+#: src/composables/useErrors.js
+msgid "Too many failed attempts. Try again in %{minutes} minute(s)."
+msgstr ""
+
+#: src/composables/useErrors.js
+msgid "Unexpected error."
+msgstr ""
+
+#: src/components/SideNav.vue src/views/UsersView.vue
+msgid "User management"
+msgstr ""
+
+#: src/views/AccountView.vue src/views/LoginView.vue src/views/SetupAccountView.vue src/views/UsersView.vue
+msgid "Username"
+msgstr ""
+
+#: src/views/LoginView.vue
+msgid "Username or password is wrong."
+msgstr ""
+
+#: src/components/SideNav.vue
+msgid "Users"
+msgstr ""
+
+#: src/views/SetupAccountView.vue
+msgid "Welcome! Choose a username and a password for %{email}."
+msgstr ""
+
+#: src/composables/useErrors.js
+msgid "You are not allowed to do this."
+msgstr ""
+
+#: src/views/SetupAccountView.vue
+msgid "Your account is ready. You can protect it with a one-time code (OTP) now or later in \"My account\"."
+msgstr ""
+
+#: src/views/AccountView.vue src/views/ResetPasswordView.vue
+msgid "Your password has been changed."
+msgstr ""
+

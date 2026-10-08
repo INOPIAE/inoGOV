@@ -52,7 +52,9 @@ def login(data: LoginRequest, db: Session = Depends(get_db)) -> TokenResponse:
 
     ok = bool(user.hashed_password) and verify_password(data.password, user.hashed_password)
     if ok and user.otp_enabled:
-        ok = bool(data.otp) and bool(user.otp_secret) and pyotp.TOTP(user.otp_secret).verify(data.otp)
+        if not data.otp:
+            raise HTTPException(status_code=401, detail="otp_required")
+        ok = bool(user.otp_secret) and pyotp.TOTP(user.otp_secret).verify(data.otp)
 
     if not ok:
         user.unsuccessful_logins += 1

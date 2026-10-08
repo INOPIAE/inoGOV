@@ -82,6 +82,13 @@ def test_manually_blocked(client, db):
 
 def test_otp_required(client, db):
     secret = pyotp.random_base32()
-    make_user(db, otp_enabled=True, otp_secret=secret)
-    assert login(client).status_code == 401
+    user = make_user(db, otp_enabled=True, otp_secret=secret)
+    missing = login(client)
+    assert missing.status_code == 401
+    assert missing.json()["detail"] == "otp_required"
+    db.refresh(user)
+    assert user.unsuccessful_logins == 0
+    assert login(client, otp="000000").status_code == 401
+    db.refresh(user)
+    assert user.unsuccessful_logins == 1
     assert login(client, otp=pyotp.TOTP(secret).now()).status_code == 200

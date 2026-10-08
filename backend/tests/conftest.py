@@ -1,6 +1,10 @@
 import os
 
 os.environ.setdefault("SECRET_KEY", "test-secret")
+# Tests sollen unabhängig von der lokalen .env laufen
+os.environ["PUBLIC_SEARCH"] = "true"
+os.environ["LOCKOUT_TIERS"] = "3:3,5:10,10:60"
+os.environ["SMTP_SERVER"] = ""
 
 import pytest
 from fastapi.testclient import TestClient
@@ -12,6 +16,14 @@ from app.database import get_db
 from app.main import app
 from app.models import Base, Role, User, UserRole
 from app.security import hash_password
+
+import app.security as security  # noqa: E402
+from pwdlib import PasswordHash  # noqa: E402
+from pwdlib.hashers.argon2 import Argon2Hasher  # noqa: E402
+
+# Schwache Parameter, nur für schnelle Tests
+security._hasher = PasswordHash((Argon2Hasher(time_cost=1, memory_cost=1024, parallelism=1),))
+security.DUMMY_HASH = security._hasher.hash("dummy-password")
 
 
 @pytest.fixture
