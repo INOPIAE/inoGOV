@@ -96,13 +96,20 @@ def test_invite_and_setup(client, admin_h, mails):
     assert response.json()["pending"] is True
     token = token_from(mails)
 
-    setup = client.post("/auth/setup-account", json={"token": token, "username": "neuer", "password": "passwort1"})
+    setup = client.post(
+        "/auth/setup-account",
+        json={"token": token, "username": "neuer", "password": "passwort1", "first_name": "Ann", "last_name": ""},
+    )
     assert setup.status_code == 200
     me = client.get("/users/me", headers={"Authorization": f"Bearer {setup.json()['access_token']}"}).json()
     assert me["username"] == "neuer" and me["pending"] is False
+    assert me["first_name"] == "Ann" and me["last_name"] is None
     assert login(client, "neuer", "passwort1").status_code == 200
     # Link ist einmalig
-    again = client.post("/auth/setup-account", json={"token": token, "username": "zweiter", "password": "passwort1"})
+    again = client.post(
+        "/auth/setup-account",
+        json={"token": token, "username": "zweiter", "password": "passwort1", "first_name": "Bob"},
+    )
     assert again.status_code == 400
 
 
@@ -113,7 +120,10 @@ def test_invite_requires_admin(client, user_h):
 def test_setup_username_taken(client, admin_h, mails):
     client.post("/users/invite", json={"email": "neu@example.com"}, headers=admin_h)
     token = token_from(mails)
-    response = client.post("/auth/setup-account", json={"token": token, "username": "boss", "password": "passwort1"})
+    response = client.post(
+        "/auth/setup-account",
+        json={"token": token, "username": "boss", "password": "passwort1", "last_name": "Muster"},
+    )
     assert response.status_code == 409
 
 

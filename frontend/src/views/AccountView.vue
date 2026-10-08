@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { api } from '../api'
 import { UI_LANGUAGES, setLanguage } from '../i18n'
@@ -11,6 +11,36 @@ const gettext = useGettext()
 const { $gettext } = gettext
 const { errorText } = useErrors()
 const auth = useAuthStore()
+
+// Profil
+const profile = ref({
+  first_name: auth.user.first_name ?? '',
+  last_name: auth.user.last_name ?? '',
+  email: auth.user.email,
+  current_password: '',
+})
+const profileMessage = ref('')
+const profileError = ref('')
+const emailChanged = computed(() => profile.value.email.trim().toLowerCase() !== auth.user.email.toLowerCase())
+const hasName = computed(() => !!(profile.value.first_name.trim() || profile.value.last_name.trim()))
+
+async function saveProfile() {
+  if (!hasName.value) return
+  profileMessage.value = profileError.value = ''
+  const body = {
+    first_name: profile.value.first_name.trim(),
+    last_name: profile.value.last_name.trim(),
+    email: profile.value.email.trim(),
+  }
+  if (emailChanged.value) body.current_password = profile.value.current_password
+  try {
+    auth.user = await api('/users/me', { method: 'PATCH', body })
+    profile.value.current_password = ''
+    profileMessage.value = $gettext('Your profile has been saved.')
+  } catch (e) {
+    profileError.value = e?.status === 400 ? $gettext('The current password is wrong.') : errorText(e)
+  }
+}
 
 // Passwort ändern
 const pw = ref({ current: '', next: '', repeat: '' })
@@ -80,14 +110,38 @@ async function otpDone() {
 
     <section class="card mb-4">
       <div class="card-body">
-        <dl class="row mb-0">
-          <dt class="col-sm-3">{{ $gettext('Username') }}</dt>
-          <dd class="col-sm-9">{{ auth.user.username }}</dd>
-          <dt class="col-sm-3">{{ $gettext('Email address') }}</dt>
-          <dd class="col-sm-9">{{ auth.user.email }}</dd>
-          <dt class="col-sm-3">{{ $gettext('Roles') }}</dt>
-          <dd class="col-sm-9">{{ auth.roles.join(', ') }}</dd>
-        </dl>
+        <h2 class="h5">{{ $gettext('Profile') }}</h2>
+        <div v-if="profileMessage" class="alert alert-success" role="status" data-test="profile-saved">{{ profileMessage }}</div>
+        <div v-if="profileError" class="alert alert-danger" role="alert">{{ profileError }}</div>
+        <form @submit.prevent="saveProfile">
+          <div class="mb-3">
+            <label class="form-label" for="profile-username">{{ $gettext('Username') }}</label>
+            <input id="profile-username" class="form-control" :value="auth.user.username" readonly />
+            <div class="form-text">{{ $gettext('The username cannot be changed.') }}</div>
+          </div>
+          <div class="row g-2 mb-3">
+            <div class="col-12 col-sm-6">
+              <label class="form-label" for="profile-first">{{ $gettext('First name') }}</label>
+              <input id="profile-first" v-model="profile.first_name" class="form-control" maxlength="50" />
+            </div>
+            <div class="col-12 col-sm-6">
+              <label class="form-label" for="profile-last">{{ $gettext('Last name') }}</label>
+              <input id="profile-last" v-model="profile.last_name" class="form-control" maxlength="50" />
+            </div>
+            <div class="form-text" :class="{ 'text-danger': !hasName }">
+              {{ $gettext('At least one of first name and last name is required.') }}
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="profile-email">{{ $gettext('Email address') }}</label>
+            <input id="profile-email" v-model="profile.email" type="email" class="form-control" autocomplete="email" required />
+          </div>
+          <div v-if="emailChanged" class="mb-3" data-test="email-password">
+            <label class="form-label" for="profile-password">{{ $gettext('Current password (required to change the email address)') }}</label>
+            <input id="profile-password" v-model="profile.current_password" type="password" class="form-control" autocomplete="current-password" required />
+          </div>
+          <button class="btn btn-primary" type="submit" :disabled="!hasName">{{ $gettext('Save') }}</button>
+        </form>
       </div>
     </section>
 

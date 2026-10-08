@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { api } from '../api'
 import { useAuthStore } from '../stores/auth'
@@ -15,9 +15,13 @@ const token = String(route.query.token ?? '')
 const valid = ref(null)
 const info = ref(null)
 const username = ref('')
+const firstName = ref('')
+const lastName = ref('')
 const password = ref('')
 const repeat = ref('')
 const error = ref('')
+const hasName = computed(() => !!(firstName.value.trim() || lastName.value.trim()))
+const canSubmit = computed(() => hasName.value && password.value === repeat.value)
 // 'account' -> 'otp' (optional) -> fertig
 const step = ref('account')
 
@@ -31,11 +35,18 @@ onMounted(async () => {
 })
 
 async function submit() {
+  if (!canSubmit.value) return
   error.value = ''
   try {
     const data = await api('/auth/setup-account', {
       method: 'POST',
-      body: { token, username: username.value, password: password.value },
+      body: {
+        token,
+        username: username.value,
+        password: password.value,
+        first_name: firstName.value.trim() || null,
+        last_name: lastName.value.trim() || null,
+      },
       auth: false,
     })
     await auth.acceptToken(data.access_token)
@@ -67,6 +78,19 @@ const finish = () => router.push('/')
           <label class="form-label" for="username">{{ $gettext('Username') }}</label>
           <input id="username" v-model="username" class="form-control" maxlength="50" autocomplete="username" required />
         </div>
+        <div class="row g-2 mb-3">
+          <div class="col-12 col-sm-6">
+            <label class="form-label" for="first-name">{{ $gettext('First name') }}</label>
+            <input id="first-name" v-model="firstName" class="form-control" maxlength="50" autocomplete="given-name" />
+          </div>
+          <div class="col-12 col-sm-6">
+            <label class="form-label" for="last-name">{{ $gettext('Last name') }}</label>
+            <input id="last-name" v-model="lastName" class="form-control" maxlength="50" autocomplete="family-name" />
+          </div>
+          <div class="form-text" :class="{ 'text-danger': !hasName && (firstName || lastName || password) }">
+            {{ $gettext('At least one of first name and last name is required.') }}
+          </div>
+        </div>
         <div class="mb-3">
           <label class="form-label" for="password">{{ $gettext('Password') }}</label>
           <input id="password" v-model="password" type="password" class="form-control" minlength="8" autocomplete="new-password" required />
@@ -77,7 +101,7 @@ const finish = () => router.push('/')
           <input id="repeat" v-model="repeat" type="password" class="form-control" autocomplete="new-password" required />
           <div v-if="repeat && repeat !== password" class="text-danger small">{{ $gettext('The passwords do not match.') }}</div>
         </div>
-        <button class="btn btn-primary w-100" type="submit" :disabled="password !== repeat">{{ $gettext('Continue') }}</button>
+        <button class="btn btn-primary w-100" type="submit" :disabled="!canSubmit">{{ $gettext('Continue') }}</button>
       </form>
     </template>
 

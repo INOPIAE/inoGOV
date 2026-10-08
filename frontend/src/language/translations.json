@@ -8,6 +8,7 @@
     "Addition": "Zusatz",
     "All districts": "Alle Kreise",
     "At least 8 characters.": "Mindestens 8 Zeichen.",
+    "At least one of first name and last name is required.": "Mindestens Vorname oder Nachname muss angegeben werden.",
     "Authentication failed.": "Authentifizierung fehlgeschlagen.",
     "Back to login": "Zurück zur Anmeldung",
     "Blocked": "Gesperrt",
@@ -21,6 +22,7 @@
     "Copy": "Kopieren",
     "Current one-time code": "Aktueller Einmalcode",
     "Current password": "Aktuelles Passwort",
+    "Current password (required to change the email address)": "Aktuelles Passwort (zum Ändern der E-Mail-Adresse erforderlich)",
     "Delete": "Löschen",
     "Disable OTP": "OTP deaktivieren",
     "District": "Kreis",
@@ -80,6 +82,7 @@
     "Places": "Orte",
     "Previous": "Zurück",
     "Privacy": "Datenschutz",
+    "Profile": "Profil",
     "QR code for the authenticator app": "QR-Code für die Authenticator-App",
     "Really delete this district?": "Diesen Kreis wirklich löschen?",
     "Really delete this place?": "Diesen Ort wirklich löschen?",
@@ -113,6 +116,7 @@
     "The privacy policy will be published here.": "Die Datenschutzerklärung wird hier veröffentlicht.",
     "The request was rejected. Please check your input or the link.": "Die Anfrage wurde abgelehnt. Bitte prüfen Sie Ihre Eingabe oder den Link.",
     "The server cannot be reached.": "Der Server ist nicht erreichbar.",
+    "The username cannot be changed.": "Der Benutzername kann nicht geändert werden.",
     "This account is blocked.": "Dieses Konto ist gesperrt.",
     "This entry already exists.": "Dieser Eintrag existiert bereits.",
     "This link is invalid or has expired.": "Dieser Link ist ungültig oder abgelaufen.",
@@ -127,6 +131,7 @@
     "Welcome! Choose a username and a password for %{email}.": "Willkommen! Wählen Sie einen Benutzernamen und ein Passwort für %{email}.",
     "You are not allowed to do this.": "Dazu haben Sie keine Berechtigung.",
     "Your account is ready. You can protect it with a one-time code (OTP) now or later in \"My account\".": "Ihr Konto ist eingerichtet. Sie können es jetzt oder später unter „Mein Konto“ mit einem Einmalcode (OTP) schützen.",
-    "Your password has been changed.": "Ihr Passwort wurde geändert."
+    "Your password has been changed.": "Ihr Passwort wurde geändert.",
+    "Your profile has been saved.": "Ihr Profil wurde gespeichert."
   }
 }

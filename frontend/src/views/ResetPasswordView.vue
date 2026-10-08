@@ -24,6 +24,7 @@ onMounted(async () => {
 })
 
 async function submit() {
+  if (password.value !== repeat.value) return
   error.value = ''
   try {
     await api('/auth/reset-password', { method: 'POST', body: { token, new_password: password.value }, auth: false })

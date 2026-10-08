@@ -1,6 +1,10 @@
 import uuid
 
-from pydantic import BaseModel, ConfigDict, EmailStr, Field
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
+
+
+def clean_name(value: str | None) -> str | None:
+    return (value or "").strip() or None
 
 
 class UserCreate(BaseModel):
@@ -29,9 +33,18 @@ class PasswordChange(BaseModel):
 
 class UserInvite(BaseModel):
     email: EmailStr
+    roles: list[str] = ["user"]
+
+
+class ProfileUpdate(BaseModel):
+    """Eigene Daten; der Benutzername ist bewusst nicht enthalten."""
+
     first_name: str | None = Field(default=None, max_length=50)
     last_name: str | None = Field(default=None, max_length=50)
-    roles: list[str] = ["user"]
+    email: EmailStr | None = None
+    current_password: str | None = None
+
+    _clean = field_validator("first_name", "last_name", mode="before")(clean_name)
 
 
 class OtpPassword(BaseModel):

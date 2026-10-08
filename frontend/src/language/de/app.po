@@ -31,6 +31,10 @@ msgstr "Alle Kreise"
 msgid "At least 8 characters."
 msgstr "Mindestens 8 Zeichen."
 
+#: src/views/AccountView.vue src/views/SetupAccountView.vue
+msgid "At least one of first name and last name is required."
+msgstr "Mindestens Vorname oder Nachname muss angegeben werden."
+
 #: src/composables/useErrors.js
 msgid "Authentication failed."
 msgstr "Authentifizierung fehlgeschlagen."
@@ -83,6 +87,10 @@ msgstr "Aktueller Einmalcode"
 msgid "Current password"
 msgstr "Aktuelles Passwort"
 
+#: src/views/AccountView.vue
+msgid "Current password (required to change the email address)"
+msgstr "Aktuelles Passwort (zum Ändern der E-Mail-Adresse erforderlich)"
+
 #: src/views/ManageKreiseView.vue src/views/ManageOrteView.vue
 msgid "Delete"
 msgstr "Löschen"
@@ -127,7 +135,7 @@ msgstr "Eine E-Mail mit einem Link wurde versendet."
 msgid "Enter a new code from the app to finish the setup"
 msgstr "Geben Sie zum Abschluss einen neuen Code aus der App ein"
 
-#: src/views/UsersView.vue
+#: src/views/AccountView.vue src/views/SetupAccountView.vue src/views/UsersView.vue
 msgid "First name"
 msgstr "Vorname"
 
@@ -187,7 +195,7 @@ msgstr "Eingeladen"
 msgid "Language"
 msgstr "Sprache"
 
-#: src/views/UsersView.vue
+#: src/views/AccountView.vue src/views/SetupAccountView.vue src/views/UsersView.vue
 msgid "Last name"
 msgstr "Nachname"
 
@@ -319,6 +327,10 @@ msgstr "Zurück"
 msgid "Privacy"
 msgstr "Datenschutz"
 
+#: src/views/AccountView.vue
+msgid "Profile"
+msgstr "Profil"
+
 #: src/components/OtpSetup.vue
 msgid "QR code for the authenticator app"
 msgstr "QR-Code für die Authenticator-App"
@@ -355,11 +367,11 @@ msgstr "Passwort zurücksetzen"
 msgid "Resetting sends the user an email with a link."
 msgstr "Beim Zurücksetzen erhält der Benutzer eine E-Mail mit einem Link."
 
-#: src/views/AccountView.vue src/views/UsersView.vue
+#: src/views/UsersView.vue
 msgid "Roles"
 msgstr "Rollen"
 
-#: src/views/ManageKreiseView.vue src/views/ManageOrteView.vue src/views/ResetPasswordView.vue src/views/UsersView.vue
+#: src/views/AccountView.vue src/views/ManageKreiseView.vue src/views/ManageOrteView.vue src/views/ResetPasswordView.vue src/views/UsersView.vue
 msgid "Save"
 msgstr "Speichern"
 
@@ -451,6 +463,10 @@ msgstr "Die Anfrage wurde abgelehnt. Bitte prüfen Sie Ihre Eingabe oder den Lin
 msgid "The server cannot be reached."
 msgstr "Der Server ist nicht erreichbar."
 
+#: src/views/AccountView.vue
+msgid "The username cannot be changed."
+msgstr "Der Benutzername kann nicht geändert werden."
+
 #: src/views/LoginView.vue
 msgid "This account is blocked."
 msgstr "Dieses Konto ist gesperrt."
@@ -510,4 +526,8 @@ msgstr "Ihr Konto ist eingerichtet. Sie können es jetzt oder später unter „M
 #: src/views/AccountView.vue src/views/ResetPasswordView.vue
 msgid "Your password has been changed."
 msgstr "Ihr Passwort wurde geändert."
+
+#: src/views/AccountView.vue
+msgid "Your profile has been saved."
+msgstr "Ihr Profil wurde gespeichert."
 

@@ -2,7 +2,7 @@ import uuid
 from datetime import UTC, datetime, timedelta
 
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Response
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, field_validator, model_validator
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -12,6 +12,7 @@ from app.database import get_db
 from app.models import User
 from app.otp import OtpStart, finish_setup, start_setup
 from app.routers.auth import TokenResponse
+from app.schemas import clean_name
 from app.security import (
     create_access_token,
     create_link_token,
@@ -38,6 +39,16 @@ class SetupAccount(BaseModel):
     token: str
     username: str = Field(min_length=1, max_length=50)
     password: str = Field(min_length=8, max_length=128)
+    first_name: str | None = Field(default=None, max_length=50)
+    last_name: str | None = Field(default=None, max_length=50)
+
+    _clean = field_validator("first_name", "last_name", mode="before")(clean_name)
+
+    @model_validator(mode="after")
+    def need_a_name(self):
+        if not (self.first_name or self.last_name):
+            raise ValueError("first_name or last_name is required")
+        return self
 
 
 class LinkInfo(BaseModel):
@@ -117,6 +128,8 @@ def setup_account(data: SetupAccount, db: Session = Depends(get_db)) -> TokenRes
     if db.scalar(select(User.id).where(User.username == data.username, User.id != user.id)):
         raise HTTPException(status_code=409, detail="Benutzername bereits vergeben")
     user.username = data.username
+    user.first_name = data.first_name
+    user.last_name = data.last_name
     user.hashed_password = hash_password(data.password)
     user.last_login = datetime.now(UTC)
     user.last_modified_by = user.id

@@ -13,7 +13,7 @@ const auth = useAuthStore()
 const users = ref([])
 const message = ref('')
 const error = ref('')
-const invite = ref({ email: '', first_name: '', last_name: '', roles: ['user'] })
+const invite = ref({ email: '' })
 const editing = ref(null)
 
 async function load() {
@@ -37,11 +37,8 @@ async function run(action, success) {
 
 const sendInvite = () =>
   run(async () => {
-    await api('/users/invite', {
-      method: 'POST',
-      body: { ...invite.value, first_name: invite.value.first_name || null, last_name: invite.value.last_name || null },
-    })
-    invite.value = { email: '', first_name: '', last_name: '', roles: ['user'] }
+    await api('/users/invite', { method: 'POST', body: { email: invite.value.email } })
+    invite.value = { email: '' }
   }, $gettext('Invitation sent.'))
 
 const resetPassword = (u) =>
@@ -82,22 +79,10 @@ onMounted(load)
       <div class="card-body">
         <h2 class="h5">{{ $gettext('Invite new user') }}</h2>
         <form class="row g-2" @submit.prevent="sendInvite">
-          <div class="col-12 col-md-4">
+          <div class="col-12 col-md-9">
             <input v-model="invite.email" type="email" class="form-control" :placeholder="$gettext('Email address')" :aria-label="$gettext('Email address')" required />
           </div>
-          <div class="col-6 col-md-2">
-            <input v-model="invite.first_name" class="form-control" :placeholder="$gettext('First name')" :aria-label="$gettext('First name')" />
-          </div>
-          <div class="col-6 col-md-2">
-            <input v-model="invite.last_name" class="form-control" :placeholder="$gettext('Last name')" :aria-label="$gettext('Last name')" />
-          </div>
-          <div class="col-8 col-md-2">
-            <select v-model="invite.roles" class="form-select" :aria-label="$gettext('Roles')">
-              <option :value="['user']">user</option>
-              <option :value="['admin', 'user']">admin + user</option>
-            </select>
-          </div>
-          <div class="col-4 col-md-2">
+          <div class="col-12 col-md-3">
             <button class="btn btn-primary w-100" type="submit">{{ $gettext('Invite') }}</button>
           </div>
         </form>

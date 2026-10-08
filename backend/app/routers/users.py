@@ -12,7 +12,16 @@ from app.deps import get_current_user, get_roles, require_admin
 from app.models import Role, User, UserRole
 from app.otp import OtpStart, finish_setup, start_setup
 from app.routers.account import send_link
-from app.schemas import OtpConfirm, OtpPassword, PasswordChange, UserCreate, UserInvite, UserOut, UserUpdate
+from app.schemas import (
+    OtpConfirm,
+    OtpPassword,
+    PasswordChange,
+    ProfileUpdate,
+    UserCreate,
+    UserInvite,
+    UserOut,
+    UserUpdate,
+)
 from app.security import hash_password, verify_password
 
 router = APIRouter(prefix="/users", tags=["users"])
@@ -55,6 +64,31 @@ def get_or_404(db: Session, user_id: uuid.UUID) -> User:
 
 @router.get("/me", response_model=UserOut)
 def me(user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    return to_out(db, user)
+
+
+@router.patch("/me", response_model=UserOut)
+def update_me(data: ProfileUpdate, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    changes = data.model_dump(exclude_unset=True, exclude={"current_password"})
+    new_email = changes.pop("email", None)
+
+    if "first_name" in changes or "last_name" in changes:
+        merged = {"first_name": user.first_name, "last_name": user.last_name, **changes}
+        if not (merged["first_name"] or merged["last_name"]):
+            raise HTTPException(status_code=422, detail="Vor- oder Nachname erforderlich")
+
+    # E-Mail-Adresse dient dem Passwort-Reset, daher nur mit aktuellem Passwort änderbar
+    if new_email and new_email.lower() != user.email.lower():
+        if not data.current_password or not user.hashed_password or not verify_password(
+            data.current_password, user.hashed_password
+        ):
+            raise HTTPException(status_code=400, detail="Passwort falsch")
+        changes["email"] = new_email
+
+    for field, value in changes.items():
+        setattr(user, field, value)
+    user.last_modified_by = user.id
+    db.commit()
     return to_out(db, user)
 
 
@@ -157,8 +191,6 @@ def invite_user(
     user = User(
         username=f"invited-{uuid.uuid4().hex[:12]}",
         email=data.email,
-        first_name=data.first_name,
-        last_name=data.last_name,
         created_by=admin.id,
     )
     db.add(user)
