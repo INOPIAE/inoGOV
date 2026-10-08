@@ -1,0 +1,38 @@
+/backend/.env
+/.marcus
+
+# Backend (Python)
+__pycache__/
+*.py[cod]
+/backend/venv/
+/backend/.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.egg-info/
+
+# Umgebungsdateien (Vorlagen bleiben versioniert)
+.env
+.env.*
+!.env.example
+
+# Frontend (Vue.js)
+node_modules/
+/frontend/dist/
+/frontend/coverage/
+*.local
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Logs
+*.log
+
+# Editor / OS
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
