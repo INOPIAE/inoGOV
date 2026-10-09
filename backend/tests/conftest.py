@@ -3,6 +3,7 @@ import os
 os.environ.setdefault("SECRET_KEY", "test-secret")
 # Tests sollen unabhängig von der lokalen .env laufen
 os.environ["PUBLIC_SEARCH"] = "true"
+os.environ["ADMIN_OTP_REQUIRED"] = "false"
 os.environ["LOCKOUT_TIERS"] = "3:3,5:10,10:60"
 os.environ["SMTP_SERVER"] = ""
 

@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 
 from app.config import settings
 from app.database import get_db
-from app.deps import get_current_user, get_roles, require_admin
+from app.deps import get_current_user, get_current_user_any, get_roles, needs_otp_setup, require_admin
 from app.models import Role, User, UserRole
 from app.otp import OtpStart, finish_setup, start_setup
 from app.routers.account import send_link
@@ -31,6 +31,7 @@ def to_out(db: Session, user: User) -> UserOut:
     out = UserOut.model_validate(user)
     out.roles = get_roles(db, user.id)
     out.pending = user.hashed_password is None
+    out.otp_setup_required = needs_otp_setup(db, user)
     return out
 
 
@@ -63,7 +64,7 @@ def get_or_404(db: Session, user_id: uuid.UUID) -> User:
 
 
 @router.get("/me", response_model=UserOut)
-def me(user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+def me(user: User = Depends(get_current_user_any), db: Session = Depends(get_db)):
     return to_out(db, user)
 
 
@@ -225,13 +226,13 @@ def admin_reset_otp(
 
 
 @router.post("/me/otp/start", response_model=OtpStart)
-def otp_start(data: OtpPassword, user: User = Depends(get_current_user)):
+def otp_start(data: OtpPassword, user: User = Depends(get_current_user_any)):
     check_password_and_otp(user, data)
     return start_setup(user)
 
 
 @router.post("/me/otp/confirm", status_code=204)
-def otp_confirm(data: OtpConfirm, user: User = Depends(get_current_user), db: Session = Depends(get_db)) -> Response:
+def otp_confirm(data: OtpConfirm, user: User = Depends(get_current_user_any), db: Session = Depends(get_db)) -> Response:
     finish_setup(user, data.setup_token, data.code)
     db.commit()
     return Response(status_code=204)
@@ -239,6 +240,8 @@ def otp_confirm(data: OtpConfirm, user: User = Depends(get_current_user), db: Se
 
 @router.post("/me/otp/disable", status_code=204)
 def otp_disable(data: OtpPassword, user: User = Depends(get_current_user), db: Session = Depends(get_db)) -> Response:
+    if "admin" in get_roles(db, user.id):
+        raise HTTPException(status_code=403, detail="Administratoren können OTP nicht deaktivieren")
     check_password_and_otp(user, data)
     user.otp_enabled = False
     user.otp_secret = None

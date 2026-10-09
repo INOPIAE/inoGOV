@@ -24,6 +24,8 @@ export function createAppRouter(history = createWebHistory()) {
   const router = createRouter({ history, routes })
   router.beforeEach((to) => {
     const auth = useAuthStore()
+    // Admins ohne OTP dürfen nur die Einrichtung auf "Mein Konto" nutzen
+    if (auth.otpSetupRequired) return to.path === '/account' ? true : '/account'
     const searchRequiresLogin = to.name === 'home' && !useSettingsStore().publicSearch
     if (!to.meta.auth && !searchRequiresLogin) return true
     if (!auth.isLoggedIn) return { path: '/login', query: { next: to.fullPath } }

@@ -62,7 +62,7 @@ async function changePassword() {
 }
 
 // OTP: mode = null | 'enable' | 'disable', stage = 'form' | 'setup'
-const mode = ref(null)
+const mode = ref(auth.user.otp_setup_required ? 'enable' : null)
 const stage = ref('form')
 const otpForm = ref({ password: '', otp: '' })
 const otpError = ref('')
@@ -108,7 +108,11 @@ async function otpDone() {
   <div class="col-12 col-lg-8">
     <h1 class="h3 mb-3">{{ $gettext('My account') }}</h1>
 
-    <section class="card mb-4">
+    <div v-if="auth.user.otp_setup_required" class="alert alert-warning" role="alert" data-test="otp-required">
+      {{ $gettext('As an administrator you must set up OTP before you can continue.') }}
+    </div>
+
+    <section v-if="!auth.user.otp_setup_required" class="card mb-4">
       <div class="card-body">
         <h2 class="h5">{{ $gettext('Profile') }}</h2>
         <div v-if="profileMessage" class="alert alert-success" role="status" data-test="profile-saved">{{ profileMessage }}</div>
@@ -154,7 +158,7 @@ async function otpDone() {
       </div>
     </section>
 
-    <section class="card mb-4">
+    <section v-if="!auth.user.otp_setup_required" class="card mb-4">
       <div class="card-body">
         <h2 class="h5">{{ $gettext('Change password') }}</h2>
         <div v-if="pwMessage" class="alert alert-success" role="status">{{ pwMessage }}</div>
@@ -189,9 +193,12 @@ async function otpDone() {
           <button v-if="!auth.user.otp_enabled" class="btn btn-primary" @click="openOtp('enable')">{{ $gettext('Set up OTP') }}</button>
           <template v-else>
             <button class="btn btn-outline-primary" @click="openOtp('enable')">{{ $gettext('Reset OTP') }}</button>
-            <button class="btn btn-outline-danger" @click="openOtp('disable')">{{ $gettext('Disable OTP') }}</button>
+            <button v-if="!auth.isAdmin" class="btn btn-outline-danger" @click="openOtp('disable')">{{ $gettext('Disable OTP') }}</button>
           </template>
         </div>
+        <p v-if="auth.isAdmin && auth.user.otp_enabled && !mode" class="text-muted small mt-2 mb-0" data-test="admin-otp-hint">
+          {{ $gettext('Administrators cannot disable OTP.') }}
+        </p>
 
         <template v-else-if="stage === 'form'">
           <div v-if="otpError" class="alert alert-danger" role="alert">{{ otpError }}</div>

@@ -18,6 +18,13 @@ function logout() {
 <template>
   <nav class="app-nav" :class="{ open }" :aria-label="$gettext('Main navigation')">
     <ul class="nav flex-column">
+      <template v-if="auth.otpSetupRequired">
+        <li class="nav-item"><router-link class="nav-link" to="/account">{{ $gettext('My account') }}</router-link></li>
+        <li class="nav-item">
+          <button type="button" class="nav-link btn btn-link text-start w-100" @click="logout">{{ $gettext('Log out') }}</button>
+        </li>
+      </template>
+      <template v-else>
       <li v-if="settings.publicSearch || auth.isLoggedIn" class="nav-item">
         <router-link class="nav-link" to="/">{{ $gettext('Search places') }}</router-link>
       </li>
@@ -52,6 +59,7 @@ function logout() {
       <li v-else class="nav-item">
         <router-link class="nav-link" to="/login">{{ $gettext('Log in') }}</router-link>
       </li>
+      </template>
     </ul>
   </nav>
 </template>

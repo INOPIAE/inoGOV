@@ -22,8 +22,16 @@ msgstr ""
 msgid "Addition"
 msgstr ""
 
+#: src/views/AccountView.vue
+msgid "Administrators cannot disable OTP."
+msgstr ""
+
 #: src/views/HomeView.vue
 msgid "All districts"
+msgstr ""
+
+#: src/views/AccountView.vue
+msgid "As an administrator you must set up OTP before you can continue."
 msgstr ""
 
 #: src/views/ResetPasswordView.vue src/views/SetupAccountView.vue

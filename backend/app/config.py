@@ -20,6 +20,7 @@ class Settings(BaseSettings):
     app_name: str = "inoGOV"
     copyright_name: str = "inoGOV"
     public_search: bool = True
+    admin_otp_required: bool = True
     frontend_url: str = "http://localhost:5173"
     cors_origins: str = "http://localhost:5173"
     password_reset_minutes: int = 60

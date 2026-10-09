@@ -4,6 +4,7 @@ export const apiBase = BASE
 
 let token = localStorage.getItem('token')
 let onUnauthorized = () => {}
+let onOtpSetupRequired = () => {}
 
 export function setToken(value) {
   token = value
@@ -17,6 +18,10 @@ export function getToken() {
 
 export function setUnauthorizedHandler(handler) {
   onUnauthorized = handler
+}
+
+export function setOtpSetupHandler(handler) {
+  onOtpSetupRequired = handler
 }
 
 export class ApiError extends Error {
@@ -57,6 +62,7 @@ export async function api(path, { method = 'GET', body, params, auth = true } = 
   }
   if (!response.ok) {
     if (response.status === 401 && auth && token) onUnauthorized()
+    if (response.status === 403 && data?.detail === 'otp_setup_required') onOtpSetupRequired()
     const detail = typeof data?.detail === 'string' ? data.detail : undefined
     throw new ApiError(response.status, detail, Number(response.headers.get('Retry-After')) || undefined)
   }

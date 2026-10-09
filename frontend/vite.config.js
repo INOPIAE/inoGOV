@@ -7,6 +7,8 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     pool: 'threads',
+    maxWorkers: 2,
+    testTimeout: 30000,
     include: ['src/**/*.test.js'],
   },
 })

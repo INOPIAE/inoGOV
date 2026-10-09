@@ -6,7 +6,7 @@ import './assets/app.css'
 import App from './App.vue'
 import { createAppRouter } from './router'
 import { createI18n } from './i18n'
-import { setUnauthorizedHandler } from './api'
+import { setOtpSetupHandler, setUnauthorizedHandler } from './api'
 import { useAuthStore } from './stores/auth'
 import { useSettingsStore } from './stores/settings'
 
@@ -22,6 +22,10 @@ const auth = useAuthStore()
 setUnauthorizedHandler(() => {
   auth.clear()
   router.push('/login')
+})
+setOtpSetupHandler(async () => {
+  await auth.fetchMe().catch(() => {})
+  router.push('/account')
 })
 
 await Promise.all([auth.init(), useSettingsStore().load().catch(() => {})])

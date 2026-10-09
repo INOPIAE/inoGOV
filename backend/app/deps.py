@@ -24,7 +24,8 @@ def get_roles(db: Session, user_id: uuid.UUID) -> list[str]:
     return list(db.scalars(stmt))
 
 
-def get_current_user(creds=Depends(bearer), db: Session = Depends(get_db)) -> User:
+def get_current_user_any(creds=Depends(bearer), db: Session = Depends(get_db)) -> User:
+    """Angemeldeter Benutzer ohne weitere Einschränkung (nötig für die OTP-Einrichtung)."""
     unauthorized = HTTPException(status_code=401, detail="Nicht angemeldet")
     try:
         payload = jwt.decode(creds.credentials, settings.secret_key, algorithms=["HS256"])
@@ -36,6 +37,20 @@ def get_current_user(creds=Depends(bearer), db: Session = Depends(get_db)) -> Us
     user = db.get(User, user_id)
     if user is None or not user.active or user.blocked:
         raise unauthorized
+    return user
+
+
+def needs_otp_setup(db: Session, user: User) -> bool:
+    return (
+        settings.admin_otp_required
+        and not user.otp_enabled
+        and "admin" in get_roles(db, user.id)
+    )
+
+
+def get_current_user(user: User = Depends(get_current_user_any), db: Session = Depends(get_db)) -> User:
+    if needs_otp_setup(db, user):
+        raise HTTPException(status_code=403, detail="otp_setup_required")
     return user
 
 
@@ -58,4 +73,4 @@ def read_access(creds=Depends(optional_bearer), db: Session = Depends(get_db)) -
         return
     if creds is None:
         raise HTTPException(status_code=401, detail="Nicht angemeldet")
-    get_current_user(creds, db)
+    get_current_user(get_current_user_any(creds, db), db)

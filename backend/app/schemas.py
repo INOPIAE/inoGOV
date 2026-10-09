@@ -69,4 +69,5 @@ class UserOut(BaseModel):
     blocked: bool
     otp_enabled: bool
     pending: bool = False
+    otp_setup_required: bool = False
     roles: list[str] = []

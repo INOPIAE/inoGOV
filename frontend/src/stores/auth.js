@@ -9,6 +9,7 @@ export const useAuthStore = defineStore('auth', {
     isAdmin() {
       return this.roles.includes('admin')
     },
+    otpSetupRequired: (state) => !!state.user?.otp_setup_required,
     canEdit() {
       return this.isAdmin || this.roles.includes('user')
     },
