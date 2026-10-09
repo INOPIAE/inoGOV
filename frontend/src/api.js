@@ -39,7 +39,8 @@ export async function api(path, { method = 'GET', body, params, auth = true } = 
     if (value !== undefined && value !== null && value !== '') url.searchParams.set(key, value)
   }
   const headers = {}
-  if (body !== undefined) headers['Content-Type'] = 'application/json'
+  const isForm = body instanceof FormData
+  if (body !== undefined && !isForm) headers['Content-Type'] = 'application/json'
   if (auth && token) headers.Authorization = `Bearer ${token}`
 
   let response
@@ -47,7 +48,7 @@ export async function api(path, { method = 'GET', body, params, auth = true } = 
     response = await fetch(url, {
       method,
       headers,
-      body: body !== undefined ? JSON.stringify(body) : undefined,
+      body: body === undefined ? undefined : isForm ? body : JSON.stringify(body),
     })
   } catch {
     throw new ApiError(0, 'network')

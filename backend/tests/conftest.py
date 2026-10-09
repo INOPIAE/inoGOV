@@ -4,12 +4,13 @@ os.environ.setdefault("SECRET_KEY", "test-secret")
 # Tests sollen unabhängig von der lokalen .env laufen
 os.environ["PUBLIC_SEARCH"] = "true"
 os.environ["ADMIN_OTP_REQUIRED"] = "false"
+os.environ["IMPORT_MAX_MB"] = "10"
 os.environ["LOCKOUT_TIERS"] = "3:3,5:10,10:60"
 os.environ["SMTP_SERVER"] = ""
 
 import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, event
 from sqlalchemy.orm import Session
 from sqlalchemy.pool import StaticPool
 
@@ -32,6 +33,9 @@ def db():
     engine = create_engine(
         "sqlite://", connect_args={"check_same_thread": False}, poolclass=StaticPool
     )
+    # SAVEPOINTs (begin_nested) brauchen unter pysqlite explizites BEGIN
+    event.listen(engine, "connect", lambda conn, _: setattr(conn, "isolation_level", None))
+    event.listen(engine, "begin", lambda conn: conn.exec_driver_sql("BEGIN"))
     Base.metadata.create_all(engine)
     with Session(engine) as session:
         yield session

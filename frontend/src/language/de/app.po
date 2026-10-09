@@ -3,6 +3,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language: de\n"
 
+#: src/views/ImportsView.vue
+msgid "%{imported} of %{total} rows imported, %{failed} with errors."
+msgstr "%{imported} von %{total} Zeilen importiert, %{failed} mit Fehlern."
+
 #: src/components/SideNav.vue
 msgid "API documentation"
 msgstr "API-Dokumentation"
@@ -55,6 +59,14 @@ msgstr "Zurück zur Anmeldung"
 msgid "Blocked"
 msgstr "Gesperrt"
 
+#: src/views/ImportsView.vue
+msgid "CSV file"
+msgstr "CSV-Datei"
+
+#: src/views/ImportsView.vue
+msgid "CSV file with a header row and three columns: Polish place name, Polish district name, coordinate. Every row creates a new place with a reference to the map \"Lück\"."
+msgstr "CSV-Datei mit Überschriftszeile und drei Spalten: polnischer Ortsname, polnischer Kreisname, Koordinate. Jede Zeile legt einen neuen Ort mit Verweis auf die Karte „Lück“ an."
+
 #: src/views/AccountView.vue src/views/UsersView.vue
 msgid "Cancel"
 msgstr "Abbrechen"
@@ -74,6 +86,14 @@ msgstr "Bestätigen"
 #: src/views/AccountView.vue src/views/SetupAccountView.vue
 msgid "Continue"
 msgstr "Weiter"
+
+#: src/views/ImportsView.vue
+msgid "Coordinate is longer than 2 characters."
+msgstr "Die Koordinate ist länger als 2 Zeichen."
+
+#: src/views/ImportsView.vue
+msgid "Coordinate is missing."
+msgstr "Die Koordinate fehlt."
 
 #: src/views/HomeView.vue
 msgid "Coordinates"
@@ -115,6 +135,14 @@ msgstr "Kreis"
 msgid "District name"
 msgstr "Kreisname"
 
+#: src/views/ImportsView.vue
+msgid "District name is longer than 50 characters."
+msgstr "Der Kreisname ist länger als 50 Zeichen."
+
+#: src/views/ImportsView.vue
+msgid "District name is missing."
+msgstr "Der Kreisname fehlt."
+
 #: src/views/ManageKreiseView.vue
 msgid "District names"
 msgstr "Kreisnamen"
@@ -143,6 +171,18 @@ msgstr "Eine E-Mail mit einem Link wurde versendet."
 msgid "Enter a new code from the app to finish the setup"
 msgstr "Geben Sie zum Abschluss einen neuen Code aus der App ein"
 
+#: src/views/ImportsView.vue
+msgid "Errors"
+msgstr "Fehler"
+
+#: src/views/ImportsView.vue
+msgid "Fewer than 3 columns."
+msgstr "Weniger als 3 Spalten."
+
+#: src/views/ImportsView.vue
+msgid "File archived as %{name}."
+msgstr "Datei abgelegt als %{name}."
+
 #: src/views/AccountView.vue src/views/SetupAccountView.vue src/views/UsersView.vue
 msgid "First name"
 msgstr "Vorname"
@@ -158,6 +198,14 @@ msgstr "Planquadrat"
 #: src/views/ForgotPasswordView.vue
 msgid "If the address is known, an email with a link has been sent."
 msgstr "Falls die Adresse bekannt ist, wurde eine E-Mail mit einem Link versendet."
+
+#: src/views/ImportsView.vue
+msgid "Import"
+msgstr "Import"
+
+#: src/components/SideNav.vue src/views/ImportsView.vue
+msgid "Imports"
+msgstr "Importe"
 
 #: src/components/SideNav.vue src/views/InfoView.vue
 msgid "Imprint"
@@ -211,6 +259,10 @@ msgstr "Nachname"
 msgid "Latitude"
 msgstr "Breitengrad"
 
+#: src/views/ImportsView.vue
+msgid "Line"
+msgstr "Zeile"
+
 #: src/views/HomeView.vue
 msgid "Links"
 msgstr "Links"
@@ -250,6 +302,10 @@ msgstr "Mein Konto"
 #: src/views/ManageKreiseView.vue
 msgid "New district"
 msgstr "Neuer Kreis"
+
+#: src/views/ImportsView.vue
+msgid "New districts created (Polish name)"
+msgstr "Neu angelegte Kreise (polnischer Name)"
 
 #: src/views/AccountView.vue src/views/ResetPasswordView.vue
 msgid "New password"
@@ -319,6 +375,14 @@ msgstr "Ort"
 msgid "Place name"
 msgstr "Ortsname"
 
+#: src/views/ImportsView.vue
+msgid "Place name is longer than 255 characters."
+msgstr "Der Ortsname ist länger als 255 Zeichen."
+
+#: src/views/ImportsView.vue
+msgid "Place name is missing."
+msgstr "Der Ortsname fehlt."
+
 #: src/views/ManageOrteView.vue
 msgid "Place names"
 msgstr "Ortsnamen"
@@ -326,6 +390,10 @@ msgstr "Ortsnamen"
 #: src/components/SideNav.vue src/views/ManageOrteView.vue
 msgid "Places"
 msgstr "Orte"
+
+#: src/views/ImportsView.vue
+msgid "Please wait..."
+msgstr "Bitte warten..."
 
 #: src/views/HomeView.vue
 msgid "Previous"
@@ -350,6 +418,10 @@ msgstr "Diesen Kreis wirklich löschen?"
 #: src/views/ManageOrteView.vue
 msgid "Really delete this place?"
 msgstr "Diesen Ort wirklich löschen?"
+
+#: src/views/ImportsView.vue
+msgid "Reason"
+msgstr "Grund"
 
 #: src/components/NamesEditor.vue src/views/ManageKartenView.vue
 msgid "Remove"
@@ -378,6 +450,14 @@ msgstr "Beim Zurücksetzen erhält der Benutzer eine E-Mail mit einem Link."
 #: src/views/UsersView.vue
 msgid "Roles"
 msgstr "Rollen"
+
+#: src/views/ImportsView.vue
+msgid "Row content"
+msgstr "Zeileninhalt"
+
+#: src/views/ImportsView.vue
+msgid "Rows with errors are skipped and listed below. Duplicates are not checked."
+msgstr "Zeilen mit Fehlern werden übersprungen und unten aufgelistet. Auf Duplikate wird nicht geprüft."
 
 #: src/views/AccountView.vue src/views/ManageKreiseView.vue src/views/ManageOrteView.vue src/views/ResetPasswordView.vue src/views/UsersView.vue
 msgid "Save"
@@ -435,9 +515,17 @@ msgstr "Angemeldet als %{user} (%{roles})"
 msgid "Skip"
 msgstr "Überspringen"
 
+#: src/views/ImportsView.vue
+msgid "Start import"
+msgstr "Import starten"
+
 #: src/views/UsersView.vue
 msgid "Status"
 msgstr "Status"
+
+#: src/views/ImportsView.vue
+msgid "The Polish language is missing in the language table."
+msgstr "Die polnische Sprache fehlt in der Sprachtabelle."
 
 #: src/components/OtpSetup.vue
 msgid "The code is wrong or the setup has expired."
@@ -450,6 +538,14 @@ msgstr "Der Code oder die Zugangsdaten sind falsch."
 #: src/views/AccountView.vue
 msgid "The current password is wrong."
 msgstr "Das aktuelle Passwort ist falsch."
+
+#: src/views/ImportsView.vue
+msgid "The file could not be archived. The import itself was saved."
+msgstr "Die Datei konnte nicht abgelegt werden. Der Import selbst wurde gespeichert."
+
+#: src/views/ImportsView.vue
+msgid "The file is too large."
+msgstr "Die Datei ist zu groß."
 
 #: src/views/InfoView.vue
 msgid "The legal notice will be published here."
@@ -498,6 +594,10 @@ msgstr "Zu viele Fehlversuche. Bitte versuchen Sie es später erneut."
 #: src/composables/useErrors.js
 msgid "Too many failed attempts. Try again in %{minutes} minute(s)."
 msgstr "Zu viele Fehlversuche. Versuchen Sie es in %{minutes} Minute(n) erneut."
+
+#: src/views/ImportsView.vue
+msgid "Unexpected error while saving this row."
+msgstr "Unerwarteter Fehler beim Speichern dieser Zeile."
 
 #: src/composables/useErrors.js
 msgid "Unexpected error."

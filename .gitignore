@@ -1,4 +1,5 @@
 /backend/.env
+/backend/import_archive/
 /.marcus
 
 # Backend (Python)

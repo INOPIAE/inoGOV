@@ -11,9 +11,14 @@ export function mockFetch(routes) {
   const fn = vi.fn(async (url, init = {}) => {
     const parsed = new URL(url)
     const key = `${init.method ?? 'GET'} ${parsed.pathname}`
-    calls.push({ key, url: parsed, body: init.body ? JSON.parse(init.body) : undefined, headers: init.headers })
+    calls.push({
+      key,
+      url: parsed,
+      body: init.body instanceof FormData ? init.body : init.body ? JSON.parse(init.body) : undefined,
+      headers: init.headers,
+    })
     let handler = routes[key]
-    if (typeof handler === 'function') handler = handler(parsed, init)
+    if (typeof handler === 'function') handler = await handler(parsed, init)
     if (!handler) return new Response(JSON.stringify({ detail: `unmocked ${key}` }), { status: 500 })
     const status = handler.status ?? 200
     const body = status === 204 ? null : JSON.stringify(handler.body ?? {})

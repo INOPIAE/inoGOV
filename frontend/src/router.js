@@ -14,6 +14,7 @@ export const routes = [
   { path: '/manage/orte', component: () => import('./views/ManageOrteView.vue'), meta: { auth: true, role: 'editor' } },
   { path: '/manage/kreise', component: () => import('./views/ManageKreiseView.vue'), meta: { auth: true, role: 'editor' } },
   { path: '/manage/karten', component: () => import('./views/ManageKartenView.vue'), meta: { auth: true, role: 'editor' } },
+  { path: '/manage/imports', component: () => import('./views/ImportsView.vue'), meta: { auth: true, role: 'admin' } },
   { path: '/about', component: () => import('./views/InfoView.vue'), props: { page: 'about' } },
   { path: '/imprint', component: () => import('./views/InfoView.vue'), props: { page: 'imprint' } },
   { path: '/privacy', component: () => import('./views/InfoView.vue'), props: { page: 'privacy' } },

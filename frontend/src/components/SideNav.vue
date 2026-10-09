@@ -34,6 +34,9 @@ function logout() {
         <li class="nav-item"><router-link class="nav-link" to="/manage/orte">{{ $gettext('Places') }}</router-link></li>
         <li class="nav-item"><router-link class="nav-link" to="/manage/kreise">{{ $gettext('Districts') }}</router-link></li>
         <li class="nav-item"><router-link class="nav-link" to="/manage/karten">{{ $gettext('Maps') }}</router-link></li>
+        <li v-if="auth.isAdmin" class="nav-item">
+          <router-link class="nav-link" to="/manage/imports">{{ $gettext('Imports') }}</router-link>
+        </li>
       </template>
 
       <template v-if="auth.isLoggedIn">
