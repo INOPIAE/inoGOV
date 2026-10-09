@@ -101,7 +101,17 @@ onMounted(async () => {
               <span v-if="ort.lat && ort.lon">{{ ort.lat }}, {{ ort.lon }}</span>
             </td>
             <td>
-              <div v-for="k in ort.karten" :key="k.id">{{ k.karte }} {{ k.koordinate }}</div>
+              <div v-for="k in ort.karten" :key="k.id">
+                <router-link
+                  v-if="k.karte && k.koordinate"
+                  :to="{ name: 'map', params: { karte: k.karte, koordinate: k.koordinate } }"
+                  target="_blank"
+                  rel="noopener"
+                  data-test="map-link"
+                  >{{ k.karte }} {{ k.koordinate }}</router-link
+                >
+                <span v-else>{{ k.karte }} {{ k.koordinate }}</span>
+              </div>
             </td>
             <td class="text-nowrap">
               <a v-if="ort.gov_id" :href="govUrl(ort)" target="_blank" rel="noopener">GOV</a>

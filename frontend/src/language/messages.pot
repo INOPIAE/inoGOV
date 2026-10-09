@@ -6,6 +6,10 @@ msgstr ""
 msgid "%{imported} of %{total} rows imported, %{failed} with errors."
 msgstr ""
 
+#: src/views/ImportsView.vue
+msgid "A number is invalid or missing."
+msgstr ""
+
 #: src/components/SideNav.vue
 msgid "API documentation"
 msgstr ""
@@ -16,6 +20,10 @@ msgstr ""
 
 #: src/views/UsersView.vue
 msgid "Active"
+msgstr ""
+
+#: src/views/MapView.vue
+msgid "Actual size"
 msgstr ""
 
 #: src/components/NamesEditor.vue src/views/ManageKartenView.vue
@@ -54,12 +62,12 @@ msgstr ""
 msgid "Back to login"
 msgstr ""
 
-#: src/views/UsersView.vue
-msgid "Blocked"
+#: src/views/ImportsView.vue
+msgid "Bildbreite_px / Bildhoehe_px are missing or invalid."
 msgstr ""
 
-#: src/views/ImportsView.vue
-msgid "CSV file"
+#: src/views/UsersView.vue
+msgid "Blocked"
 msgstr ""
 
 #: src/views/ImportsView.vue
@@ -175,7 +183,15 @@ msgid "Errors"
 msgstr ""
 
 #: src/views/ImportsView.vue
+msgid "Excel or CSV file with the image size (Bildbreite_px, Bildhoehe_px) followed by a table with the columns Koordinate, X1, Y1, X2, Y2, Breite_px, Hoehe_px, Laenge_von, Laenge_bis, Breite_von, Breite_bis. Every row defines a grid square of the map \"Lück\". Duplicates are not checked."
+msgstr ""
+
+#: src/views/ImportsView.vue
 msgid "Fewer than 3 columns."
+msgstr ""
+
+#: src/views/ImportsView.vue
+msgid "File"
 msgstr ""
 
 #: src/views/ImportsView.vue
@@ -184,6 +200,10 @@ msgstr ""
 
 #: src/views/AccountView.vue src/views/SetupAccountView.vue src/views/UsersView.vue
 msgid "First name"
+msgstr ""
+
+#: src/views/MapView.vue
+msgid "Fit to width"
 msgstr ""
 
 #: src/views/LoginView.vue
@@ -278,6 +298,10 @@ msgstr ""
 msgid "Longitude"
 msgstr ""
 
+#: src/views/MapView.vue
+msgid "Longitude %{from} to %{to}, latitude %{latFrom} to %{latTo}"
+msgstr ""
+
 #: src/components/SideNav.vue
 msgid "Main navigation"
 msgstr ""
@@ -288,6 +312,18 @@ msgstr ""
 
 #: src/views/HomeView.vue src/views/ManageKartenView.vue
 msgid "Map"
+msgstr ""
+
+#: src/views/MapView.vue
+msgid "Map \"%{karte}\", square %{koordinate}"
+msgstr ""
+
+#: src/views/MapView.vue
+msgid "Map image with the highlighted square %{koordinate}"
+msgstr ""
+
+#: src/views/MapView.vue
+msgid "Map view"
 msgstr ""
 
 #: src/components/SideNav.vue src/views/HomeView.vue src/views/ManageKartenView.vue
@@ -316,6 +352,10 @@ msgstr ""
 
 #: src/views/HomeView.vue
 msgid "Next"
+msgstr ""
+
+#: src/views/MapView.vue
+msgid "No map data is available for this square."
 msgstr ""
 
 #: src/views/ManageKartenView.vue
@@ -390,7 +430,7 @@ msgstr ""
 msgid "Places"
 msgstr ""
 
-#: src/views/ImportsView.vue
+#: src/views/ImportsView.vue src/views/MapView.vue
 msgid "Please wait..."
 msgstr ""
 
@@ -428,6 +468,10 @@ msgstr ""
 
 #: src/views/AccountView.vue src/views/ResetPasswordView.vue src/views/SetupAccountView.vue
 msgid "Repeat password"
+msgstr ""
+
+#: src/views/ImportsView.vue
+msgid "Required columns are missing."
 msgstr ""
 
 #: src/views/UsersView.vue
@@ -526,6 +570,14 @@ msgstr ""
 msgid "The Polish language is missing in the language table."
 msgstr ""
 
+#: src/views/ImportsView.vue
+msgid "The area is empty or reversed (X2/Y2 must be greater than X1/Y1)."
+msgstr ""
+
+#: src/views/ImportsView.vue
+msgid "The area lies outside the image."
+msgstr ""
+
 #: src/components/OtpSetup.vue
 msgid "The code is wrong or the setup has expired."
 msgstr ""
@@ -539,6 +591,10 @@ msgid "The current password is wrong."
 msgstr ""
 
 #: src/views/ImportsView.vue
+msgid "The file cannot be read."
+msgstr ""
+
+#: src/views/ImportsView.vue
 msgid "The file could not be archived. The import itself was saved."
 msgstr ""
 
@@ -546,8 +602,16 @@ msgstr ""
 msgid "The file is too large."
 msgstr ""
 
+#: src/views/ImportsView.vue
+msgid "The header row with \"Koordinate\" was not found."
+msgstr ""
+
 #: src/views/InfoView.vue
 msgid "The legal notice will be published here."
+msgstr ""
+
+#: src/views/MapView.vue
+msgid "The map image could not be loaded."
 msgstr ""
 
 #: src/views/ResetPasswordView.vue src/views/SetupAccountView.vue
@@ -636,5 +700,21 @@ msgstr ""
 
 #: src/views/AccountView.vue
 msgid "Your profile has been saved."
+msgstr ""
+
+#: src/views/MapView.vue
+msgid "Zoom"
+msgstr ""
+
+#: src/views/MapView.vue
+msgid "Zoom in"
+msgstr ""
+
+#: src/views/MapView.vue
+msgid "Zoom out"
+msgstr ""
+
+#: src/views/MapView.vue
+msgid "Zoom: %{percent} %"
 msgstr ""
 

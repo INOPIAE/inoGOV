@@ -6,6 +6,7 @@ from sqlalchemy import (
     Boolean,
     DateTime,
     ForeignKey,
+    Index,
     Integer,
     Numeric,
     String,
@@ -126,3 +127,34 @@ class MapReference(AuditMixin, Base):
     ort_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("ort.id"), nullable=False)
     koordinate: Mapped[str | None] = mapped_column(String(2))
     karte: Mapped[str | None] = mapped_column(String(10))
+
+
+class MapImage(AuditMixin, Base):
+    """Eine Kartenabbildung; Bildgröße und Dateiname gelten für alle Planquadrate der Karte."""
+
+    __tablename__ = "map_image"
+
+    karte: Mapped[str] = mapped_column(String(10), unique=True, nullable=False)
+    filename: Mapped[str] = mapped_column(String(255), nullable=False)
+    width_px: Mapped[int] = mapped_column(Integer, nullable=False)
+    height_px: Mapped[int] = mapped_column(Integer, nullable=False)
+
+
+class MapGrid(AuditMixin, Base):
+    """Planquadrat einer Karte; Verknüpfung zu map_reference über (karte, koordinate)."""
+
+    __tablename__ = "map_grid"
+    __table_args__ = (Index("ix_map_grid_karte_koordinate", "karte", "koordinate"),)
+
+    karte: Mapped[str] = mapped_column(ForeignKey("map_image.karte"), nullable=False)
+    koordinate: Mapped[str] = mapped_column(String(10), nullable=False)
+    x1: Mapped[int] = mapped_column(Integer, nullable=False)
+    y1: Mapped[int] = mapped_column(Integer, nullable=False)
+    x2: Mapped[int] = mapped_column(Integer, nullable=False)
+    y2: Mapped[int] = mapped_column(Integer, nullable=False)
+    breite_px: Mapped[int] = mapped_column(Integer, nullable=False)
+    hoehe_px: Mapped[int] = mapped_column(Integer, nullable=False)
+    laenge_von: Mapped[Decimal] = mapped_column(Numeric(9, 6), nullable=False)
+    laenge_bis: Mapped[Decimal] = mapped_column(Numeric(9, 6), nullable=False)
+    breite_von: Mapped[Decimal] = mapped_column(Numeric(9, 6), nullable=False)
+    breite_bis: Mapped[Decimal] = mapped_column(Numeric(9, 6), nullable=False)

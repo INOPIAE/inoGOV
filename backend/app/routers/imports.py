@@ -8,7 +8,7 @@ from app.config import settings
 from app.database import get_db
 from app.deps import require_admin
 from app.imports import IMPORTS
-from app.imports.common import ImportAborted, archive, decode, parse_csv, protocol_text
+from app.imports.common import ImportAborted, archive, protocol_text
 from app.models import User
 
 logger = logging.getLogger(__name__)
@@ -18,6 +18,7 @@ router = APIRouter(prefix="/imports", tags=["imports"])
 class ImportInfo(BaseModel):
     key: str
     columns: list[str]
+    accepts: list[str]
 
 
 class RowErrorOut(BaseModel):
@@ -37,6 +38,7 @@ class ImportReport(BaseModel):
     filename: str | None
     total: int
     imported: int
+    updated: int = 0
     failed: int
     errors: list[RowErrorOut]
     created_kreise: list[CreatedKreis]
@@ -46,7 +48,7 @@ class ImportReport(BaseModel):
 
 @router.get("", response_model=list[ImportInfo])
 def list_imports(_: User = Depends(require_admin)):
-    return [ImportInfo(key=i.key, columns=i.columns) for i in IMPORTS.values()]
+    return [ImportInfo(key=i.key, columns=i.columns, accepts=i.accepts) for i in IMPORTS.values()]
 
 
 @router.post("/{key}", response_model=ImportReport)
@@ -65,9 +67,9 @@ def run_import(
     if len(raw) > limit:
         raise HTTPException(status_code=413, detail="Datei zu groß")
     try:
-        rows = parse_csv(decode(raw))
-    except UnicodeDecodeError:
-        raise HTTPException(status_code=422, detail="Datei kann nicht gelesen werden")
+        rows = importer.parse(raw, file.filename)
+    except ImportAborted as exc:
+        raise HTTPException(status_code=422, detail=exc.code)
 
     try:
         result = importer.run(db, rows, admin.id)
@@ -88,6 +90,7 @@ def run_import(
         filename=file.filename,
         total=result.total,
         imported=result.imported,
+        updated=result.updated,
         failed=len(result.errors),
         errors=result.errors,
         created_kreise=result.created_kreise,

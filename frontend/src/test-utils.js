@@ -33,7 +33,10 @@ export function makeRouter() {
   const page = { template: '<div />' }
   return createRouter({
     history: createMemoryHistory(),
-    routes: [{ path: '/:pathMatch(.*)*', component: page }],
+    routes: [
+      { path: '/map/:karte/:koordinate', name: 'map', component: page },
+      { path: '/:pathMatch(.*)*', component: page },
+    ],
   })
 }
 

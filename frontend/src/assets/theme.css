@@ -12,6 +12,8 @@
   --ino-footer-bg: #e6ebf0;
   --ino-footer-fg: #44505b;
   --ino-body-bg: #ffffff;
+  --ino-map-highlight: #e03131;
+  --ino-map-highlight-fill: rgba(224, 49, 49, 0.22);
 
   --bs-primary: var(--ino-primary);
   --bs-primary-rgb: var(--ino-primary-rgb);

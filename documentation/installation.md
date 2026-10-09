@@ -137,9 +137,16 @@ Optional: if the API does not run at http://localhost:8000, create `frontend/.en
 
 ```
 VITE_API_URL=http://localhost:8000
+VITE_MAPS_URL=/maps
 ```
 
 Bootstrap and all other libraries are installed locally from npm; nothing is loaded from the internet at runtime.
+
+### 4.1.1 Map images
+
+Map images are static files and are **not** stored in Git. Copy them to `frontend/public/maps/` (create the folder if it does not exist), for example `frontend/public/maps/Lueck1927_gr.jpg`. They are served at `VITE_MAPS_URL` (default `/maps`). To keep the images elsewhere, point `VITE_MAPS_URL` to that address.
+
+The image file name of a map is stored in the table `map_image` by the matching import (see section 6).
 
 ### 4.2 Start (development)
 
@@ -213,6 +220,25 @@ Administrators find the page **Management > Imports** in the web interface.
 - Rows with errors are skipped and listed with their line number; all other rows are imported.
 - After processing, the file and a protocol (`.log`) are stored in `IMPORT_ARCHIVE_DIR`. The folder is excluded from Git.
 
+**ImportLueckKoordinaten** reads the grid of the map "Lück" from an Excel (`.xlsx`, first sheet) or CSV/tab separated file:
+
+```
+Bildbreite_px   2000
+Bildhoehe_px    1362
+
+Koordinate  X1   Y1  X2   Y2   Breite_px  Hoehe_px  Laenge_von  Laenge_bis  Breite_von  Breite_bis
+A1          36   35  357  248  321        213       42          42,5        51          50
+```
+
+- The image size is stored once per map in `map_image` (together with the image file name `Lueck1927_gr.jpg`); importing again updates it.
+- Every row is stored in `map_grid` with the map name `Lück`. Decimal commas are accepted, columns may be in any order.
+- Rows with an invalid number, an empty or reversed area, or an area outside the image are skipped and listed. Duplicates are not checked; if a square exists more than once, the newest row is used.
+- The same archive, protocol and report rules as for ImportLueck apply.
+
+### Map view
+
+In the place search, a map reference (for example `Lück B5`) opens the map page in a new tab. The square is found through `map_reference.karte` / `.koordinate` and `map_grid.karte` / `.koordinate`. The image can be scrolled, zoomed (buttons or Ctrl + mouse wheel), fitted to the width or shown in its actual size, and the selected square is highlighted. The image file itself is a static file; if `PUBLIC_SEARCH=false`, only the data is protected, not a direct link to the image file.
+
 ## 7. Troubleshooting
 
 | Symptom | Cause and remedy |
@@ -225,3 +251,5 @@ Administrators find the page **Management > Imports** in the web interface.
 | Search page redirects to the login | `PUBLIC_SEARCH=false`. |
 | Email links point to the wrong address | Set `FRONTEND_URL`. |
 | Frontend tests fail with "Failed to start worker" | The machine is overloaded; run a single file or close other programs. |
+| The map page shows "The map image could not be loaded" | The image is missing in `frontend/public/maps/` or `VITE_MAPS_URL` is wrong. |
+| The map page shows "No map data is available" | The square is not in `map_grid`; run ImportLueckKoordinaten. |

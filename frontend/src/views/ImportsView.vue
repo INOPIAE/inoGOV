@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { api } from '../api'
 import { useErrors } from '../composables/useErrors'
@@ -14,6 +14,8 @@ const busy = ref(false)
 const report = ref(null)
 const error = ref('')
 
+const accept = computed(() => (imports.value.find((i) => i.key === key.value)?.accepts ?? ['.csv']).join(','))
+
 onMounted(async () => {
   try {
     imports.value = await api('/imports')
@@ -27,6 +29,11 @@ function describe(importKey) {
   if (importKey === 'ImportLueck') {
     return $gettext(
       'CSV file with a header row and three columns: Polish place name, Polish district name, coordinate. Every row creates a new place with a reference to the map "Lück".',
+    )
+  }
+  if (importKey === 'ImportLueckKoordinaten') {
+    return $gettext(
+      'Excel or CSV file with the image size (Bildbreite_px, Bildhoehe_px) followed by a table with the columns Koordinate, X1, Y1, X2, Y2, Breite_px, Hoehe_px, Laenge_von, Laenge_bis, Breite_von, Breite_bis. Every row defines a grid square of the map "Lück". Duplicates are not checked.',
     )
   }
   return ''
@@ -50,8 +57,31 @@ function rowError(item) {
       return $gettext('Coordinate is longer than 2 characters.')
     case 'unexpected':
       return $gettext('Unexpected error while saving this row.')
+    case 'bad_number':
+      return $gettext('A number is invalid or missing.')
+    case 'invalid_area':
+      return $gettext('The area is empty or reversed (X2/Y2 must be greater than X1/Y1).')
+    case 'outside_image':
+      return $gettext('The area lies outside the image.')
     default:
       return item.message
+  }
+}
+
+function abortText(detail) {
+  switch (detail) {
+    case 'no_polish':
+      return $gettext('The Polish language is missing in the language table.')
+    case 'no_header':
+      return $gettext('The header row with "Koordinate" was not found.')
+    case 'no_image_size':
+      return $gettext('Bildbreite_px / Bildhoehe_px are missing or invalid.')
+    case 'missing_columns':
+      return $gettext('Required columns are missing.')
+    case 'unreadable':
+      return $gettext('The file cannot be read.')
+    default:
+      return ''
   }
 }
 
@@ -70,8 +100,7 @@ async function start() {
     report.value = await api(`/imports/${encodeURIComponent(key.value)}`, { method: 'POST', body: form })
   } catch (e) {
     if (e.status === 413) error.value = $gettext('The file is too large.')
-    else if (e.status === 422 && e.detail === 'no_polish')
-      error.value = $gettext('The Polish language is missing in the language table.')
+    else if (e.status === 422 && abortText(e.detail)) error.value = abortText(e.detail)
     else error.value = errorText(e)
   } finally {
     busy.value = false
@@ -95,8 +124,8 @@ async function start() {
             <div v-if="key" class="form-text" data-test="description">{{ describe(key) }}</div>
           </div>
           <div class="mb-3">
-            <label class="form-label" for="import-file">{{ $gettext('CSV file') }}</label>
-            <input id="import-file" type="file" class="form-control" accept=".csv,text/csv,text/plain" @change="onFile" />
+            <label class="form-label" for="import-file">{{ $gettext('File') }}</label>
+            <input id="import-file" type="file" class="form-control" :accept="accept" @change="onFile" />
             <div class="form-text">{{ $gettext('Rows with errors are skipped and listed below. Duplicates are not checked.') }}</div>
           </div>
           <button class="btn btn-primary" type="submit" :disabled="!file || !key || busy">

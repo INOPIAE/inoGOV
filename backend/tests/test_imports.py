@@ -58,7 +58,17 @@ def test_import_list_is_admin_only(client, admin_h, user_h):
     assert client.get("/imports").status_code in (401, 403)
     assert client.get("/imports", headers=user_h).status_code == 403
     body = client.get("/imports", headers=admin_h).json()
-    assert body == [{"key": "ImportLueck", "columns": ["place_name_pl", "district_name_pl", "coordinate"]}]
+    assert body == [
+        {"key": "ImportLueck", "columns": ["place_name_pl", "district_name_pl", "coordinate"], "accepts": [".csv"]},
+        {
+            "key": "ImportLueckKoordinaten",
+            "columns": [
+                "Koordinate", "X1", "Y1", "X2", "Y2", "Breite_px", "Hoehe_px",
+                "Laenge_von", "Laenge_bis", "Breite_von", "Breite_bis",
+            ],
+            "accepts": [".xlsx", ".csv"],
+        },
+    ]
 
 
 def test_upload_is_admin_only(client, user_h, pl):

@@ -5,6 +5,7 @@ import { useSettingsStore } from './stores/settings'
 export const routes = [
   { path: '/', name: 'home', component: () => import('./views/HomeView.vue') },
   { path: '/login', name: 'login', component: () => import('./views/LoginView.vue') },
+  { path: '/map/:karte/:koordinate', name: 'map', component: () => import('./views/MapView.vue') },
   { path: '/forgot-password', component: () => import('./views/ForgotPasswordView.vue') },
   { path: '/reset-password', component: () => import('./views/ResetPasswordView.vue') },
   { path: '/setup-account', component: () => import('./views/SetupAccountView.vue') },
@@ -27,7 +28,7 @@ export function createAppRouter(history = createWebHistory()) {
     const auth = useAuthStore()
     // Admins ohne OTP dürfen nur die Einrichtung auf "Mein Konto" nutzen
     if (auth.otpSetupRequired) return to.path === '/account' ? true : '/account'
-    const searchRequiresLogin = to.name === 'home' && !useSettingsStore().publicSearch
+    const searchRequiresLogin = ['home', 'map'].includes(to.name) && !useSettingsStore().publicSearch
     if (!to.meta.auth && !searchRequiresLogin) return true
     if (!auth.isLoggedIn) return { path: '/login', query: { next: to.fullPath } }
     if (to.meta.role === 'admin' && !auth.isAdmin) return '/'
