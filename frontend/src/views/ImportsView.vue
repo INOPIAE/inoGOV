@@ -31,7 +31,17 @@ function describe(importKey) {
       'CSV file with a header row and three columns: Polish place name, Polish district name, coordinate. Every row creates a new place with a reference to the map "Lück".',
     )
   }
+    if (importKey === 'ImportStumpp') {
+    return $gettext(
+      'CSV file with a header row and three columns: German place name, German district name, coordinate. Every row creates a new place with a reference to the map "Stumpp".',
+    )
+  }
   if (importKey === 'ImportLueckKoordinaten') {
+    return $gettext(
+      'Excel or CSV file with the image size (Bildbreite_px, Bildhoehe_px) followed by a table with the columns Koordinate, X1, Y1, X2, Y2, Breite_px, Hoehe_px, Laenge_von, Laenge_bis, Breite_von, Breite_bis. Every row defines a grid square of the map "Lück". Duplicates are not checked.',
+    )
+  }
+  if (importKey === 'ImportStumppKoordinaten') {
     return $gettext(
       'Excel or CSV file with the image size (Bildbreite_px, Bildhoehe_px) followed by a table with the columns Koordinate, X1, Y1, X2, Y2, Breite_px, Hoehe_px, Laenge_von, Laenge_bis, Breite_von, Breite_bis. Every row defines a grid square of the map "Lück". Duplicates are not checked.',
     )
@@ -72,6 +82,8 @@ function abortText(detail) {
   switch (detail) {
     case 'no_polish':
       return $gettext('The Polish language is missing in the language table.')
+    case 'no_german':
+      return $gettext('The German language is missing in the language table.')
     case 'no_header':
       return $gettext('The header row with "Koordinate" was not found.')
     case 'no_image_size':
@@ -154,7 +166,7 @@ async function start() {
           <h2 class="h5">{{ $gettext('Errors') }}</h2>
           <div class="table-responsive">
             <table class="table table-sm align-middle mb-0">
-              <thead>
+              <thead> 
                 <tr>
                   <th>{{ $gettext('Line') }}</th>
                   <th>{{ $gettext('Reason') }}</th>
