@@ -34,7 +34,7 @@ export class ApiError extends Error {
 }
 
 export async function api(path, { method = 'GET', body, params, auth = true } = {}) {
-  const url = new URL(BASE + path)
+  const url = new URL(BASE + path, window.location.origin)
   for (const [key, value] of Object.entries(params || {})) {
     if (value !== undefined && value !== null && value !== '') url.searchParams.set(key, value)
   }
