@@ -77,6 +77,15 @@ onMounted(async () => {
     <div v-if="error" class="alert alert-danger" role="alert">{{ error }}</div>
     <p v-if="searched && !results.length && !error" data-test="empty">{{ $gettext('No places found.') }}</p>
 
+    <div v-if="searched && (offset > 0 || results.length === LIMIT)" class="d-flex gap-2">
+      <button class="btn btn-outline-primary" :disabled="offset === 0 || loading" @click="search(offset - LIMIT)">
+        {{ $gettext('Previous') }}
+      </button>
+      <button class="btn btn-outline-primary" :disabled="results.length < LIMIT || loading" @click="search(offset + LIMIT)">
+        {{ $gettext('Next') }}
+      </button>
+    </div>
+
     <div v-if="results.length" class="table-responsive">
       <table class="table table-hover align-middle">
         <thead>
@@ -130,5 +139,6 @@ onMounted(async () => {
         {{ $gettext('Next') }}
       </button>
     </div>
+
   </div>
 </template>
