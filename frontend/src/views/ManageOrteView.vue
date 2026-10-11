@@ -5,6 +5,7 @@ import { api } from '../api'
 import { useErrors } from '../composables/useErrors'
 import { useSettingsStore } from '../stores/settings'
 import NamesEditor from '../components/NamesEditor.vue'
+import GovSuche from '../components/GovSuche.vue'
 
 const gettext = useGettext()
 const { $gettext } = gettext
@@ -87,6 +88,17 @@ const removeName = (nameId) =>
     await refresh(form.value.id)
   })
 
+const addGovPlace = (data) =>
+  guard(async () => {
+    if (!form.value) return
+
+    form.value.gov_id = data.gov_id
+    form.value.lon = data.lon
+    form.value.lat = data.lat
+
+    await save()
+})
+
 onMounted(async () => {
   await guard(() => settings.loadReference())
   await loadList()
@@ -163,6 +175,13 @@ onMounted(async () => {
             @add="addName"
             @remove="removeName"
           />
+
+          <GovSuche
+            v-if="form.id"
+            @add="addName"
+            @select-place="addGovPlace"
+          />
+
           <p v-else class="text-muted small mb-0">{{ $gettext('Save the place first, then add names.') }}</p>
         </form>
       </div>
