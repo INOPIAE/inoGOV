@@ -39,6 +39,7 @@ async function search(newOffset = 0) {
 
 const govUrl = (ort) => `https://gov.genealogy.net/item/show/${encodeURIComponent(ort.gov_id)}`
 const mapUrl = (ort) => `https://etomesto.com/map-ukraine_spezialkarte-uk-750/?y=${ort.lat}&x=${ort.lon}`
+const osmURL = (ort) => `https://www.openstreetmap.org/?mlat=${ort.lat}&mlon=${ort.lon}#map=9/${ort.lat}/${ort.lon}` 
 const otherNames = (ort) => ort.namen.filter((n) => n.ortsname !== settings.pickName(ort.namen, 'ortsname', language.value))
 
 onMounted(async () => {
@@ -125,6 +126,7 @@ onMounted(async () => {
             <td class="text-nowrap">
               <a v-if="ort.gov_id" :href="govUrl(ort)" target="_blank" rel="noopener">GOV</a>
               <a v-if="ort.lat && ort.lon" class="ms-2" :href="mapUrl(ort)" target="_blank" rel="noopener">{{ $gettext('Map') }}</a>
+              <a v-if="ort.lat && ort.lon" class="ms-2" :href="osmURL(ort)" target="_blank" rel="noopener">{{ $gettext('OSM') }}</a>  
             </td>
           </tr>
         </tbody>
