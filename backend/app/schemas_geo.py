@@ -124,3 +124,4 @@ class OrtStatistics(ORM):
     total: int
     gov: int
     geo: int
+    not_found: int

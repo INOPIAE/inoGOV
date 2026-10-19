@@ -174,4 +174,5 @@ def ort_statistics(
     total = db.scalar(select(func.count()).select_from(Ort).where(Ort.active))
     gov = db.scalar(select(func.count()).select_from(Ort).where(Ort.active, Ort.gov_id.isnot(None)))
     geo = db.scalar(select(func.count()).select_from(Ort).where(Ort.active, Ort.lon.isnot(None), Ort.lat.isnot(None)))
-    return OrtStatistics(total=total, gov=gov, geo=geo)
+    not_found = db.scalar(select(func.count()).select_from(Ort).where(Ort.active, Ort.coordinates_not_found))
+    return OrtStatistics(total=total, gov=gov, geo=geo, not_found=not_found)

@@ -44,7 +44,7 @@ onMounted(loadStatistics)
 
     <template v-else-if="statistics">
       <div class="row g-3">
-        <div class="col-12 col-md-4">
+        <div class="col-12 col-md-3">
           <div class="card h-100">
             <div class="card-body">
               <h2 class="h6 text-muted">
@@ -57,7 +57,7 @@ onMounted(loadStatistics)
           </div>
         </div>
 
-        <div class="col-12 col-md-4">
+        <div class="col-12 col-md-3">
           <div class="card h-100">
             <div class="card-body">
               <h2 class="h6 text-muted">
@@ -76,7 +76,7 @@ onMounted(loadStatistics)
           </div>
         </div>
 
-        <div class="col-12 col-md-4">
+        <div class="col-12 col-md-3">
           <div class="card h-100">
             <div class="card-body">
               <h2 class="h6 text-muted">
@@ -87,6 +87,25 @@ onMounted(loadStatistics)
               </p>
               <small v-if="statistics.total > 0" class="text-muted">
                 {{ (statistics.geo / statistics.total * 100).toLocaleString(
+                  gettext.current,
+                  { maximumFractionDigits: 1 }
+                ) }} %
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-3">
+          <div class="card h-100">
+            <div class="card-body">
+              <h2 class="h6 text-muted">
+                {{ gettext.$gettext('Places with coordinates not found') }}
+              </h2>
+              <p class="display-6 mb-0">
+                {{ statistics.not_found }}
+              </p>
+              <small v-if="statistics.total > 0" class="text-muted">
+                {{ (statistics.not_found / statistics.total * 100).toLocaleString(
                   gettext.current,
                   { maximumFractionDigits: 1 }
                 ) }} %
