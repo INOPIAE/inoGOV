@@ -116,3 +116,8 @@ class OrtOut(ORM):
     comment: str | None
     namen: list[OrtsnameOut] = []
     karten: list[KarteOut] = []
+
+class OrtStatistics(ORM):
+    total: int
+    gov: int
+    geo: int

@@ -3,6 +3,7 @@ import uuid
 from fastapi import APIRouter, Depends, HTTPException, Query, Response
 from sqlalchemy import select
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 
 from app.database import get_db
 from app.deps import read_access, require_editor
@@ -16,6 +17,7 @@ from app.schemas_geo import (
     OrtsnameIn,
     OrtsnameOut,
     OrtUpdate,
+    OrtStatistics,
 )
 
 router = APIRouter(prefix="/orte", tags=["orte"])
@@ -163,3 +165,13 @@ def delete_karte(
     apply_changes(karte, {"active": False}, user.id)
     db.commit()
     return Response(status_code=204)
+
+@router.get("/statistics/", response_model=OrtStatistics)
+def ort_statistics(
+    db: Session = Depends(get_db),
+):
+    print("ort_statistics wurde aufgerufen")
+    total = db.scalar(select(func.count()).select_from(Ort).where(Ort.active))
+    gov = db.scalar(select(func.count()).select_from(Ort).where(Ort.active, Ort.gov_id.isnot(None)))
+    geo = db.scalar(select(func.count()).select_from(Ort).where(Ort.active, Ort.lon.isnot(None), Ort.lat.isnot(None)))
+    return OrtStatistics(total=total, gov=gov, geo=geo)

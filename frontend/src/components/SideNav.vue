@@ -54,6 +54,7 @@ function logout() {
       <li class="nav-item"><router-link class="nav-link" to="/about">{{ $gettext('About us') }}</router-link></li>
       <li class="nav-item"><router-link class="nav-link" to="/imprint">{{ $gettext('Imprint') }}</router-link></li>
       <li class="nav-item"><router-link class="nav-link" to="/privacy">{{ $gettext('Privacy') }}</router-link></li>
+      <li class="nav-item"><router-link class="nav-link" to="/statistics">{{ $gettext('Statistics') }}</router-link></li>
 
       <li class="nav-heading">&nbsp;</li>
       <li v-if="auth.isLoggedIn" class="nav-item">

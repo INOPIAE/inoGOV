@@ -19,6 +19,7 @@ export const routes = [
   { path: '/about', component: () => import('./views/InfoView.vue'), props: { page: 'about' } },
   { path: '/imprint', component: () => import('./views/InfoView.vue'), props: { page: 'imprint' } },
   { path: '/privacy', component: () => import('./views/InfoView.vue'), props: { page: 'privacy' } },
+  { path: '/statistics', component: () => import('./views/OrteStatisticsView.vue') },
   { path: '/:pathMatch(.*)*', redirect: '/' },
 ]
 
