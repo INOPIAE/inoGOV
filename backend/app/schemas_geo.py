@@ -93,6 +93,7 @@ class OrtCreate(BaseModel):
     lat: Decimal | None = Field(default=None, ge=-90, le=90, max_digits=9, decimal_places=6)
     addition: str | None = Field(default=None, max_length=255)
     comment: str | None = None
+    coordinates_not_found: bool = False
     namen: list[OrtsnameIn] = []
     karten: list[KarteIn] = []
 
@@ -104,6 +105,7 @@ class OrtUpdate(BaseModel):
     lat: Decimal | None = Field(default=None, ge=-90, le=90, max_digits=9, decimal_places=6)
     addition: str | None = Field(default=None, max_length=255)
     comment: str | None = None
+    coordinates_not_found: bool | None = None
 
 
 class OrtOut(ORM):
@@ -114,6 +116,7 @@ class OrtOut(ORM):
     lat: Decimal | None
     addition: str | None
     comment: str | None
+    coordinates_not_found: bool = False
     namen: list[OrtsnameOut] = []
     karten: list[KarteOut] = []
 

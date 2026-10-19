@@ -31,6 +31,7 @@ const toForm = (ort) => ({
   lon: ort.lon ?? '',
   addition: ort.addition ?? '',
   comment: ort.comment ?? '',
+  coordinates_not_found: ort.coordinates_not_found ?? false,
 })
 const clean = (v) => (v === '' ? null : v)
 
@@ -59,6 +60,7 @@ const save = () =>
       lon: clean(f.lon),
       addition: clean(f.addition),
       comment: clean(f.comment),
+      coordinates_not_found: f.coordinates_not_found,
     }
     const saved = f.id
       ? await api(`/orte/${f.id}`, { method: 'PATCH', body })
@@ -162,6 +164,10 @@ onMounted(async () => {
             <div class="col-12">
               <label class="form-label" for="comment">{{ $gettext('Comment') }}</label>
               <textarea id="comment" v-model="form.comment" class="form-control" rows="2"></textarea>
+            </div>
+            <div class="col-12">
+              <label class="form-label" for="coordinates_not_found">{{ $gettext('Coordinates not found') }}</label>
+              <input id="coordinates_not_found" type="checkbox" v-model="form.coordinates_not_found" class="form-check-input" />
             </div>
           </div>
           <div class="d-flex gap-2 mb-3">

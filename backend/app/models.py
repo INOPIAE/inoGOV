@@ -111,6 +111,12 @@ class Ort(AuditMixin, Base):
     lat: Mapped[Decimal | None] = mapped_column(Numeric(9, 6))
     addition: Mapped[str | None] = mapped_column(String(255))
     comment: Mapped[str | None] = mapped_column(String)
+    coordinates_not_found: Mapped[bool] = mapped_column(
+        Boolean,
+        nullable=False,
+        default=False,
+        server_default=text("false"),
+    )
 
 
 class Ortsname(AuditMixin, Base):
