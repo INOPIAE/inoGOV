@@ -130,7 +130,7 @@ onMounted(async () => {
             data-test="list-item"
             @click="form = toForm(ort)"
           >
-            {{ label(ort) }} <small v-if="ort.gov_id">({{ ort.gov_id }})</small>
+            {{ label(ort) }} <small v-if="ort.gov_id">({{ ort.gov_id }})</small><small v-if="ort.lon"> [{{ ort.lat }}, {{ ort.lon }}]</small><small v-if="ort.coordinates_not_found">({{ $gettext('Coordinates not found') }})</small>
           </button>
         </div>
       </div>
