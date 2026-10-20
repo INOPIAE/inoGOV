@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">Kartensuche</title>
+  <rect width="64" height="64" rx="12" fill="#1f5f8b"/>
+  <!-- Karte -->
+  <path d="M8 24 L23 19 L41 24 L56 19 V48 L41 53 L23 48 L8 53 Z"
+        fill="#79bd78" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M23 19 V48 M41 24 V53" stroke="#fff" stroke-width="2"/>
+  <!-- Pin -->
+  <path d="M32 5 C24 5 19 11 19 18 C19 27 32 37 32 37 C32 37 45 27 45 18 C45 11 40 5 32 5 Z"
+        fill="#fff" stroke="#1f5f8b" stroke-width="2"/>
+  <circle cx="32" cy="17" r="4" fill="#1f5f8b"/>
+  <!-- Lupe -->
+  <circle cx="42" cy="39" r="9" fill="#1f5f8b" stroke="#fff" stroke-width="3.5"/>
+  <path d="M48 46 L57 55" stroke="#fff" stroke-width="4.5" stroke-linecap="round"/>
+</svg>

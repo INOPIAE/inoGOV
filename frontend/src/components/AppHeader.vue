@@ -19,7 +19,7 @@ const settings = useSettingsStore()
       &#9776;
     </button>
     <router-link to="/" class="d-flex align-items-center gap-2 text-decoration-none text-reset">
-      <img src="/logo.svg" alt="" width="36" height="36" />
+      <img src="/logo.svg" alt="inoGOV logo" width="36" height="36" />
       <span class="fs-4 fw-semibold">{{ settings.appName }}</span>
     </router-link>
     <div class="ms-auto">

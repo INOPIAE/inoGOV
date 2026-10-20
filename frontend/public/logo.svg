@@ -1,5 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="inoGOV">
-  <rect width="64" height="64" rx="12" fill="#1f5f8b"/>
-  <circle cx="32" cy="26" r="9" fill="none" stroke="#fff" stroke-width="4"/>
-  <path d="M32 54 L20 32 M32 54 L44 32" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title id="title">Kartensuche</title>
+  <desc id="desc">Gefaltete Karte mit Standortmarkierung und Lupe</desc>
+  <rect width="256" height="256" rx="28" fill="#1f5f8b"/>
+  <!-- Gefaltete Karte -->
+  <path d="M32 91 L91 70 L164 91 L224 70 L224 177 L164 198 L91 177 L32 198 Z"
+        fill="#79bd78" stroke="#ffffff" stroke-width="7" stroke-linejoin="round"/>
+  <path d="M91 70 V177 M164 91 V198" fill="none" stroke="#ffffff" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M32 145 C54 139 68 126 91 119 L124 135 L164 121 L224 103 V151 L164 168 L91 151 L32 174 Z"
+        fill="#4aa6d8" stroke="#ffffff" stroke-width="5" stroke-linejoin="round"/>
+  <!-- Standort-Pin -->
+  <path d="M128 28 C105 28 88 45 88 67 C88 93 128 128 128 128 C128 128 168 93 168 67 C168 45 151 28 128 28 Z"
+        fill="#ffffff" stroke="#1f5f8b" stroke-width="5" stroke-linejoin="round"/>
+  <circle cx="128" cy="66" r="12" fill="#1f5f8b"/>
+  <!-- Lupe -->
+  <circle cx="166" cy="155" r="31" fill="#1f5f8b" stroke="#ffffff" stroke-width="8"/>
+  <circle cx="166" cy="155" r="19" fill="#79bd78" stroke="#ffffff" stroke-width="3"/>
+  <path d="M188 178 L218 208" fill="none" stroke="#ffffff" stroke-width="13" stroke-linecap="round"/>
 </svg>
