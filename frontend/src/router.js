@@ -20,6 +20,8 @@ export const routes = [
   { path: '/imprint', component: () => import('./views/InfoView.vue'), props: { page: 'imprint' } },
   { path: '/privacy', component: () => import('./views/InfoView.vue'), props: { page: 'privacy' } },
   { path: '/terms', component: () => import('./views/InfoView.vue'), props: { page: 'terms' } },
+  { path: '/license', component: () => import('./views/InfoView.vue'), props: { page: 'license' } },
+  { path: '/third-party-licenses', component: () => import('./views/InfoView.vue'), props: { page: 'tp_license' } },
   { path: '/statistics', component: () => import('./views/OrteStatisticsView.vue') },
   { path: '/:pathMatch(.*)*', redirect: '/' },
 ]

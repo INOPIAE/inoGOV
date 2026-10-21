@@ -4,6 +4,8 @@ This folder is used to load legal text content at runtime.
 
 The real HTML files are intentionally excluded from git via [.gitignore](../../.gitignore) and should be provided per deployment environment.
 
+The files LICENSE and THIRD-PARTY-LICENSES.md ara copy from the root directory.
+
 Expected files (language-specific):
 
 - imprint.en.html

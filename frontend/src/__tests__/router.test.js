@@ -40,7 +40,7 @@ describe('router guard', () => {
 
   it('keeps public pages reachable when search is restricted', async () => {
     useSettingsStore().publicSearch = false
-    for (const path of ['/login', '/about', '/imprint', '/privacy', '/terms', '/forgot-password']) {
+    for (const path of ['/login', '/about', '/imprint', '/privacy', '/terms', '/license', '/third-party-licenses', '/forgot-password']) {
       expect((await go(path)).path).toBe(path)
     }
   })
