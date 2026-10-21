@@ -4,7 +4,23 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
 from app.routers import account, auth, gov_suche, imports, kreise, maps, orte, sprachen, users
 
-app = FastAPI(title="inoGOV")
+app = FastAPI(
+    title="inoGOV",
+    description="RESTful API for inoGOV",
+    version="1.0.0",
+    terms_of_service=f"{settings.frontend_url.rstrip('/')}/terms",
+    openapi_tags=[
+        {"name": "auth", "description": "Authentication and user management"},
+        {"name": "users", "description": "User management and profile"},
+        {"name": "account", "description": "Account management"},
+        {"name": "sprachen", "description": "Language management"},
+        {"name": "kreise", "description": "District management"},
+        {"name": "orte", "description": "Place management"},
+        {"name": "imports", "description": "Data import management"},
+        {"name": "maps", "description": "Map management"},
+        {"name": "gov_suche", "description": "GOV search functionality"},
+    ]
+)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origin_list,
