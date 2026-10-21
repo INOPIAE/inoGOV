@@ -1,3 +1,4 @@
+
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
@@ -5,8 +6,13 @@ import { useGettext } from 'vue3-gettext'
 const props = defineProps({ page: String })
 const { $gettext } = useGettext()
 
-const termsHtml = ref('')
-const termsError = ref(false)
+const legalHtml = ref('')
+const legalError = ref(false)
+
+const legalFiles = {
+  terms: '/legal/terms-of-service.de.html',
+  privacy: '/legal/data-protection.de.html',
+}
 
 const pages = computed(() => ({
   about: {
@@ -19,7 +25,7 @@ const pages = computed(() => ({
   },
   privacy: {
     title: $gettext('Privacy'),
-    text: $gettext('The privacy policy will be published here.'),
+    text: '',
   },
   terms: {
     title: $gettext('Terms of Service'),
@@ -27,53 +33,66 @@ const pages = computed(() => ({
   },
 }))
 
-async function loadTerms() {
-  termsHtml.value = ''
-  termsError.value = false
+async function loadLegalPage(page) {
+  legalHtml.value = ''
+  legalError.value = false
+
+  const file = legalFiles[page]
+  if (!file) return
 
   try {
-    const response = await fetch('/legal/terms-of-service.de.html')
+    const response = await fetch(file)
 
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`)
     }
 
-    termsHtml.value = await response.text()
+    legalHtml.value = await response.text()
   } catch (error) {
-    console.error('Error loading terms.html:', error)
-    termsError.value = true
+    console.error(`Error loading ${file}:`, error)
+    legalError.value = true
   }
 }
 
 onMounted(() => {
-  if (props.page === 'terms') {
-    loadTerms()
+  if (legalFiles[props.page]) {
+    loadLegalPage(props.page)
   }
 })
 
-watch(() => props.page, (page) => {
-  if (page === 'terms') {
-    loadTerms()
-  }
-})
+watch(
+  () => props.page,
+  (page) => {
+    if (legalFiles[page]) {
+      loadLegalPage(page)
+    } else {
+      legalHtml.value = ''
+      legalError.value = false
+    }
+  },
+)
 </script>
 
 <template>
   <div class="col-12 col-lg-8">
-    <h1 class="h3 mb-3">{{ pages[props.page]?.title }}</h1>
+    <h1 class="h3 mb-3">
+      {{ pages[props.page]?.title }}
+    </h1>
 
-    <template v-if="props.page === 'terms'">
-      <div v-if="termsError" class="alert alert-danger">
-        {{ $gettext('The terms of service could not be loaded.') }}
+    <template v-if="legalFiles[props.page]">
+      <div v-if="legalError" class="alert alert-danger">
+        {{ $gettext('The legal text could not be loaded.') }}
       </div>
 
-      <div v-else-if="termsHtml" v-html="termsHtml"></div>
+      <div v-else-if="legalHtml" v-html="legalHtml"></div>
 
       <p v-else class="text-muted">
         {{ $gettext('Loading...') }}
       </p>
     </template>
 
-    <p v-else>{{ pages[props.page]?.text }}</p>
+    <p v-else>
+      {{ pages[props.page]?.text }}
+    </p>
   </div>
 </template>
