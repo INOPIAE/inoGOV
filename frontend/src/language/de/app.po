@@ -39,7 +39,7 @@ msgstr "Zusatz"
 msgid "Administrators cannot disable OTP."
 msgstr "Administratoren können OTP nicht deaktivieren."
 
-#: src/views/HomeView.vue
+#: src/views/OrteView.vue
 msgid "All districts"
 msgstr "Alle Kreise"
 
@@ -103,7 +103,7 @@ msgstr "Die Koordinate ist länger als 2 Zeichen."
 msgid "Coordinate is missing."
 msgstr "Die Koordinate fehlt."
 
-#: src/views/HomeView.vue
+#: src/views/OrteView.vue
 msgid "Coordinates"
 msgstr "Koordinaten"
 
@@ -135,7 +135,7 @@ msgstr "Löschen"
 msgid "Disable OTP"
 msgstr "OTP deaktivieren"
 
-#: src/views/HomeView.vue src/views/ManageOrteView.vue
+#: src/views/OrteView.vue src/views/ManageOrteView.vue
 msgid "District"
 msgstr "Kreis"
 
@@ -283,7 +283,7 @@ msgstr "Breitengrad"
 msgid "Line"
 msgstr "Zeile"
 
-#: src/views/HomeView.vue
+#: src/views/OrteView.vue
 msgid "Links"
 msgstr "Links"
 
@@ -311,7 +311,7 @@ msgstr "Hauptnavigation"
 msgid "Management"
 msgstr "Verwaltung"
 
-#: src/views/HomeView.vue src/views/ManageKartenView.vue
+#: src/views/OrteView.vue src/views/ManageKartenView.vue
 msgid "Map"
 msgstr "Karte"
 
@@ -327,7 +327,7 @@ msgstr "Kartenbild mit hervorgehobenem Planquadrat %{koordinate}"
 msgid "Map view"
 msgstr "Kartenansicht"
 
-#: src/components/SideNav.vue src/views/HomeView.vue src/views/ManageKartenView.vue
+#: src/components/SideNav.vue src/views/OrteView.vue src/views/ManageKartenView.vue
 msgid "Maps"
 msgstr "Karten"
 
@@ -351,7 +351,7 @@ msgstr "Neues Passwort"
 msgid "New place"
 msgstr "Neuer Ort"
 
-#: src/views/HomeView.vue
+#: src/views/OrteView.vue
 msgid "Next"
 msgstr "Weiter"
 
@@ -363,7 +363,7 @@ msgstr "Für dieses Planquadrat liegen keine Kartendaten vor."
 msgid "No map references yet."
 msgstr "Noch keine Kartenverweise."
 
-#: src/views/HomeView.vue
+#: src/views/OrteView.vue
 msgid "No places found."
 msgstr "Keine Orte gefunden."
 
@@ -407,11 +407,11 @@ msgstr "Passwort"
 msgid "Password or code is wrong."
 msgstr "Passwort oder Code ist falsch."
 
-#: src/views/HomeView.vue
+#: src/views/OrteView.vue
 msgid "Place"
 msgstr "Ort"
 
-#: src/views/HomeView.vue src/views/ManageKartenView.vue src/views/ManageOrteView.vue
+#: src/views/OrteView.vue src/views/ManageKartenView.vue src/views/ManageOrteView.vue
 msgid "Place name"
 msgstr "Ortsname"
 
@@ -435,7 +435,7 @@ msgstr "Orte"
 msgid "Please wait..."
 msgstr "Bitte warten..."
 
-#: src/views/HomeView.vue
+#: src/views/OrteView.vue
 msgid "Previous"
 msgstr "Zurück"
 
@@ -523,11 +523,11 @@ msgstr "Gespeichert."
 msgid "Scan the QR code with your authenticator app or enter the key manually."
 msgstr "Scannen Sie den QR-Code mit Ihrer Authenticator-App oder geben Sie den Schlüssel manuell ein."
 
-#: src/views/HomeView.vue src/views/ManageKartenView.vue src/views/ManageKreiseView.vue src/views/ManageOrteView.vue
+#: src/views/OrteView.vue src/views/ManageKartenView.vue src/views/ManageKreiseView.vue src/views/ManageOrteView.vue
 msgid "Search"
 msgstr "Suchen"
 
-#: src/components/SideNav.vue src/views/HomeView.vue
+#: src/components/SideNav.vue src/views/OrteView.vue
 msgid "Search places"
 msgstr "Orte suchen"
 

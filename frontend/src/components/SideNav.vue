@@ -18,6 +18,7 @@ function logout() {
 <template>
   <nav class="app-nav" :class="{ open }" :aria-label="$gettext('Main navigation')">
     <ul class="nav flex-column">
+      <li class="nav-item"><router-link class="nav-link" to="/">{{ $gettext('Home') }}</router-link></li>
       <template v-if="auth.otpSetupRequired">
         <li class="nav-item"><router-link class="nav-link" to="/account">{{ $gettext('My account') }}</router-link></li>
         <li class="nav-item">
@@ -25,44 +26,43 @@ function logout() {
         </li>
       </template>
       <template v-else>
-      <li v-if="settings.publicSearch || auth.isLoggedIn" class="nav-item">
-        <router-link class="nav-link" to="/">{{ $gettext('Search places') }}</router-link>
-      </li>
-
-      <template v-if="auth.canEdit">
-        <li class="nav-heading">{{ $gettext('Management') }}</li>
-        <li class="nav-item"><router-link class="nav-link" to="/manage/orte">{{ $gettext('Places') }}</router-link></li>
-        <li class="nav-item"><router-link class="nav-link" to="/manage/kreise">{{ $gettext('Districts') }}</router-link></li>
-        <li class="nav-item"><router-link class="nav-link" to="/manage/karten">{{ $gettext('Maps') }}</router-link></li>
-        <li v-if="auth.isAdmin" class="nav-item">
-          <router-link class="nav-link" to="/manage/imports">{{ $gettext('Imports') }}</router-link>
+        <li v-if="settings.publicSearch || auth.isLoggedIn" class="nav-item">
+          <router-link class="nav-link" to="/orte">{{ $gettext('Search places') }}</router-link>
         </li>
-      </template>
+        <template v-if="auth.canEdit">
+          <li class="nav-heading">{{ $gettext('Management') }}</li>
+          <li class="nav-item"><router-link class="nav-link" to="/manage/orte">{{ $gettext('Places') }}</router-link></li>
+          <li class="nav-item"><router-link class="nav-link" to="/manage/kreise">{{ $gettext('Districts') }}</router-link></li>
+          <li class="nav-item"><router-link class="nav-link" to="/manage/karten">{{ $gettext('Maps') }}</router-link></li>
+          <li v-if="auth.isAdmin" class="nav-item">
+            <router-link class="nav-link" to="/manage/imports">{{ $gettext('Imports') }}</router-link>
+          </li>
+        </template>
 
-      <template v-if="auth.isLoggedIn">
-        <li class="nav-heading">{{ $gettext('Users') }}</li>
-        <li class="nav-item"><router-link class="nav-link" to="/account">{{ $gettext('My account') }}</router-link></li>
-        <li v-if="auth.isAdmin" class="nav-item">
-          <router-link class="nav-link" to="/users">{{ $gettext('User management') }}</router-link>
+        <template v-if="auth.isLoggedIn">
+          <li class="nav-heading">{{ $gettext('Users') }}</li>
+          <li class="nav-item"><router-link class="nav-link" to="/account">{{ $gettext('My account') }}</router-link></li>
+          <li v-if="auth.isAdmin" class="nav-item">
+            <router-link class="nav-link" to="/users">{{ $gettext('User management') }}</router-link>
+          </li>
+        </template>
+
+        <li class="nav-heading">{{ $gettext('Information') }}</li>
+        <li class="nav-item">
+          <a class="nav-link" :href="`${apiBase}/docs`" target="_blank" rel="noopener">{{ $gettext('API documentation') }}</a>
         </li>
-      </template>
+        <li class="nav-item"><router-link class="nav-link" to="/about">{{ $gettext('About us') }}</router-link></li>
+        <li class="nav-item"><router-link class="nav-link" to="/imprint">{{ $gettext('Imprint') }}</router-link></li>
+        <li class="nav-item"><router-link class="nav-link" to="/privacy">{{ $gettext('Privacy') }}</router-link></li>
+        <li class="nav-item"><router-link class="nav-link" to="/statistics">{{ $gettext('Statistics') }}</router-link></li>
 
-      <li class="nav-heading">{{ $gettext('Information') }}</li>
-      <li class="nav-item">
-        <a class="nav-link" :href="`${apiBase}/docs`" target="_blank" rel="noopener">{{ $gettext('API documentation') }}</a>
-      </li>
-      <li class="nav-item"><router-link class="nav-link" to="/about">{{ $gettext('About us') }}</router-link></li>
-      <li class="nav-item"><router-link class="nav-link" to="/imprint">{{ $gettext('Imprint') }}</router-link></li>
-      <li class="nav-item"><router-link class="nav-link" to="/privacy">{{ $gettext('Privacy') }}</router-link></li>
-      <li class="nav-item"><router-link class="nav-link" to="/statistics">{{ $gettext('Statistics') }}</router-link></li>
-
-      <li class="nav-heading">&nbsp;</li>
-      <li v-if="auth.isLoggedIn" class="nav-item">
-        <button type="button" class="nav-link btn btn-link text-start w-100" @click="logout">{{ $gettext('Log out') }}</button>
-      </li>
-      <li v-else class="nav-item">
-        <router-link class="nav-link" to="/login">{{ $gettext('Log in') }}</router-link>
-      </li>
+        <li class="nav-heading">&nbsp;</li>
+        <li v-if="auth.isLoggedIn" class="nav-item">
+          <button type="button" class="nav-link btn btn-link text-start w-100" @click="logout">{{ $gettext('Log out') }}</button>
+        </li>
+        <li v-else class="nav-item">
+          <router-link class="nav-link" to="/login">{{ $gettext('Log in') }}</router-link>
+        </li>
       </template>
     </ul>
   </nav>

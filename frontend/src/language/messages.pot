@@ -38,7 +38,7 @@ msgstr ""
 msgid "Administrators cannot disable OTP."
 msgstr ""
 
-#: src/views/HomeView.vue
+#: src/views/OrteView.vue
 msgid "All districts"
 msgstr ""
 
@@ -102,7 +102,7 @@ msgstr ""
 msgid "Coordinate is missing."
 msgstr ""
 
-#: src/views/HomeView.vue
+#: src/views/OrteView.vue
 msgid "Coordinates"
 msgstr ""
 
@@ -134,7 +134,7 @@ msgstr ""
 msgid "Disable OTP"
 msgstr ""
 
-#: src/views/HomeView.vue src/views/ManageOrteView.vue
+#: src/views/OrteView.vue src/views/ManageOrteView.vue
 msgid "District"
 msgstr ""
 
@@ -282,7 +282,7 @@ msgstr ""
 msgid "Line"
 msgstr ""
 
-#: src/views/HomeView.vue
+#: src/views/OrteView.vue
 msgid "Links"
 msgstr ""
 
@@ -310,7 +310,7 @@ msgstr ""
 msgid "Management"
 msgstr ""
 
-#: src/views/HomeView.vue src/views/ManageKartenView.vue
+#: src/views/OrteView.vue src/views/ManageKartenView.vue
 msgid "Map"
 msgstr ""
 
@@ -326,7 +326,7 @@ msgstr ""
 msgid "Map view"
 msgstr ""
 
-#: src/components/SideNav.vue src/views/HomeView.vue src/views/ManageKartenView.vue
+#: src/components/SideNav.vue src/views/OrteView.vue src/views/ManageKartenView.vue
 msgid "Maps"
 msgstr ""
 
@@ -350,7 +350,7 @@ msgstr ""
 msgid "New place"
 msgstr ""
 
-#: src/views/HomeView.vue
+#: src/views/OrteView.vue
 msgid "Next"
 msgstr ""
 
@@ -362,7 +362,7 @@ msgstr ""
 msgid "No map references yet."
 msgstr ""
 
-#: src/views/HomeView.vue
+#: src/views/OrteView.vue
 msgid "No places found."
 msgstr ""
 
@@ -406,11 +406,11 @@ msgstr ""
 msgid "Password or code is wrong."
 msgstr ""
 
-#: src/views/HomeView.vue
+#: src/views/OrteView.vue
 msgid "Place"
 msgstr ""
 
-#: src/views/HomeView.vue src/views/ManageKartenView.vue src/views/ManageOrteView.vue
+#: src/views/OrteView.vue src/views/ManageKartenView.vue src/views/ManageOrteView.vue
 msgid "Place name"
 msgstr ""
 
@@ -434,7 +434,7 @@ msgstr ""
 msgid "Please wait..."
 msgstr ""
 
-#: src/views/HomeView.vue
+#: src/views/OrteView.vue
 msgid "Previous"
 msgstr ""
 
@@ -522,11 +522,11 @@ msgstr ""
 msgid "Scan the QR code with your authenticator app or enter the key manually."
 msgstr ""
 
-#: src/views/HomeView.vue src/views/ManageKartenView.vue src/views/ManageKreiseView.vue src/views/ManageOrteView.vue
+#: src/views/OrteView.vue src/views/ManageKartenView.vue src/views/ManageKreiseView.vue src/views/ManageOrteView.vue
 msgid "Search"
 msgstr ""
 
-#: src/components/SideNav.vue src/views/HomeView.vue
+#: src/components/SideNav.vue src/views/OrteView.vue
 msgid "Search places"
 msgstr ""
 

@@ -8,7 +8,7 @@ import SideNav from '../components/SideNav.vue'
 import LoginView from '../views/LoginView.vue'
 import ForgotPasswordView from '../views/ForgotPasswordView.vue'
 import ResetPasswordView from '../views/ResetPasswordView.vue'
-import HomeView from '../views/HomeView.vue'
+import OrteView from '../views/OrteView.vue'
 
 afterEach(() => {
   setToken(null)
@@ -185,7 +185,7 @@ describe('ResetPasswordView', () => {
   })
 })
 
-describe('HomeView', () => {
+describe('OrteView', () => {
   const sprachen = [
     { id: 's-de', sprache2: 'de', sprache_land: 'Deutsch' },
     { id: 's-en', sprache2: 'en', sprache_land: 'English' },
@@ -216,7 +216,7 @@ describe('HomeView', () => {
     const pinia = (await import('pinia')).createPinia()
     ;(await import('pinia')).setActivePinia(pinia)
     useSettingsStore().sprachen = sprachen
-    return mountView(HomeView, { pinia, language })
+    return mountView(OrteView, { pinia, language })
   }
 
   it('searches without authentication and shows results with links', async () => {
@@ -239,7 +239,7 @@ describe('HomeView', () => {
 
   it('sends the search term', async () => {
     const fetch = setup([])
-    const { wrapper } = await mountView(HomeView)
+    const { wrapper } = await mountView(OrteView)
     await wrapper.get('#q').setValue('lem')
     await wrapper.get('form').trigger('submit')
     await vi.waitFor(() => expect(fetch.calls.at(-1).url.searchParams.get('q')).toBe('lem'))
@@ -249,7 +249,7 @@ describe('HomeView', () => {
   it('sends the token when signed in (needed when search is restricted)', async () => {
     const fetch = setup([])
     setToken('tok')
-    await mountView(HomeView)
+    await mountView(OrteView)
     expect(fetch.calls.find((c) => c.key === 'GET /orte').headers.Authorization).toBe('Bearer tok')
     expect(fetch.calls.find((c) => c.key === 'GET /sprachen').headers.Authorization).toBe('Bearer tok')
   })

@@ -4,12 +4,14 @@ import { useGettext } from 'vue3-gettext'
 import { api } from '../api'
 import { useErrors } from '../composables/useErrors'
 import { useSettingsStore } from '../stores/settings'
+import { useAuthStore } from '../stores/auth'
 
 const LIMIT = 20
 const gettext = useGettext()
 const { $gettext } = gettext
 const { errorText } = useErrors()
 const settings = useSettingsStore()
+const auth = useAuthStore()
 
 const q = ref('')
 const kreisId = ref('')
@@ -114,13 +116,15 @@ onMounted(async () => {
             <td>
               <div v-for="k in ort.karten" :key="k.id">
                 <router-link
-                  v-if="k.karte && k.koordinate"
+                  v-if="auth.isLoggedIn && k.karte && k.koordinate"
                   :to="{ name: 'map', params: { karte: k.karte, koordinate: k.koordinate } }"
                   target="_blank"
                   rel="noopener"
                   data-test="map-link"
-                  >{{ k.karte }} {{ k.koordinate }}</router-link
                 >
+                  {{ k.karte }} {{ k.koordinate }}
+                </router-link>
+
                 <span v-else>{{ k.karte }} {{ k.koordinate }}</span>
               </div>
             </td>

@@ -7,7 +7,7 @@ import { useAuthStore } from '../stores/auth'
 import { useSettingsStore } from '../stores/settings'
 import { mockFetch, mountView } from '../test-utils'
 import MapView from '../views/MapView.vue'
-import HomeView from '../views/HomeView.vue'
+import OrteView from '../views/OrteView.vue'
 import ImportsView from '../views/ImportsView.vue'
 
 const SQUARE = {
@@ -234,7 +234,7 @@ describe('search results link to the map', () => {
         ],
       },
     })
-    const { wrapper } = await mountView(HomeView)
+    const { wrapper } = await mountView(OrteView)
     const links = wrapper.findAll('[data-test=map-link]')
     expect(links).toHaveLength(1)
     expect(links[0].text()).toBe('Lück B5')
