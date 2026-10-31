@@ -109,6 +109,7 @@ onMounted(async () => {
             <td>{{ settings.kreisName(ort.kreis_id, language) }}</td>
             <td>
               <span v-if="ort.lat && ort.lon">{{ ort.lat }}, {{ ort.lon }}</span>
+              <span v-if="ort.coordinates_not_found">{{ $gettext('Coordinates not found') }}</span>
             </td>
             <td>
               <div v-for="k in ort.karten" :key="k.id">
