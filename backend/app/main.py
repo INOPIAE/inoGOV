@@ -9,6 +9,9 @@ app = FastAPI(
     description="RESTful API for inoGOV",
     version="1.0.0",
     terms_of_service=f"{settings.frontend_url.rstrip('/')}/terms",
+    servers=[
+        {"url": "/api", "description": "inoGOV API"}
+    ],
     openapi_tags=[
         {"name": "auth", "description": "Authentication and user management"},
         {"name": "users", "description": "User management and profile"},
