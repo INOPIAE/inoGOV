@@ -17,6 +17,8 @@ const route = useRoute()
 
 const q = ref(typeof route.query.q === 'string' ? route.query.q : '')
 const kreisId = ref('')
+const coordinateStatus = ref('')
+const linkStatus = ref('')
 const offset = ref(0)
 const results = ref([])
 const foundCount = ref(0)
@@ -48,7 +50,12 @@ async function search(newOffset = 0) {
   loading.value = true
   error.value = ''
   try {
-    const params = { q: q.value.trim(), kreis_id: kreisId.value }
+    const params = {
+      q: q.value.trim(),
+      kreis_id: kreisId.value,
+      coordinate_status: coordinateStatus.value || undefined,
+      link_status: linkStatus.value || undefined,
+    }
     const [nextResults, counts] = await Promise.all([
       api('/orte', {
         params: {
@@ -110,6 +117,27 @@ onMounted(async () => {
         <button class="btn btn-primary w-100" type="submit" :disabled="loading">{{ $gettext('Search') }}</button>
       </div>
     </form>
+
+    <div v-if="auth.isLoggedIn" class="row g-2 mb-3">
+      <div class="col-12 col-sm-6">
+        <label class="form-label" for="coordinate-status">{{ $gettext('Filter coordinates') }}</label>
+        <select id="coordinate-status" v-model="coordinateStatus" class="form-select" :disabled="loading" @change="search(0)">
+          <option value="">{{ $gettext('All') }}</option>
+          <option value="empty">{{ $gettext('Empty') }}</option>
+          <option value="not_found">{{ $gettext('No coordinates found') }}</option>
+          <option value="available">{{ $gettext('Coordinates available') }}</option>
+        </select>
+      </div>
+      <div class="col-12 col-sm-6">
+        <label class="form-label" for="link-status">{{ $gettext('Filter links') }}</label>
+        <select id="link-status" v-model="linkStatus" class="form-select" :disabled="loading" @change="search(0)">
+          <option value="">{{ $gettext('All') }}</option>
+          <option value="empty">{{ $gettext('Empty') }}</option>
+          <option value="gov">GOV</option>
+          <option value="without_gov">{{ $gettext('Without GOV') }}</option>
+        </select>
+      </div>
+    </div>
 
     <div v-if="error" class="alert alert-danger" role="alert">{{ error }}</div>
     <p v-if="searched && !results.length && !error" data-test="empty">{{ $gettext('No places found.') }}</p>

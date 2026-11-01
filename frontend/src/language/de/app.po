@@ -40,6 +40,10 @@ msgid "Administrators cannot disable OTP."
 msgstr "Administratoren können OTP nicht deaktivieren."
 
 #: src/views/OrteView.vue
+msgid "All"
+msgstr "Alle"
+
+#: src/views/OrteView.vue
 msgid "All districts"
 msgstr "Alle Kreise"
 
@@ -115,6 +119,10 @@ msgstr "Die Koordinate fehlt."
 msgid "Coordinates"
 msgstr "Koordinaten"
 
+#: src/views/OrteView.vue
+msgid "Coordinates available"
+msgstr "Koordinaten vorhanden"
+
 #: src/views/ManageOrteView.vue src/views/OrteView.vue
 msgid "Coordinates not found"
 msgstr "Koordinaten nicht gefunden"
@@ -187,6 +195,10 @@ msgstr "E-Mail-Adresse"
 msgid "Email with a link has been sent."
 msgstr "Eine E-Mail mit einem Link wurde versendet."
 
+#: src/views/OrteView.vue
+msgid "Empty"
+msgstr "Leer"
+
 #: src/components/OtpSetup.vue
 msgid "Enter a new code from the app to finish the setup"
 msgstr "Geben Sie zum Abschluss einen neuen Code aus der App ein"
@@ -210,6 +222,14 @@ msgstr "Datei"
 #: src/views/ImportsView.vue
 msgid "File archived as %{name}."
 msgstr "Datei abgelegt als %{name}."
+
+#: src/views/OrteView.vue
+msgid "Filter coordinates"
+msgstr "Koordinaten filtern"
+
+#: src/views/OrteView.vue
+msgid "Filter links"
+msgstr "Links filtern"
 
 #: src/views/AccountView.vue src/views/SetupAccountView.vue src/views/UsersView.vue
 msgid "First name"
@@ -390,6 +410,10 @@ msgstr "Neuer Ort"
 #: src/views/OrteView.vue
 msgid "Next"
 msgstr "Weiter"
+
+#: src/views/OrteView.vue
+msgid "No coordinates found"
+msgstr "Keine Koordinaten gefunden"
 
 #: src/views/MapView.vue
 msgid "No map data is available for this square."
@@ -790,6 +814,10 @@ msgstr "Willkommen auf inoGov"
 #: src/views/SetupAccountView.vue
 msgid "Welcome! Choose a username and a password for %{email}."
 msgstr "Willkommen! Wählen Sie einen Benutzernamen und ein Passwort für %{email}."
+
+#: src/views/OrteView.vue
+msgid "Without GOV"
+msgstr "Ohne GOV"
 
 #: src/composables/useErrors.js
 msgid "You are not allowed to do this."

@@ -153,6 +153,43 @@ def test_ort_count_uses_search_filters_and_reports_global_total(client, user_h, 
     assert response.json() == {"found": 2, "total": 3}
 
 
+def test_ort_coordinate_and_link_filters_apply_to_list_and_count(client, user_h, de):
+    places = [
+        {"name": "empty", "gov_id": None, "coordinates_not_found": False},
+        {"name": "not found", "gov_id": None, "coordinates_not_found": True},
+        {"name": "with gov", "gov_id": "GOV1", "lat": "49.0", "lon": "22.0"},
+        {"name": "without gov", "gov_id": None, "lat": "50.0", "lon": "23.0"},
+        {"name": "gov only", "gov_id": "GOV2", "coordinates_not_found": False},
+    ]
+    for place in places:
+        name = place.pop("name")
+        response = client.post(
+            "/orte",
+            json={**place, "namen": [{"sprache_id": str(de.id), "ortsname": name}]},
+            headers=user_h,
+        )
+        assert response.status_code == 201
+
+    filters_and_expected_names = [
+        ({"coordinate_status": "empty"}, {"empty", "gov only"}),
+        ({"coordinate_status": "not_found"}, {"not found"}),
+        ({"coordinate_status": "available"}, {"with gov", "without gov"}),
+        ({"link_status": "empty"}, {"empty", "not found"}),
+        ({"link_status": "gov"}, {"with gov", "gov only"}),
+        ({"link_status": "without_gov"}, {"empty", "not found", "without gov"}),
+        (
+            {"coordinate_status": "available", "link_status": "without_gov"},
+            {"without gov"},
+        ),
+    ]
+    for params, expected_names in filters_and_expected_names:
+        listed = client.get("/orte", params=params, headers=user_h)
+        counted = client.get("/orte/count", params=params, headers=user_h)
+        actual_names = {place["namen"][0]["ortsname"] for place in listed.json()}
+        assert actual_names == expected_names
+        assert counted.json() == {"found": len(expected_names), "total": len(places)}
+
+
 def test_ort_sorting_applies_before_pagination(client, user_h, de):
     for gov_id, name in [("O1", "Zamość"), ("O2", "Alwernia"), ("O3", "Przemyśl")]:
         client.post(

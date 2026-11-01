@@ -260,6 +260,8 @@ describe('OrteView', () => {
 
   it('searches without authentication and shows results with links', async () => {
     const { wrapper } = await mountHome([ort])
+    expect(wrapper.find('#coordinate-status').exists()).toBe(false)
+    expect(wrapper.find('#link-status').exists()).toBe(false)
     const row = wrapper.get('[data-test=result]')
     expect(row.text()).toContain('Przemyśl')
     expect(row.text()).toContain('Kreis Przemyśl')
@@ -339,5 +341,30 @@ describe('OrteView', () => {
   it('shows filtered result count and global total below the results', async () => {
     const { wrapper } = await mountHome([ort], 'de', 12)
     expect(wrapper.get('[data-test=result-count]').text()).toBe('1 von 12 Orten gefunden.')
+  })
+
+  it('shows translated filters to signed-in users and applies them to results and counts', async () => {
+    const pinia = await signedIn(['user'])
+    const fetch = setup([ort], 12)
+    const { wrapper } = await mountView(OrteView, { pinia, language: 'de' })
+
+    expect(wrapper.get('label[for=coordinate-status]').text()).toBe('Koordinaten filtern')
+    expect(wrapper.get('label[for=link-status]').text()).toBe('Links filtern')
+
+    await wrapper.get('#coordinate-status').setValue('not_found')
+    await vi.waitFor(() => {
+      const request = fetch.calls.filter((call) => call.key === 'GET /orte').at(-1)
+      expect(request.url.searchParams.get('coordinate_status')).toBe('not_found')
+    })
+    await vi.waitFor(() => expect(wrapper.get('#link-status').attributes('disabled')).toBeUndefined())
+
+    await wrapper.get('#link-status').setValue('without_gov')
+    await vi.waitFor(() => {
+      const listRequest = fetch.calls.filter((call) => call.key === 'GET /orte').at(-1)
+      const countRequest = fetch.calls.filter((call) => call.key === 'GET /orte/count').at(-1)
+      expect(listRequest.url.searchParams.get('link_status')).toBe('without_gov')
+      expect(countRequest.url.searchParams.get('coordinate_status')).toBe('not_found')
+      expect(countRequest.url.searchParams.get('link_status')).toBe('without_gov')
+    })
   })
 })

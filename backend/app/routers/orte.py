@@ -2,7 +2,7 @@ import uuid
 from typing import Literal
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Response
-from sqlalchemy import and_, case, func, select
+from sqlalchemy import and_, case, func, or_, select
 from sqlalchemy.orm import Session
 
 from app.database import get_db
@@ -44,7 +44,13 @@ def ensure_kreis(db: Session, kreis_id: uuid.UUID | None) -> None:
         raise HTTPException(status_code=422, detail="Unbekannter Kreis")
 
 
-def ort_filters(q: str | None, kreis_id: uuid.UUID | None, sprache_id: uuid.UUID | None):
+def ort_filters(
+    q: str | None,
+    kreis_id: uuid.UUID | None,
+    sprache_id: uuid.UUID | None,
+    coordinate_status: str | None = None,
+    link_status: str | None = None,
+):
     filters = [Ort.active]
     if kreis_id:
         filters.append(Ort.kreis_id == kreis_id)
@@ -55,6 +61,24 @@ def ort_filters(q: str | None, kreis_id: uuid.UUID | None, sprache_id: uuid.UUID
         if sprache_id:
             matching = matching.where(Ortsname.sprache_id == sprache_id)
         filters.append(Ort.id.in_(matching))
+    if coordinate_status == "empty":
+        filters.append(
+            and_(Ort.coordinates_not_found.is_(False), or_(Ort.lat.is_(None), Ort.lon.is_(None)))
+        )
+    elif coordinate_status == "not_found":
+        filters.append(Ort.coordinates_not_found.is_(True))
+    elif coordinate_status == "available":
+        filters.append(
+            and_(Ort.coordinates_not_found.is_(False), Ort.lat.is_not(None), Ort.lon.is_not(None))
+        )
+    if link_status == "empty":
+        filters.append(
+            and_(Ort.gov_id.is_(None), or_(Ort.lat.is_(None), Ort.lon.is_(None)))
+        )
+    elif link_status == "gov":
+        filters.append(Ort.gov_id.is_not(None))
+    elif link_status == "without_gov":
+        filters.append(Ort.gov_id.is_(None))
     return filters
 
 
@@ -123,6 +147,8 @@ def list_orte(
     q: str | None = None,
     kreis_id: uuid.UUID | None = None,
     sprache_id: uuid.UUID | None = None,
+    coordinate_status: Literal["empty", "not_found", "available"] | None = None,
+    link_status: Literal["empty", "gov", "without_gov"] | None = None,
     sort_sprache_id: uuid.UUID | None = None,
     sort_by: Literal["name", "district", "coordinates", "maps", "links"] = "name",
     sort_order: Literal["asc", "desc"] = "asc",
@@ -130,7 +156,9 @@ def list_orte(
     offset: int = Query(0, ge=0),
     db: Session = Depends(get_db),
 ):
-    stmt = select(Ort).where(*ort_filters(q, kreis_id, sprache_id))
+    stmt = select(Ort).where(
+        *ort_filters(q, kreis_id, sprache_id, coordinate_status, link_status)
+    )
     orte = db.scalars(
         stmt.order_by(*ort_ordering(sort_by, sort_order, sort_sprache_id)).limit(limit).offset(offset)
     ).all()
@@ -142,9 +170,15 @@ def count_orte(
     q: str | None = None,
     kreis_id: uuid.UUID | None = None,
     sprache_id: uuid.UUID | None = None,
+    coordinate_status: Literal["empty", "not_found", "available"] | None = None,
+    link_status: Literal["empty", "gov", "without_gov"] | None = None,
     db: Session = Depends(get_db),
 ) -> dict[str, int]:
-    found = db.scalar(select(func.count(Ort.id)).where(*ort_filters(q, kreis_id, sprache_id))) or 0
+    found = db.scalar(
+        select(func.count(Ort.id)).where(
+            *ort_filters(q, kreis_id, sprache_id, coordinate_status, link_status)
+        )
+    ) or 0
     total = db.scalar(select(func.count(Ort.id)).where(Ort.active)) or 0
     return {"found": found, "total": total}
 

@@ -39,6 +39,10 @@ msgid "Administrators cannot disable OTP."
 msgstr ""
 
 #: src/views/OrteView.vue
+msgid "All"
+msgstr ""
+
+#: src/views/OrteView.vue
 msgid "All districts"
 msgstr ""
 
@@ -114,6 +118,10 @@ msgstr ""
 msgid "Coordinates"
 msgstr ""
 
+#: src/views/OrteView.vue
+msgid "Coordinates available"
+msgstr ""
+
 #: src/views/ManageOrteView.vue src/views/OrteView.vue
 msgid "Coordinates not found"
 msgstr ""
@@ -186,6 +194,10 @@ msgstr ""
 msgid "Email with a link has been sent."
 msgstr ""
 
+#: src/views/OrteView.vue
+msgid "Empty"
+msgstr ""
+
 #: src/components/OtpSetup.vue
 msgid "Enter a new code from the app to finish the setup"
 msgstr ""
@@ -208,6 +220,14 @@ msgstr ""
 
 #: src/views/ImportsView.vue
 msgid "File archived as %{name}."
+msgstr ""
+
+#: src/views/OrteView.vue
+msgid "Filter coordinates"
+msgstr ""
+
+#: src/views/OrteView.vue
+msgid "Filter links"
 msgstr ""
 
 #: src/views/AccountView.vue src/views/SetupAccountView.vue src/views/UsersView.vue
@@ -388,6 +408,10 @@ msgstr ""
 
 #: src/views/OrteView.vue
 msgid "Next"
+msgstr ""
+
+#: src/views/OrteView.vue
+msgid "No coordinates found"
 msgstr ""
 
 #: src/views/MapView.vue
@@ -788,6 +812,10 @@ msgstr ""
 
 #: src/views/SetupAccountView.vue
 msgid "Welcome! Choose a username and a password for %{email}."
+msgstr ""
+
+#: src/views/OrteView.vue
+msgid "Without GOV"
 msgstr ""
 
 #: src/composables/useErrors.js
