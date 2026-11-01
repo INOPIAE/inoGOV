@@ -9,6 +9,7 @@ import LoginView from '../views/LoginView.vue'
 import ForgotPasswordView from '../views/ForgotPasswordView.vue'
 import ResetPasswordView from '../views/ResetPasswordView.vue'
 import HomeView from '../views/HomeView.vue'
+import AboutView from '../views/AboutView.vue'
 import OrteView from '../views/OrteView.vue'
 import ManageOrteView from '../views/ManageOrteView.vue'
 import OrteStatisticsView from '../views/OrteStatisticsView.vue'
@@ -191,6 +192,39 @@ describe('ResetPasswordView', () => {
     await wrapper.get('form').trigger('submit')
     await vi.waitFor(() => expect(wrapper.find('[data-test=done]').exists()).toBe(true))
     expect(fetch.calls.at(-1).body).toEqual({ token: 'tok', new_password: 'neuespass1' })
+  })
+})
+
+describe('AboutView', () => {
+  it('loads localized project content and links to source and license files', async () => {
+    let requestedPath = ''
+    vi.stubGlobal('fetch', vi.fn(async (url) => {
+      requestedPath = new URL(url, window.location.origin).pathname
+      return new Response('## Projektüberblick\ninoGOV dokumentiert historische Orte.', { status: 200 })
+    }))
+    const { wrapper } = await mountView(AboutView, { language: 'de' })
+    await vi.waitFor(() => expect(wrapper.get('[data-test=about-content]').text()).toContain('Projektüberblick'))
+
+    expect(requestedPath).toBe('/home/about.de.md')
+    expect(wrapper.get('h1').text()).toBe('Über inoGOV')
+    expect(wrapper.text()).toContain('Projektinformationen')
+    expect(wrapper.get('[data-test=about-content]').text()).toContain('inoGOV dokumentiert historische Orte.')
+    expect(wrapper.get('[data-test=version]').text()).toBe('0.1.0')
+    expect(wrapper.text()).toContain('GNU Affero General Public License')
+    expect(wrapper.get('a[href="/legal/LICENSE"]').text()).toBe('Vollständige Lizenz anzeigen')
+    expect(wrapper.get('a[href="/legal/THIRD-PARTY-LICENSES.md"]').text()).toBe(
+      'Lizenzen der Drittanbieter anzeigen',
+    )
+    expect(wrapper.get('a[href="https://github.com/INOPIAE/inogov"]').text()).toBe('Quellcode anzeigen')
+    expect(wrapper.text()).not.toContain('Copyright')
+  })
+
+  it('shows a translated error when the localized project text cannot be loaded', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => new Response('', { status: 404 })))
+    const { wrapper } = await mountView(AboutView, { language: 'de' })
+    await vi.waitFor(() => expect(wrapper.find('[role=alert]').exists()).toBe(true))
+
+    expect(wrapper.get('[role=alert]').text()).toBe('Der About-Text konnte nicht geladen werden.')
   })
 })
 

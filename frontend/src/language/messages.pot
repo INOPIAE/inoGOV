@@ -14,7 +14,15 @@ msgstr ""
 msgid "API documentation"
 msgstr ""
 
-#: src/components/SideNav.vue src/views/InfoView.vue
+#: src/views/AboutView.vue
+msgid "About inoGOV"
+msgstr ""
+
+#: src/views/AboutView.vue
+msgid "About text could not be loaded."
+msgstr ""
+
+#: src/components/SideNav.vue
 msgid "About us"
 msgstr ""
 
@@ -286,10 +294,6 @@ msgstr ""
 msgid "Information"
 msgstr ""
 
-#: src/views/InfoView.vue
-msgid "Information about the project and its operators will be published here."
-msgstr ""
-
 #: src/views/AccountView.vue
 msgid "Interface language"
 msgstr ""
@@ -326,7 +330,7 @@ msgstr ""
 msgid "Latitude"
 msgstr ""
 
-#: src/views/InfoView.vue
+#: src/views/AboutView.vue src/views/InfoView.vue
 msgid "License"
 msgstr ""
 
@@ -342,7 +346,7 @@ msgstr ""
 msgid "Loading statistics..."
 msgstr ""
 
-#: src/views/HomeView.vue src/views/InfoView.vue
+#: src/views/AboutView.vue src/views/HomeView.vue src/views/InfoView.vue
 msgid "Loading..."
 msgstr ""
 
@@ -538,6 +542,10 @@ msgstr ""
 msgid "Profile"
 msgstr ""
 
+#: src/views/AboutView.vue
+msgid "Project information"
+msgstr ""
+
 #: src/components/OtpSetup.vue
 msgid "QR code for the authenticator app"
 msgstr ""
@@ -666,6 +674,10 @@ msgstr ""
 msgid "Skip"
 msgstr ""
 
+#: src/views/AboutView.vue
+msgid "Source code"
+msgstr ""
+
 #: src/views/ImportsView.vue
 msgid "Start import"
 msgstr ""
@@ -726,6 +738,10 @@ msgstr ""
 msgid "The header row with \"Koordinate\" was not found."
 msgstr ""
 
+#: src/views/AboutView.vue
+msgid "The inoGOV source code is available on GitHub."
+msgstr ""
+
 #: src/views/InfoView.vue
 msgid "The legal notice will be published here."
 msgstr ""
@@ -760,6 +776,14 @@ msgstr ""
 
 #: src/views/InfoView.vue
 msgid "Third-Party Licenses"
+msgstr ""
+
+#: src/views/AboutView.vue
+msgid "Third-party components"
+msgstr ""
+
+#: src/views/AboutView.vue
+msgid "Third-party software used by inoGOV and its license information are listed here."
 msgstr ""
 
 #: src/views/LoginView.vue
@@ -810,6 +834,22 @@ msgstr ""
 msgid "Users"
 msgstr ""
 
+#: src/views/AboutView.vue
+msgid "Version"
+msgstr ""
+
+#: src/views/AboutView.vue
+msgid "View full license"
+msgstr ""
+
+#: src/views/AboutView.vue
+msgid "View source code"
+msgstr ""
+
+#: src/views/AboutView.vue
+msgid "View third-party licenses"
+msgstr ""
+
 #: src/views/HomeView.vue
 msgid "Welcome to inoGov"
 msgstr ""
@@ -856,5 +896,13 @@ msgstr ""
 
 #: src/views/MapView.vue
 msgid "Zoom: %{percent} %"
+msgstr ""
+
+#: src/views/AboutView.vue
+msgid "inoGOV helps document historical places and their geographical context, including names, districts, coordinates and map references."
+msgstr ""
+
+#: src/views/AboutView.vue
+msgid "inoGOV is licensed under the GNU Affero General Public License, version 3 or later."
 msgstr ""
 

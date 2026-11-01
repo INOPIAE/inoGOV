@@ -15,7 +15,15 @@ msgstr "Eine Zahl ist ungültig oder fehlt."
 msgid "API documentation"
 msgstr "API-Dokumentation"
 
-#: src/components/SideNav.vue src/views/InfoView.vue
+#: src/views/AboutView.vue
+msgid "About inoGOV"
+msgstr "Über inoGOV"
+
+#: src/views/AboutView.vue
+msgid "About text could not be loaded."
+msgstr "Der Informationstext konnte nicht geladen werden."
+
+#: src/components/SideNav.vue
 msgid "About us"
 msgstr "Über uns"
 
@@ -287,10 +295,6 @@ msgstr "Inaktiv"
 msgid "Information"
 msgstr "Information"
 
-#: src/views/InfoView.vue
-msgid "Information about the project and its operators will be published here."
-msgstr "Informationen zum Projekt und seinen Betreibern werden hier veröffentlicht."
-
 #: src/views/AccountView.vue
 msgid "Interface language"
 msgstr "Oberflächensprache"
@@ -327,7 +331,7 @@ msgstr "Nachname"
 msgid "Latitude"
 msgstr "Breitengrad"
 
-#: src/views/InfoView.vue
+#: src/views/AboutView.vue src/views/InfoView.vue
 msgid "License"
 msgstr "Lizenz"
 
@@ -343,7 +347,7 @@ msgstr "Links"
 msgid "Loading statistics..."
 msgstr "Statistiken werden geladen..."
 
-#: src/views/HomeView.vue src/views/InfoView.vue
+#: src/views/AboutView.vue src/views/HomeView.vue src/views/InfoView.vue
 msgid "Loading..."
 msgstr "Lädt..."
 
@@ -539,6 +543,10 @@ msgstr "Datenschutz"
 msgid "Profile"
 msgstr "Profil"
 
+#: src/views/AboutView.vue
+msgid "Project information"
+msgstr "Projektinformationen"
+
 #: src/components/OtpSetup.vue
 msgid "QR code for the authenticator app"
 msgstr "QR-Code für die Authenticator-App"
@@ -667,6 +675,10 @@ msgstr "Angemeldet als %{user} (%{roles})"
 msgid "Skip"
 msgstr "Überspringen"
 
+#: src/views/AboutView.vue
+msgid "Source code"
+msgstr "Quellcode"
+
 #: src/views/ImportsView.vue
 msgid "Start import"
 msgstr "Import starten"
@@ -727,6 +739,10 @@ msgstr "Die Datei ist zu groß."
 msgid "The header row with \"Koordinate\" was not found."
 msgstr "Die Kopfzeile mit „Koordinate“ wurde nicht gefunden."
 
+#: src/views/AboutView.vue
+msgid "The inoGOV source code is available on GitHub."
+msgstr "Der inoGOV-Quellcode ist auf GitHub verfügbar."
+
 #: src/views/InfoView.vue
 msgid "The legal notice will be published here."
 msgstr "Das Impressum wird hier veröffentlicht."
@@ -762,6 +778,14 @@ msgstr "Der Begrüßungstext konnte nicht geladen werden."
 #: src/views/InfoView.vue
 msgid "Third-Party Licenses"
 msgstr "Lizenzen Dritter"
+
+#: src/views/AboutView.vue
+msgid "Third-party components"
+msgstr "Komponenten von Drittanbietern"
+
+#: src/views/AboutView.vue
+msgid "Third-party software used by inoGOV and its license information are listed here."
+msgstr "Hier finden Sie die von inoGOV verwendete Drittanbietersoftware und Informationen zu ihren Lizenzen."
 
 #: src/views/LoginView.vue
 msgid "This account is blocked."
@@ -811,6 +835,22 @@ msgstr "Benutzername oder Passwort ist falsch."
 msgid "Users"
 msgstr "Benutzer"
 
+#: src/views/AboutView.vue
+msgid "Version"
+msgstr "Version"
+
+#: src/views/AboutView.vue
+msgid "View full license"
+msgstr "Vollständige Lizenz anzeigen"
+
+#: src/views/AboutView.vue
+msgid "View source code"
+msgstr "Quellcode anzeigen"
+
+#: src/views/AboutView.vue
+msgid "View third-party licenses"
+msgstr "Lizenzen der Drittanbieter anzeigen"
+
 #: src/views/HomeView.vue
 msgid "Welcome to inoGov"
 msgstr "Willkommen auf inoGov"
@@ -858,4 +898,12 @@ msgstr "Verkleinern"
 #: src/views/MapView.vue
 msgid "Zoom: %{percent} %"
 msgstr "Zoom: %{percent} %"
+
+#: src/views/AboutView.vue
+msgid "inoGOV helps document historical places and their geographical context, including names, districts, coordinates and map references."
+msgstr "inoGOV unterstützt die Dokumentation historischer Orte und ihres geografischen Kontexts, einschließlich Namen, Kreisen, Koordinaten und Kartenverweisen."
+
+#: src/views/AboutView.vue
+msgid "inoGOV is licensed under the GNU Affero General Public License, version 3 or later."
+msgstr "inoGOV steht unter der GNU Affero General Public License, Version 3 oder höher."
 

@@ -40,3 +40,4 @@ Thumbs.db
 /frontend/public/maps
 /frontend/public/legal/*.html
 /frontend/public/home/*.md
+!/frontend/public/home/README.md

@@ -33,12 +33,6 @@ const legalFiles = {
 }
 
 const pages = computed(() => ({
-  about: {
-    title: $gettext('About us'),
-    text: $gettext(
-      'Information about the project and its operators will be published here.',
-    ),
-  },
   imprint: {
     title: $gettext('Imprint'),
     text: $gettext('The legal notice will be published here.'),
