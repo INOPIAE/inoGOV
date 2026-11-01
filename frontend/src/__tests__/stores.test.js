@@ -1,6 +1,6 @@
 import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest'
 import { createPinia, setActivePinia } from 'pinia'
-import { getToken, setToken } from '../api'
+import { getToken, setInactivityTimeoutHandler, setToken } from '../api'
 import { useAuthStore } from '../stores/auth'
 import { useSettingsStore } from '../stores/settings'
 import { mockFetch } from '../test-utils'
@@ -9,7 +9,10 @@ const ME = { id: '1', username: 'marcus', email: 'm@example.com', roles: ['user'
 
 beforeEach(() => setActivePinia(createPinia()))
 afterEach(() => {
+  useAuthStore().clear()
   setToken(null)
+  setInactivityTimeoutHandler(() => {})
+  vi.useRealTimers()
   vi.unstubAllGlobals()
 })
 
@@ -53,6 +56,39 @@ describe('auth store', () => {
     await auth.init()
     expect(auth.ready).toBe(true)
     expect(getToken()).toBeNull()
+  })
+
+  it('refreshes the token after five minutes of active use', async () => {
+    vi.useFakeTimers({ toFake: ['Date', 'setInterval', 'clearInterval'] })
+    const fetch = mockFetch({
+      'GET /users/me': { body: ME },
+      'POST /auth/refresh': { body: { access_token: 'refreshed' } },
+    })
+    setToken('original')
+    const auth = useAuthStore()
+    await auth.init()
+
+    await vi.advanceTimersByTimeAsync(5 * 60 * 1000)
+    document.dispatchEvent(new Event('keydown'))
+    await vi.waitFor(() => expect(getToken()).toBe('refreshed'))
+
+    expect(fetch.calls.some((call) => call.key === 'POST /auth/refresh')).toBe(true)
+  })
+
+  it('logs out after 60 minutes without activity', async () => {
+    vi.useFakeTimers({ toFake: ['Date', 'setInterval', 'clearInterval'] })
+    const onTimeout = vi.fn()
+    setInactivityTimeoutHandler(onTimeout)
+    mockFetch({ 'GET /users/me': { body: ME } })
+    setToken('original')
+    const auth = useAuthStore()
+    await auth.init()
+
+    await vi.advanceTimersByTimeAsync(60 * 60 * 1000)
+
+    expect(getToken()).toBeNull()
+    expect(auth.isLoggedIn).toBe(false)
+    expect(onTimeout).toHaveBeenCalledOnce()
   })
 })
 

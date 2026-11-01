@@ -5,6 +5,7 @@ export const apiBase = BASE
 let token = localStorage.getItem('token')
 let onUnauthorized = () => {}
 let onOtpSetupRequired = () => {}
+let onInactivityTimeout = () => {}
 
 export function setToken(value) {
   token = value
@@ -22,6 +23,14 @@ export function setUnauthorizedHandler(handler) {
 
 export function setOtpSetupHandler(handler) {
   onOtpSetupRequired = handler
+}
+
+export function setInactivityTimeoutHandler(handler) {
+  onInactivityTimeout = handler
+}
+
+export function notifyInactivityTimeout() {
+  onInactivityTimeout()
 }
 
 export class ApiError extends Error {

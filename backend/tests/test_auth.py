@@ -1,11 +1,13 @@
 from datetime import UTC, datetime, timedelta
 
+import jwt
 import pyotp
 import pytest
 
+from app.config import settings
 from app.lockout import lock_duration, parse_tiers
 from app.models import User
-from app.security import hash_password
+from app.security import decode_signed, hash_password
 
 TIERS = parse_tiers("3:3,5:10,10:60")
 
@@ -42,6 +44,42 @@ def test_login_success_resets_counter(client, db):
     db.refresh(user)
     assert user.unsuccessful_logins == 0
     assert user.last_login is not None
+
+
+def test_refresh_extends_valid_access_token(client, db, monkeypatch):
+    make_user(db)
+    original_token = login(client).json()["access_token"]
+    original_expiry = decode_signed(original_token)["exp"]
+
+    import app.security as security
+
+    real_datetime = security.datetime
+
+    class FutureDateTime(real_datetime):
+        @classmethod
+        def now(cls, tz=None):
+            return real_datetime.now(tz) + timedelta(seconds=2)
+
+    monkeypatch.setattr(security, "datetime", FutureDateTime)
+
+    response = client.post("/auth/refresh", headers={"Authorization": f"Bearer {original_token}"})
+
+    assert response.status_code == 200
+    refreshed_token = response.json()["access_token"]
+    assert decode_signed(refreshed_token)["exp"] > original_expiry
+
+
+def test_refresh_rejects_expired_access_token(client, db):
+    user = make_user(db)
+    expired_token = jwt.encode(
+        {"sub": str(user.id), "exp": datetime.now(UTC) - timedelta(seconds=1)},
+        settings.secret_key,
+        algorithm="HS256",
+    )
+
+    response = client.post("/auth/refresh", headers={"Authorization": f"Bearer {expired_token}"})
+
+    assert response.status_code == 401
 
 
 def test_unknown_user(client):

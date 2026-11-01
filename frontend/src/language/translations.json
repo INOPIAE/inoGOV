@@ -195,6 +195,7 @@
     "Users": "Benutzer",
     "Welcome! Choose a username and a password for %{email}.": "Willkommen! Wählen Sie einen Benutzernamen und ein Passwort für %{email}.",
     "You are not allowed to do this.": "Dazu haben Sie keine Berechtigung.",
+    "You have been logged out after 60 minutes of inactivity.": "Sie wurden nach 60 Minuten Inaktivität abgemeldet.",
     "Your account is ready. You can protect it with a one-time code (OTP) now or later in \"My account\".": "Ihr Konto ist eingerichtet. Sie können es jetzt oder später unter „Mein Konto“ mit einem Einmalcode (OTP) schützen.",
     "Your password has been changed.": "Ihr Passwort wurde geändert.",
     "Your profile has been saved.": "Ihr Profil wurde gespeichert.",

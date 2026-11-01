@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 
 from app.config import settings
 from app.database import get_db
+from app.deps import get_current_user_any
 from app.lockout import lock_duration
 from app.models import User
 from app.security import DUMMY_HASH, create_access_token, verify_password
@@ -68,4 +69,9 @@ def login(data: LoginRequest, db: Session = Depends(get_db)) -> TokenResponse:
     user.blocked_until = None
     user.last_login = now
     db.commit()
+    return TokenResponse(access_token=create_access_token(str(user.id)))
+
+
+@router.post("/refresh", response_model=TokenResponse)
+def refresh(user: User = Depends(get_current_user_any)) -> TokenResponse:
     return TokenResponse(access_token=create_access_token(str(user.id)))

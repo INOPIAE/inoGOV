@@ -47,6 +47,9 @@ async function submit() {
 <template>
   <div class="col-12 col-md-6 col-lg-4 mx-auto">
     <h1 class="h3 mb-3">{{ $gettext('Log in') }}</h1>
+    <div v-if="route.query.reason === 'inactive'" class="alert alert-info" role="status">
+      {{ $gettext('You have been logged out after 60 minutes of inactivity.') }}
+    </div>
     <div v-if="error" class="alert alert-danger" role="alert">{{ error }}</div>
     <form @submit.prevent="submit">
       <div class="mb-3">

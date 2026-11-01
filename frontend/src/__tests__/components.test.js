@@ -94,6 +94,11 @@ describe('SideNav', () => {
 })
 
 describe('LoginView', () => {
+  it('shows the inactivity notice in German', async () => {
+    const { wrapper } = await mountView(LoginView, { language: 'de', route: '/login?reason=inactive' })
+    expect(wrapper.find('[role=status]').text()).toBe('Sie wurden nach 60 Minuten Inaktivität abgemeldet.')
+  })
+
   it('asks for the OTP only when the server requires it', async () => {
     let attempts = 0
     mockFetch({

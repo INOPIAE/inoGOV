@@ -778,6 +778,10 @@ msgstr ""
 msgid "You are not allowed to do this."
 msgstr ""
 
+#: src/views/LoginView.vue
+msgid "You have been logged out after 60 minutes of inactivity."
+msgstr ""
+
 #: src/views/SetupAccountView.vue
 msgid "Your account is ready. You can protect it with a one-time code (OTP) now or later in \"My account\"."
 msgstr ""
