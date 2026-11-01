@@ -87,6 +87,10 @@ msgstr "Abbrechen"
 msgid "Change password"
 msgstr "Passwort ändern"
 
+#: src/views/OrteView.vue
+msgid "Click to sort by this column."
+msgstr "Zum Sortieren nach dieser Spalte anklicken."
+
 #: src/views/ManageKreiseView.vue src/views/ManageOrteView.vue
 msgid "Comment"
 msgstr "Kommentar"

@@ -128,27 +128,27 @@ onMounted(async () => {
         <thead>
           <tr>
             <th :aria-sort="sortState('name')">
-              <button class="btn btn-link p-0 fw-semibold text-body text-decoration-none" data-sort="name" type="button" :disabled="loading" @click="toggleSort('name')">
+              <button class="btn btn-link p-0 fw-semibold text-body text-decoration-none" data-sort="name" type="button" :title="$gettext('Click to sort by this column.')" :disabled="loading" @click="toggleSort('name')">
                 {{ $gettext('Place') }} <span aria-hidden="true">{{ sortColumn === 'name' ? (sortDirection === 'asc' ? '▲' : '▼') : '' }}</span>
               </button>
             </th>
             <th :aria-sort="sortState('district')">
-              <button class="btn btn-link p-0 fw-semibold text-body text-decoration-none" data-sort="district" type="button" :disabled="loading" @click="toggleSort('district')">
+              <button class="btn btn-link p-0 fw-semibold text-body text-decoration-none" data-sort="district" type="button" :title="$gettext('Click to sort by this column.')" :disabled="loading" @click="toggleSort('district')">
                 {{ $gettext('District') }} <span aria-hidden="true">{{ sortColumn === 'district' ? (sortDirection === 'asc' ? '▲' : '▼') : '' }}</span>
               </button>
             </th>
             <th :aria-sort="sortState('coordinates')">
-              <button class="btn btn-link p-0 fw-semibold text-body text-decoration-none" data-sort="coordinates" type="button" :disabled="loading" @click="toggleSort('coordinates')">
+              <button class="btn btn-link p-0 fw-semibold text-body text-decoration-none" data-sort="coordinates" type="button" :title="$gettext('Click to sort by this column.')" :disabled="loading" @click="toggleSort('coordinates')">
                 {{ $gettext('Coordinates') }} <span aria-hidden="true">{{ sortColumn === 'coordinates' ? (sortDirection === 'asc' ? '▲' : '▼') : '' }}</span>
               </button>
             </th>
             <th :aria-sort="sortState('maps')">
-              <button class="btn btn-link p-0 fw-semibold text-body text-decoration-none" data-sort="maps" type="button" :disabled="loading" @click="toggleSort('maps')">
+              <button class="btn btn-link p-0 fw-semibold text-body text-decoration-none" data-sort="maps" type="button" :title="$gettext('Click to sort by this column.')" :disabled="loading" @click="toggleSort('maps')">
                 {{ $gettext('Maps') }} <span aria-hidden="true">{{ sortColumn === 'maps' ? (sortDirection === 'asc' ? '▲' : '▼') : '' }}</span>
               </button>
             </th>
             <th :aria-sort="sortState('links')">
-              <button class="btn btn-link p-0 fw-semibold text-body text-decoration-none" data-sort="links" type="button" :disabled="loading" @click="toggleSort('links')">
+              <button class="btn btn-link p-0 fw-semibold text-body text-decoration-none" data-sort="links" type="button" :title="$gettext('Click to sort by this column.')" :disabled="loading" @click="toggleSort('links')">
                 {{ $gettext('Links') }} <span aria-hidden="true">{{ sortColumn === 'links' ? (sortDirection === 'asc' ? '▲' : '▼') : '' }}</span>
               </button>
             </th>

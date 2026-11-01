@@ -86,6 +86,10 @@ msgstr ""
 msgid "Change password"
 msgstr ""
 
+#: src/views/OrteView.vue
+msgid "Click to sort by this column."
+msgstr ""
+
 #: src/views/ManageKreiseView.vue src/views/ManageOrteView.vue
 msgid "Comment"
 msgstr ""

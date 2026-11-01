@@ -22,6 +22,7 @@
     "CSV file with a header row and three columns: Polish place name, Polish district name, coordinate. Every row creates a new place with a reference to the map \"Lück\".": "CSV-Datei mit Überschriftszeile und drei Spalten: polnischer Ortsname, polnischer Kreisname, Koordinate. Jede Zeile legt einen neuen Ort mit Verweis auf die Karte „Lück“ an.",
     "Cancel": "Abbrechen",
     "Change password": "Passwort ändern",
+    "Click to sort by this column.": "Zum Sortieren nach dieser Spalte anklicken.",
     "Comment": "Kommentar",
     "Confirm": "Bestätigen",
     "Continue": "Weiter",

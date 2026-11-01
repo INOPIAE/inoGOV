@@ -331,6 +331,9 @@ describe('OrteView', () => {
       'maps',
       'links',
     ])
+    expect(wrapper.findAll('thead [data-sort]').map((button) => button.attributes('title'))).toEqual(
+      Array(5).fill('Zum Sortieren nach dieser Spalte anklicken.'),
+    )
   })
 
   it('shows filtered result count and global total below the results', async () => {
