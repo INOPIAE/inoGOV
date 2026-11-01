@@ -11,6 +11,7 @@ import ResetPasswordView from '../views/ResetPasswordView.vue'
 import HomeView from '../views/HomeView.vue'
 import OrteView from '../views/OrteView.vue'
 import ManageOrteView from '../views/ManageOrteView.vue'
+import OrteStatisticsView from '../views/OrteStatisticsView.vue'
 import GovSuche from '../components/GovSuche.vue'
 
 afterEach(() => {
@@ -272,6 +273,54 @@ describe('ManageOrteView', () => {
 
     const patch = fetch.calls.find((call) => call.key === 'PATCH /orte/o1')
     expect(patch.body).toMatchObject({ gov_id: 'object_1', lat: 49.8, lon: 22.5 })
+  })
+})
+
+describe('OrteStatisticsView', () => {
+  it('shows translated statistics and refreshes them on request', async () => {
+    const fetch = mockFetch({
+      'GET /orte/statistics/': { body: { total: 10, gov: 3, geo: 5, not_found: 2 } },
+    })
+    const { wrapper } = await mountView(OrteStatisticsView, { language: 'de' })
+    await vi.waitFor(() => expect(wrapper.find('button').text()).toBe('Aktualisieren'))
+
+    expect(wrapper.text()).toContain('Ortsstatistik')
+    expect(wrapper.text()).toContain('Orte mit GOV-ID')
+    expect(wrapper.text()).toContain('Orte mit Koordinaten')
+    expect(wrapper.text()).toContain('Orte mit Koordinaten nicht gefunden')
+    expect(wrapper.findAll('.card').map((card) => card.text())).toEqual([
+      'Orte10',
+      'Orte mit GOV-ID330 %',
+      'Orte mit Koordinaten550 %',
+      'Orte mit Koordinaten nicht gefunden220 %',
+    ])
+
+    await wrapper.get('button').trigger('click')
+    await vi.waitFor(() => expect(fetch.calls.filter((call) => call.key === 'GET /orte/statistics/')).toHaveLength(2))
+  })
+
+  it('does not render percentages when there are no places', async () => {
+    mockFetch({
+      'GET /orte/statistics/': { body: { total: 0, gov: 0, geo: 0, not_found: 0 } },
+    })
+    const { wrapper } = await mountView(OrteStatisticsView, { language: 'de' })
+    await vi.waitFor(() => expect(wrapper.findAll('.card')).toHaveLength(4))
+
+    expect(wrapper.findAll('.card').map((card) => card.text())).toEqual([
+      'Orte0',
+      'Orte mit GOV-ID0',
+      'Orte mit Koordinaten0',
+      'Orte mit Koordinaten nicht gefunden0',
+    ])
+    expect(wrapper.text()).not.toContain('%')
+  })
+
+  it('shows a translated error when loading statistics fails', async () => {
+    mockFetch({ 'GET /orte/statistics/': { status: 500, body: {} } })
+    const { wrapper } = await mountView(OrteStatisticsView, { language: 'de' })
+    await vi.waitFor(() => expect(wrapper.find('[role=alert]').exists()).toBe(true))
+
+    expect(wrapper.get('[role=alert]').text()).toBe('Unerwarteter Fehler.')
   })
 })
 

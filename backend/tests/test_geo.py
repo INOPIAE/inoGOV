@@ -1,6 +1,6 @@
 import pytest
 
-from app.models import Sprache
+from app.models import Ort, Sprache
 
 
 @pytest.fixture
@@ -188,6 +188,31 @@ def test_ort_coordinate_and_link_filters_apply_to_list_and_count(client, user_h,
         actual_names = {place["namen"][0]["ortsname"] for place in listed.json()}
         assert actual_names == expected_names
         assert counted.json() == {"found": len(expected_names), "total": len(places)}
+
+
+def test_ort_statistics_count_only_active_places_and_allow_overlapping_metrics(client, db):
+    db.add_all(
+        [
+            Ort(gov_id="GOV-GEO", lat="49.5", lon="22.5"),
+            Ort(lat="50.0", lon="23.0"),
+            Ort(gov_id="GOV-ONLY"),
+            Ort(coordinates_not_found=True),
+            Ort(gov_id="INACTIVE", lat="51.0", lon="24.0", coordinates_not_found=True, active=False),
+        ]
+    )
+    db.commit()
+
+    response = client.get("/orte/statistics/", headers={"Host": "localhost"})
+
+    assert response.status_code == 200
+    assert response.json() == {"total": 4, "gov": 2, "geo": 2, "not_found": 1}
+
+
+def test_ort_statistics_returns_zero_counts_for_empty_database(client):
+    response = client.get("/orte/statistics/", headers={"Host": "localhost"})
+
+    assert response.status_code == 200
+    assert response.json() == {"total": 0, "gov": 0, "geo": 0, "not_found": 0}
 
 
 def test_ort_sorting_applies_before_pagination(client, user_h, de):

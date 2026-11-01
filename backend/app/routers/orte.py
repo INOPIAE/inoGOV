@@ -286,7 +286,6 @@ def delete_karte(
 def ort_statistics(
     db: Session = Depends(get_db),
 ):
-    print("ort_statistics wurde aufgerufen")
     total = db.scalar(select(func.count()).select_from(Ort).where(Ort.active))
     gov = db.scalar(select(func.count()).select_from(Ort).where(Ort.active, Ort.gov_id.isnot(None)))
     geo = db.scalar(select(func.count()).select_from(Ort).where(Ort.active, Ort.lon.isnot(None), Ort.lat.isnot(None)))
