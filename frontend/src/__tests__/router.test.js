@@ -25,17 +25,18 @@ describe('router guard', () => {
     expect((await go('/')).path).toBe('/')
   })
 
-  it('redirects anonymous visitors to login when search is restricted', async () => {
+  it('keeps the welcome page public but redirects place search when search is restricted', async () => {
     useSettingsStore().publicSearch = false
-    const route = await go('/')
+    expect((await go('/')).path).toBe('/')
+    const route = await go('/orte')
     expect(route.path).toBe('/login')
-    expect(route.query.next).toBe('/')
+    expect(route.query.next).toBe('/orte')
   })
 
   it('lets signed-in users search when search is restricted', async () => {
     useSettingsStore().publicSearch = false
     useAuthStore().user = { username: 'm', roles: ['user'] }
-    expect((await go('/')).path).toBe('/')
+    expect((await go('/orte')).path).toBe('/orte')
   })
 
   it('keeps public pages reachable when search is restricted', async () => {

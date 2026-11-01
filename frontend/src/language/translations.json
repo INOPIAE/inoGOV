@@ -180,6 +180,7 @@
     "The request was rejected. Please check your input or the link.": "Die Anfrage wurde abgelehnt. Bitte prüfen Sie Ihre Eingabe oder den Link.",
     "The server cannot be reached.": "Der Server ist nicht erreichbar.",
     "The username cannot be changed.": "Der Benutzername kann nicht geändert werden.",
+    "The welcome text could not be loaded.": "Der Begrüßungstext konnte nicht geladen werden.",
     "Third-Party Licenses": "Lizenzen Dritter",
     "This account is blocked.": "Dieses Konto ist gesperrt.",
     "This entry already exists.": "Dieser Eintrag existiert bereits.",
@@ -193,6 +194,7 @@
     "Username": "Benutzername",
     "Username or password is wrong.": "Benutzername oder Passwort ist falsch.",
     "Users": "Benutzer",
+    "Welcome to inoGov": "Willkommen auf inoGov",
     "Welcome! Choose a username and a password for %{email}.": "Willkommen! Wählen Sie einen Benutzernamen und ein Passwort für %{email}.",
     "You are not allowed to do this.": "Dazu haben Sie keine Berechtigung.",
     "You have been logged out after 60 minutes of inactivity.": "Sie wurden nach 60 Minuten Inaktivität abgemeldet.",
@@ -202,7 +204,6 @@
     "Zoom": "Zoom",
     "Zoom in": "Vergrößern",
     "Zoom out": "Verkleinern",
-    "Zoom: %{percent} %": "Zoom: %{percent} %",
-    "inoGOV is a database to collect geographical information of historical places.": "inoGOV ist eine Datenbank zur Erfassung geografischer Informationen historischer Orte."
+    "Zoom: %{percent} %": "Zoom: %{percent} %"
   }
 }

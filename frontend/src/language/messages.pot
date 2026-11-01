@@ -310,7 +310,7 @@ msgstr ""
 msgid "Loading statistics..."
 msgstr ""
 
-#: src/views/InfoView.vue
+#: src/views/HomeView.vue src/views/InfoView.vue
 msgid "Loading..."
 msgstr ""
 
@@ -450,7 +450,7 @@ msgstr ""
 msgid "Place"
 msgstr ""
 
-#: src/views/ManageKartenView.vue src/views/ManageOrteView.vue src/views/OrteView.vue
+#: src/views/HomeView.vue src/views/ManageKartenView.vue src/views/ManageOrteView.vue src/views/OrteView.vue
 msgid "Place name"
 msgstr ""
 
@@ -582,7 +582,7 @@ msgstr ""
 msgid "Scan the QR code with your authenticator app or enter the key manually."
 msgstr ""
 
-#: src/components/GovSuche.vue src/views/ManageKartenView.vue src/views/ManageKreiseView.vue src/views/ManageOrteView.vue src/views/OrteView.vue
+#: src/components/GovSuche.vue src/views/HomeView.vue src/views/ManageKartenView.vue src/views/ManageKreiseView.vue src/views/ManageOrteView.vue src/views/OrteView.vue
 msgid "Search"
 msgstr ""
 
@@ -718,6 +718,10 @@ msgstr ""
 msgid "The username cannot be changed."
 msgstr ""
 
+#: src/views/HomeView.vue
+msgid "The welcome text could not be loaded."
+msgstr ""
+
 #: src/views/InfoView.vue
 msgid "Third-Party Licenses"
 msgstr ""
@@ -770,6 +774,10 @@ msgstr ""
 msgid "Users"
 msgstr ""
 
+#: src/views/HomeView.vue
+msgid "Welcome to inoGov"
+msgstr ""
+
 #: src/views/SetupAccountView.vue
 msgid "Welcome! Choose a username and a password for %{email}."
 msgstr ""
@@ -808,9 +816,5 @@ msgstr ""
 
 #: src/views/MapView.vue
 msgid "Zoom: %{percent} %"
-msgstr ""
-
-#: src/views/InfoView.vue
-msgid "inoGOV is a database to collect geographical information of historical places."
 msgstr ""
 

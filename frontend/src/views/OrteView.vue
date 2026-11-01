@@ -1,5 +1,6 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
 import { api } from '../api'
 import { useErrors } from '../composables/useErrors'
@@ -12,8 +13,9 @@ const { $gettext } = gettext
 const { errorText } = useErrors()
 const settings = useSettingsStore()
 const auth = useAuthStore()
+const route = useRoute()
 
-const q = ref('')
+const q = ref(typeof route.query.q === 'string' ? route.query.q : '')
 const kreisId = ref('')
 const offset = ref(0)
 const results = ref([])

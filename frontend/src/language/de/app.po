@@ -311,7 +311,7 @@ msgstr "Links"
 msgid "Loading statistics..."
 msgstr "Statistiken werden geladen..."
 
-#: src/views/InfoView.vue
+#: src/views/HomeView.vue src/views/InfoView.vue
 msgid "Loading..."
 msgstr "Lädt..."
 
@@ -451,7 +451,7 @@ msgstr "Passwort oder Code ist falsch."
 msgid "Place"
 msgstr "Ort"
 
-#: src/views/ManageKartenView.vue src/views/ManageOrteView.vue src/views/OrteView.vue
+#: src/views/HomeView.vue src/views/ManageKartenView.vue src/views/ManageOrteView.vue src/views/OrteView.vue
 msgid "Place name"
 msgstr "Ortsname"
 
@@ -583,7 +583,7 @@ msgstr "Gespeichert."
 msgid "Scan the QR code with your authenticator app or enter the key manually."
 msgstr "Scannen Sie den QR-Code mit Ihrer Authenticator-App oder geben Sie den Schlüssel manuell ein."
 
-#: src/components/GovSuche.vue src/views/ManageKartenView.vue src/views/ManageKreiseView.vue src/views/ManageOrteView.vue src/views/OrteView.vue
+#: src/components/GovSuche.vue src/views/HomeView.vue src/views/ManageKartenView.vue src/views/ManageKreiseView.vue src/views/ManageOrteView.vue src/views/OrteView.vue
 msgid "Search"
 msgstr "Suchen"
 
@@ -719,6 +719,10 @@ msgstr "Der Server ist nicht erreichbar."
 msgid "The username cannot be changed."
 msgstr "Der Benutzername kann nicht geändert werden."
 
+#: src/views/HomeView.vue
+msgid "The welcome text could not be loaded."
+msgstr "Der Begrüßungstext konnte nicht geladen werden."
+
 #: src/views/InfoView.vue
 msgid "Third-Party Licenses"
 msgstr "Lizenzen Dritter"
@@ -771,6 +775,10 @@ msgstr "Benutzername oder Passwort ist falsch."
 msgid "Users"
 msgstr "Benutzer"
 
+#: src/views/HomeView.vue
+msgid "Welcome to inoGov"
+msgstr "Willkommen auf inoGov"
+
 #: src/views/SetupAccountView.vue
 msgid "Welcome! Choose a username and a password for %{email}."
 msgstr "Willkommen! Wählen Sie einen Benutzernamen und ein Passwort für %{email}."
@@ -810,8 +818,4 @@ msgstr "Verkleinern"
 #: src/views/MapView.vue
 msgid "Zoom: %{percent} %"
 msgstr "Zoom: %{percent} %"
-
-#: src/views/InfoView.vue
-msgid "inoGOV is a database to collect geographical information of historical places."
-msgstr "inoGOV ist eine Datenbank zur Erfassung geografischer Informationen historischer Orte."
 

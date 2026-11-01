@@ -234,7 +234,10 @@ describe('search results link to the map', () => {
         ],
       },
     })
-    const { wrapper } = await mountView(OrteView)
+    const pinia = createPinia()
+    setActivePinia(pinia)
+    useAuthStore().user = { username: 'u', roles: ['user'] }
+    const { wrapper } = await mountView(OrteView, { pinia })
     const links = wrapper.findAll('[data-test=map-link]')
     expect(links).toHaveLength(1)
     expect(links[0].text()).toBe('Lück B5')

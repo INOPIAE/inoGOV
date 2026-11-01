@@ -39,3 +39,4 @@ pnpm-debug.log*
 Thumbs.db
 /frontend/public/maps
 /frontend/public/legal/*.html
+/frontend/public/home/*.md

@@ -33,12 +33,6 @@ const legalFiles = {
 }
 
 const pages = computed(() => ({
-    home: {
-    title: 'inoGOV',
-    text: $gettext(
-      'inoGOV is a database to collect geographical information of historical places.',
-    ),
-  },
   about: {
     title: $gettext('About us'),
     text: $gettext(

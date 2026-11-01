@@ -8,6 +8,7 @@ import SideNav from '../components/SideNav.vue'
 import LoginView from '../views/LoginView.vue'
 import ForgotPasswordView from '../views/ForgotPasswordView.vue'
 import ResetPasswordView from '../views/ResetPasswordView.vue'
+import HomeView from '../views/HomeView.vue'
 import OrteView from '../views/OrteView.vue'
 
 afterEach(() => {
@@ -190,6 +191,38 @@ describe('ResetPasswordView', () => {
   })
 })
 
+describe('HomeView', () => {
+  it('loads the German welcome text and routes the search term to places', async () => {
+    let requestedPath = ''
+    vi.stubGlobal('fetch', vi.fn(async (url) => {
+      requestedPath = new URL(url, window.location.origin).pathname
+      return new Response('## Willkommen in inoGOV', { status: 200 })
+    }))
+
+    const { wrapper, router } = await mountView(HomeView, { language: 'de' })
+    await vi.waitFor(() => expect(wrapper.get('[data-test=welcome-content]').text()).toContain('Willkommen in inoGOV'))
+    expect(requestedPath).toBe('/home/welcome.de.md')
+    expect(wrapper.get('h1').text()).toBe('Willkommen auf inoGov')
+
+    await wrapper.get('#home-place-search').setValue('Lviv')
+    await wrapper.get('form').trigger('submit')
+    await vi.waitFor(() => expect(router.currentRoute.value.query.q).toBe('Lviv'))
+    expect(router.currentRoute.value.path).toBe('/orte')
+  })
+
+  it('hides the search form when public search is disabled', async () => {
+    const { createPinia, setActivePinia } = await import('pinia')
+    const pinia = createPinia()
+    setActivePinia(pinia)
+    useSettingsStore().publicSearch = false
+    vi.stubGlobal('fetch', vi.fn(async () => new Response('Welcome', { status: 200 })))
+
+    const { wrapper } = await mountView(HomeView, { pinia })
+
+    expect(wrapper.find('form').exists()).toBe(false)
+  })
+})
+
 describe('OrteView', () => {
   const sprachen = [
     { id: 's-de', sprache2: 'de', sprache_land: 'Deutsch' },
@@ -249,6 +282,14 @@ describe('OrteView', () => {
     await wrapper.get('form').trigger('submit')
     await vi.waitFor(() => expect(fetch.calls.at(-1).url.searchParams.get('q')).toBe('lem'))
     expect(fetch.calls.at(-1).headers.Authorization).toBeUndefined()
+  })
+
+  it('uses a search term passed in the route query', async () => {
+    const fetch = setup([])
+    await mountView(OrteView, { route: '/orte?q=Przemysl' })
+    await vi.waitFor(() =>
+      expect(fetch.calls.find((call) => call.key === 'GET /orte').url.searchParams.get('q')).toBe('Przemysl'),
+    )
   })
 
   it('sends the token when signed in (needed when search is restricted)', async () => {
