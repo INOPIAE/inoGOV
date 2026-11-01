@@ -27,7 +27,7 @@ msgstr "Aktiv"
 msgid "Actual size"
 msgstr "Originalgröße"
 
-#: src/components/NamesEditor.vue src/views/ManageKartenView.vue
+#: src/components/GovSuche.vue src/components/NamesEditor.vue src/views/ManageKartenView.vue
 msgid "Add"
 msgstr "Hinzufügen"
 
@@ -72,6 +72,10 @@ msgid "Blocked"
 msgstr "Gesperrt"
 
 #: src/views/ImportsView.vue
+msgid "CSV file with a header row and three columns: German place name, German district name, coordinate. Every row creates a new place with a reference to the map \"Stumpp\"."
+msgstr "CSV-Datei mit Überschriftszeile und drei Spalten: deutscher Ortsname, deutscher Kreisname, Koordinate. Jede Zeile legt einen neuen Ort mit Verweis auf die Karte „Stumpp“ an."
+
+#: src/views/ImportsView.vue
 msgid "CSV file with a header row and three columns: Polish place name, Polish district name, coordinate. Every row creates a new place with a reference to the map \"Lück\"."
 msgstr "CSV-Datei mit Überschriftszeile und drei Spalten: polnischer Ortsname, polnischer Kreisname, Koordinate. Jede Zeile legt einen neuen Ort mit Verweis auf die Karte „Lück“ an."
 
@@ -107,6 +111,10 @@ msgstr "Die Koordinate fehlt."
 msgid "Coordinates"
 msgstr "Koordinaten"
 
+#: src/views/ManageOrteView.vue src/views/OrteView.vue
+msgid "Coordinates not found"
+msgstr "Koordinaten nicht gefunden"
+
 #: src/components/OtpSetup.vue
 msgid "Copied"
 msgstr "Kopiert"
@@ -135,7 +143,7 @@ msgstr "Löschen"
 msgid "Disable OTP"
 msgstr "OTP deaktivieren"
 
-#: src/views/OrteView.vue src/views/ManageOrteView.vue
+#: src/views/ManageOrteView.vue src/views/OrteView.vue
 msgid "District"
 msgstr "Kreis"
 
@@ -211,9 +219,17 @@ msgstr "An Breite anpassen"
 msgid "Forgot your password?"
 msgstr "Passwort vergessen?"
 
+#: src/components/GovSuche.vue
+msgid "GOV place search"
+msgstr "GOV-Ortssuche"
+
 #: src/views/ManageKartenView.vue
 msgid "Grid square"
 msgstr "Planquadrat"
+
+#: src/components/SideNav.vue
+msgid "Home"
+msgstr "Startseite"
 
 #: src/views/ForgotPasswordView.vue
 msgid "If the address is known, an email with a link has been sent."
@@ -279,6 +295,10 @@ msgstr "Nachname"
 msgid "Latitude"
 msgstr "Breitengrad"
 
+#: src/views/InfoView.vue
+msgid "License"
+msgstr "Lizenz"
+
 #: src/views/ImportsView.vue
 msgid "Line"
 msgstr "Zeile"
@@ -286,6 +306,14 @@ msgstr "Zeile"
 #: src/views/OrteView.vue
 msgid "Links"
 msgstr "Links"
+
+#: src/views/OrteStatisticsView.vue
+msgid "Loading statistics..."
+msgstr "Statistiken werden geladen..."
+
+#: src/views/InfoView.vue
+msgid "Loading..."
+msgstr "Lädt..."
 
 #: src/components/SideNav.vue src/views/LoginView.vue src/views/OtpLinkView.vue src/views/ResetPasswordView.vue
 msgid "Log in"
@@ -311,7 +339,7 @@ msgstr "Hauptnavigation"
 msgid "Management"
 msgstr "Verwaltung"
 
-#: src/views/OrteView.vue src/views/ManageKartenView.vue
+#: src/views/ManageKartenView.vue src/views/OrteView.vue
 msgid "Map"
 msgstr "Karte"
 
@@ -327,7 +355,7 @@ msgstr "Kartenbild mit hervorgehobenem Planquadrat %{koordinate}"
 msgid "Map view"
 msgstr "Kartenansicht"
 
-#: src/components/SideNav.vue src/views/OrteView.vue src/views/ManageKartenView.vue
+#: src/components/SideNav.vue src/views/ManageKartenView.vue src/views/OrteView.vue
 msgid "Maps"
 msgstr "Karten"
 
@@ -363,9 +391,17 @@ msgstr "Für dieses Planquadrat liegen keine Kartendaten vor."
 msgid "No map references yet."
 msgstr "Noch keine Kartenverweise."
 
+#: src/components/GovSuche.vue
+msgid "No names available."
+msgstr "Keine Namen verfügbar."
+
 #: src/views/OrteView.vue
 msgid "No places found."
 msgstr "Keine Orte gefunden."
+
+#: src/components/GovSuche.vue
+msgid "No results found."
+msgstr "Keine Ergebnisse gefunden."
 
 #: src/composables/useErrors.js
 msgid "Not found."
@@ -374,6 +410,10 @@ msgstr "Nicht gefunden."
 #: src/components/AppFooter.vue
 msgid "Not signed in"
 msgstr "Nicht angemeldet"
+
+#: src/views/OrteView.vue
+msgid "OSM"
+msgstr "OSM"
 
 #: src/views/AccountView.vue
 msgid "OTP has been disabled."
@@ -411,7 +451,7 @@ msgstr "Passwort oder Code ist falsch."
 msgid "Place"
 msgstr "Ort"
 
-#: src/views/OrteView.vue src/views/ManageKartenView.vue src/views/ManageOrteView.vue
+#: src/views/ManageKartenView.vue src/views/ManageOrteView.vue src/views/OrteView.vue
 msgid "Place name"
 msgstr "Ortsname"
 
@@ -427,9 +467,25 @@ msgstr "Der Ortsname fehlt."
 msgid "Place names"
 msgstr "Ortsnamen"
 
-#: src/components/SideNav.vue src/views/ManageOrteView.vue
+#: src/views/OrteStatisticsView.vue
+msgid "Place statistics"
+msgstr "Ortsstatistik"
+
+#: src/components/SideNav.vue src/views/ManageOrteView.vue src/views/OrteStatisticsView.vue
 msgid "Places"
 msgstr "Orte"
+
+#: src/views/OrteStatisticsView.vue
+msgid "Places with GOV-ID"
+msgstr "Orte mit GOV-ID"
+
+#: src/views/OrteStatisticsView.vue
+msgid "Places with coordinates"
+msgstr "Orte mit Koordinaten"
+
+#: src/views/OrteStatisticsView.vue
+msgid "Places with coordinates not found"
+msgstr "Orte mit Koordinaten nicht gefunden"
 
 #: src/views/ImportsView.vue src/views/MapView.vue
 msgid "Please wait..."
@@ -462,6 +518,10 @@ msgstr "Diesen Ort wirklich löschen?"
 #: src/views/ImportsView.vue
 msgid "Reason"
 msgstr "Grund"
+
+#: src/views/OrteStatisticsView.vue
+msgid "Refresh"
+msgstr "Aktualisieren"
 
 #: src/components/NamesEditor.vue src/views/ManageKartenView.vue
 msgid "Remove"
@@ -523,13 +583,25 @@ msgstr "Gespeichert."
 msgid "Scan the QR code with your authenticator app or enter the key manually."
 msgstr "Scannen Sie den QR-Code mit Ihrer Authenticator-App oder geben Sie den Schlüssel manuell ein."
 
-#: src/views/OrteView.vue src/views/ManageKartenView.vue src/views/ManageKreiseView.vue src/views/ManageOrteView.vue
+#: src/components/GovSuche.vue src/views/ManageKartenView.vue src/views/ManageKreiseView.vue src/views/ManageOrteView.vue src/views/OrteView.vue
 msgid "Search"
 msgstr "Suchen"
+
+#: src/components/GovSuche.vue
+msgid "Search GOV place name"
+msgstr "GOV-Ortsnamen suchen"
+
+#: src/components/GovSuche.vue
+msgid "Search failed."
+msgstr "Suche fehlgeschlagen."
 
 #: src/components/SideNav.vue src/views/OrteView.vue
 msgid "Search places"
 msgstr "Orte suchen"
+
+#: src/components/GovSuche.vue
+msgid "Searching..."
+msgstr "Suche läuft..."
 
 #: src/components/OtpSetup.vue
 msgid "Secret key"
@@ -563,9 +635,21 @@ msgstr "Überspringen"
 msgid "Start import"
 msgstr "Import starten"
 
+#: src/components/SideNav.vue
+msgid "Statistics"
+msgstr "Statistiken"
+
 #: src/views/UsersView.vue
 msgid "Status"
 msgstr "Status"
+
+#: src/views/InfoView.vue
+msgid "Terms of Service"
+msgstr "Nutzungsbedingungen"
+
+#: src/views/ImportsView.vue
+msgid "The German language is missing in the language table."
+msgstr "Die deutsche Sprache fehlt in der Sprachtabelle."
 
 #: src/views/ImportsView.vue
 msgid "The Polish language is missing in the language table."
@@ -611,6 +695,10 @@ msgstr "Die Kopfzeile mit „Koordinate“ wurde nicht gefunden."
 msgid "The legal notice will be published here."
 msgstr "Das Impressum wird hier veröffentlicht."
 
+#: src/views/InfoView.vue
+msgid "The legal text could not be loaded."
+msgstr "Der Rechtstext konnte nicht geladen werden."
+
 #: src/views/MapView.vue
 msgid "The map image could not be loaded."
 msgstr "Das Kartenbild konnte nicht geladen werden."
@@ -618,10 +706,6 @@ msgstr "Das Kartenbild konnte nicht geladen werden."
 #: src/views/ResetPasswordView.vue src/views/SetupAccountView.vue
 msgid "The passwords do not match."
 msgstr "Die Passwörter stimmen nicht überein."
-
-#: src/views/InfoView.vue
-msgid "The privacy policy will be published here."
-msgstr "Die Datenschutzerklärung wird hier veröffentlicht."
 
 #: src/composables/useErrors.js
 msgid "The request was rejected. Please check your input or the link."
@@ -634,6 +718,10 @@ msgstr "Der Server ist nicht erreichbar."
 #: src/views/AccountView.vue
 msgid "The username cannot be changed."
 msgstr "Der Benutzername kann nicht geändert werden."
+
+#: src/views/InfoView.vue
+msgid "Third-Party Licenses"
+msgstr "Lizenzen Dritter"
 
 #: src/views/LoginView.vue
 msgid "This account is blocked."
@@ -718,4 +806,8 @@ msgstr "Verkleinern"
 #: src/views/MapView.vue
 msgid "Zoom: %{percent} %"
 msgstr "Zoom: %{percent} %"
+
+#: src/views/InfoView.vue
+msgid "inoGOV is a database to collect geographical information of historical places."
+msgstr "inoGOV ist eine Datenbank zur Erfassung geografischer Informationen historischer Orte."
 
