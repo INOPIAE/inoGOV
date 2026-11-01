@@ -87,7 +87,7 @@ async function search() {
       params: { placename: query },
     })
   } catch (e) {
-    error.value = e?.message || gettext.$gettext('Search failed.')
+    error.value = gettext.$gettext('Search failed.')
   } finally {
     loading.value = false
   }
@@ -117,7 +117,7 @@ function selectPlace(result) {
   <section class="mt-4">
     <h3 class="h6">{{ gettext.$gettext('GOV place search') }}</h3>
 
-    <form class="input-group mb-3" @submit.prevent="search">
+    <form class="input-group mb-3" @submit.prevent.stop="search">
       <input
         v-model="placename"
         type="search"

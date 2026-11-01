@@ -10,6 +10,8 @@ import ForgotPasswordView from '../views/ForgotPasswordView.vue'
 import ResetPasswordView from '../views/ResetPasswordView.vue'
 import HomeView from '../views/HomeView.vue'
 import OrteView from '../views/OrteView.vue'
+import ManageOrteView from '../views/ManageOrteView.vue'
+import GovSuche from '../components/GovSuche.vue'
 
 afterEach(() => {
   setToken(null)
@@ -188,6 +190,88 @@ describe('ResetPasswordView', () => {
     await wrapper.get('form').trigger('submit')
     await vi.waitFor(() => expect(wrapper.find('[data-test=done]').exists()).toBe(true))
     expect(fetch.calls.at(-1).body).toEqual({ token: 'tok', new_password: 'neuespass1' })
+  })
+})
+
+describe('GovSuche', () => {
+  const govPlace = {
+    id: 'object_1',
+    position: { lon: 22.5, lat: 49.8, type: 'point' },
+    name: [
+      { lang: 'pol', value: 'Przemyśl' },
+      { lang: 'deu', value: 'Premissel' },
+    ],
+  }
+
+  it('searches GOV, adds translated names, and emits selected coordinates', async () => {
+    const pinia = (await import('pinia')).createPinia()
+    useSettingsStore(pinia).sprachen = [
+      { id: 'de', sprache_land: 'Deutsch', sprache2: 'de' },
+      { id: 'pl', sprache_land: 'Polski', sprache2: 'pl' },
+    ]
+    const fetch = mockFetch({ 'GET /gov_suche': { body: [govPlace] } })
+    const { wrapper } = await mountView(GovSuche, { language: 'de', pinia })
+
+    expect(wrapper.get('h3').text()).toBe('GOV-Ortssuche')
+    await wrapper.get('input[type=search]').setValue('  Przemyśl  ')
+    await wrapper.get('form').trigger('submit')
+    await vi.waitFor(() => expect(wrapper.text()).toContain('object_1'))
+
+    expect(fetch.calls[0].url.searchParams.get('placename')).toBe('Przemyśl')
+    expect(wrapper.text()).toContain('Polski · pol')
+    expect(wrapper.text()).toContain('Deutsch · deu')
+
+    const addButtons = wrapper.findAll('button.btn-sm')
+    await addButtons[1].trigger('click')
+    expect(wrapper.emitted('add')).toEqual([[{ sprache_id: 'pl', text: 'Przemyśl' }]])
+    await addButtons[0].trigger('click')
+    expect(wrapper.emitted('select-place')).toEqual([
+      [{ gov_id: 'object_1', lon: 22.5, lat: 49.8 }],
+    ])
+  })
+
+  it('shows a translated generic error when GOV search fails', async () => {
+    mockFetch({ 'GET /gov_suche': { status: 502, body: { detail: 'GOV API unavailable' } } })
+    const { wrapper } = await mountView(GovSuche, { language: 'de' })
+    await wrapper.get('input[type=search]').setValue('Przemyśl')
+    await wrapper.get('form').trigger('submit')
+    await vi.waitFor(() => expect(wrapper.find('[role=alert]').exists()).toBe(true))
+
+    expect(wrapper.get('[role=alert]').text()).toBe('Suche fehlgeschlagen.')
+  })
+})
+
+describe('ManageOrteView', () => {
+  it('selects a GOV result and saves its identifier and coordinates', async () => {
+    const place = {
+      id: 'o1', gov_id: null, kreis_id: null, lat: null, lon: null, addition: null, comment: null,
+      coordinates_not_found: false, namen: [{ id: 'n1', sprache_id: 'de', ortsname: 'Przemyśl' }], karten: [],
+    }
+    const updated = { ...place, gov_id: 'object_1', lat: '49.8', lon: '22.5' }
+    const pinia = (await import('pinia')).createPinia()
+    useSettingsStore(pinia).sprachen = [{ id: 'de', sprache_land: 'Deutsch', sprache2: 'de' }]
+    const fetch = mockFetch({
+      'GET /sprachen': { body: [{ id: 'de', sprache_land: 'Deutsch', sprache2: 'de' }] },
+      'GET /kreise': { body: [] },
+      'GET /orte': { body: [place] },
+      'GET /gov_suche': {
+        body: [{ id: 'object_1', position: { lon: 22.5, lat: 49.8, type: 'point' }, name: [] }],
+      },
+      'PATCH /orte/o1': { body: updated },
+    })
+    const { wrapper } = await mountView(ManageOrteView, { language: 'de', pinia })
+    await vi.waitFor(() => expect(wrapper.find('[data-test=list-item]').exists()).toBe(true))
+    await wrapper.get('[data-test=list-item]').trigger('click')
+
+    const govSearch = wrapper.findComponent(GovSuche)
+    await govSearch.get('input[type=search]').setValue('Przemyśl')
+    await govSearch.get('form').trigger('submit')
+    await vi.waitFor(() => expect(govSearch.text()).toContain('object_1'))
+    await govSearch.get('button.btn-sm').trigger('click')
+    await vi.waitFor(() => expect(wrapper.find('[role=status]').text()).toBe('Gespeichert.'))
+
+    const patch = fetch.calls.find((call) => call.key === 'PATCH /orte/o1')
+    expect(patch.body).toMatchObject({ gov_id: 'object_1', lat: 49.8, lon: 22.5 })
   })
 })
 
