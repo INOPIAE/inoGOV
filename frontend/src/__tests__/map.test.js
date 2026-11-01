@@ -233,6 +233,7 @@ describe('search results link to the map', () => {
           },
         ],
       },
+      'GET /orte/count': { body: { found: 1, total: 1 } },
     })
     const pinia = createPinia()
     setActivePinia(pinia)

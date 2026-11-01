@@ -218,6 +218,10 @@ msgstr ""
 msgid "Forgot your password?"
 msgstr ""
 
+#: src/views/OrteView.vue
+msgid "Found %{found} of %{total} places."
+msgstr ""
+
 #: src/components/GovSuche.vue
 msgid "GOV place search"
 msgstr ""

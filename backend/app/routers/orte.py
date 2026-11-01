@@ -1,13 +1,13 @@
 import uuid
+from typing import Literal
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Response
-from sqlalchemy import select
+from sqlalchemy import and_, case, func, select
 from sqlalchemy.orm import Session
-from sqlalchemy import func
 
 from app.database import get_db
 from app.deps import read_access, require_editor
-from app.models import Kreis, MapReference, Ort, Ortsname, User
+from app.models import Kreis, Kreisname, MapReference, Ort, Ortsname, User
 from app.routers.common import apply_changes, ensure_sprache, get_active
 from app.schemas_geo import (
     KarteIn,
@@ -44,27 +44,109 @@ def ensure_kreis(db: Session, kreis_id: uuid.UUID | None) -> None:
         raise HTTPException(status_code=422, detail="Unbekannter Kreis")
 
 
-@router.get("", response_model=list[OrtOut], dependencies=[Depends(read_access)])
-def list_orte(
-    q: str | None = None,
-    kreis_id: uuid.UUID | None = None,
-    sprache_id: uuid.UUID | None = None,
-    limit: int = Query(100, ge=1, le=500),
-    offset: int = Query(0, ge=0),
-    db: Session = Depends(get_db),
-):
-    stmt = select(Ort).where(Ort.active)
+def ort_filters(q: str | None, kreis_id: uuid.UUID | None, sprache_id: uuid.UUID | None):
+    filters = [Ort.active]
     if kreis_id:
-        stmt = stmt.where(Ort.kreis_id == kreis_id)
+        filters.append(Ort.kreis_id == kreis_id)
     if q:
         matching = select(Ortsname.ort_id).where(
             Ortsname.active, Ortsname.ortsname.icontains(q, autoescape=True)
         )
         if sprache_id:
             matching = matching.where(Ortsname.sprache_id == sprache_id)
-        stmt = stmt.where(Ort.id.in_(matching))
-    orte = db.scalars(stmt.order_by(Ort.gov_id, Ort.id).limit(limit).offset(offset)).all()
+        filters.append(Ort.id.in_(matching))
+    return filters
+
+
+def ort_ordering(sort_by: str, sort_order: str, sort_sprache_id: uuid.UUID | None):
+    if sort_by == "name":
+        preferred = None
+        if sort_sprache_id:
+            preferred = (
+                select(Ortsname.ortsname)
+                .where(Ortsname.ort_id == Ort.id, Ortsname.active, Ortsname.sprache_id == sort_sprache_id)
+                .order_by(Ortsname.ortsname, Ortsname.id)
+                .limit(1)
+                .scalar_subquery()
+            )
+        fallback = (
+            select(Ortsname.ortsname)
+            .where(Ortsname.ort_id == Ort.id, Ortsname.active)
+            .order_by(Ortsname.ortsname, Ortsname.id)
+            .limit(1)
+            .scalar_subquery()
+        )
+        value = func.lower(func.coalesce(preferred, fallback, Ort.gov_id, ""))
+    elif sort_by == "district":
+        preferred = None
+        if sort_sprache_id:
+            preferred = (
+                select(Kreisname.kreisname)
+                .where(Kreisname.kreis_id == Ort.kreis_id, Kreisname.active, Kreisname.sprache_id == sort_sprache_id)
+                .order_by(Kreisname.kreisname, Kreisname.id)
+                .limit(1)
+                .scalar_subquery()
+            )
+        fallback = (
+            select(Kreisname.kreisname)
+            .where(Kreisname.kreis_id == Ort.kreis_id, Kreisname.active)
+            .order_by(Kreisname.kreisname, Kreisname.id)
+            .limit(1)
+            .scalar_subquery()
+        )
+        district_gov_id = select(Kreis.gov_id).where(Kreis.id == Ort.kreis_id).scalar_subquery()
+        value = func.lower(func.coalesce(preferred, fallback, district_gov_id, ""))
+    elif sort_by == "coordinates":
+        columns = [Ort.lat, Ort.lon]
+        return [*(column.desc() if sort_order == "desc" else column.asc() for column in columns), Ort.id.asc()]
+    elif sort_by == "maps":
+        map_value = (
+            select(MapReference.karte)
+            .where(MapReference.ort_id == Ort.id, MapReference.active)
+            .order_by(MapReference.karte, MapReference.koordinate)
+            .limit(1)
+            .scalar_subquery()
+        )
+        value = func.lower(func.coalesce(map_value, ""))
+    else:
+        value = case(
+            (and_(Ort.gov_id.isnot(None), Ort.lat.isnot(None), Ort.lon.isnot(None)), 0),
+            (Ort.gov_id.isnot(None), 1),
+            (and_(Ort.lat.isnot(None), Ort.lon.isnot(None)), 2),
+            else_=3,
+        )
+    return [value.desc() if sort_order == "desc" else value.asc(), Ort.id.asc()]
+
+
+@router.get("", response_model=list[OrtOut], dependencies=[Depends(read_access)])
+def list_orte(
+    q: str | None = None,
+    kreis_id: uuid.UUID | None = None,
+    sprache_id: uuid.UUID | None = None,
+    sort_sprache_id: uuid.UUID | None = None,
+    sort_by: Literal["name", "district", "coordinates", "maps", "links"] = "name",
+    sort_order: Literal["asc", "desc"] = "asc",
+    limit: int = Query(100, ge=1, le=500),
+    offset: int = Query(0, ge=0),
+    db: Session = Depends(get_db),
+):
+    stmt = select(Ort).where(*ort_filters(q, kreis_id, sprache_id))
+    orte = db.scalars(
+        stmt.order_by(*ort_ordering(sort_by, sort_order, sort_sprache_id)).limit(limit).offset(offset)
+    ).all()
     return to_out(db, list(orte))
+
+
+@router.get("/count", dependencies=[Depends(read_access)])
+def count_orte(
+    q: str | None = None,
+    kreis_id: uuid.UUID | None = None,
+    sprache_id: uuid.UUID | None = None,
+    db: Session = Depends(get_db),
+) -> dict[str, int]:
+    found = db.scalar(select(func.count(Ort.id)).where(*ort_filters(q, kreis_id, sprache_id))) or 0
+    total = db.scalar(select(func.count(Ort.id)).where(Ort.active)) or 0
+    return {"found": found, "total": total}
 
 
 @router.get("/{ort_id}", response_model=OrtOut, dependencies=[Depends(read_access)])

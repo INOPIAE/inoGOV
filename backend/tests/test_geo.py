@@ -137,6 +137,48 @@ def test_ort_filters(client, user_h, de):
     assert len(client.get("/orte", params={"limit": 1}).json()) == 1
 
 
+def test_ort_count_uses_search_filters_and_reports_global_total(client, user_h, de):
+    kreis_id = client.post("/kreise", json={}, headers=user_h).json()["id"]
+    other_kreis_id = client.post("/kreise", json={}, headers=user_h).json()["id"]
+    for kreis, name in [(kreis_id, "Lemberg"), (kreis_id, "Lemberg Süd"), (other_kreis_id, "Krakau")]:
+        client.post(
+            "/orte",
+            json={"kreis_id": kreis, "namen": [{"sprache_id": str(de.id), "ortsname": name}]},
+            headers=user_h,
+        )
+
+    response = client.get("/orte/count", params={"q": "Lemberg", "kreis_id": kreis_id})
+
+    assert response.status_code == 200
+    assert response.json() == {"found": 2, "total": 3}
+
+
+def test_ort_sorting_applies_before_pagination(client, user_h, de):
+    for gov_id, name in [("O1", "Zamość"), ("O2", "Alwernia"), ("O3", "Przemyśl")]:
+        client.post(
+            "/orte",
+            json={"gov_id": gov_id, "namen": [{"sprache_id": str(de.id), "ortsname": name}]},
+            headers=user_h,
+        )
+
+    first_page = client.get(
+        "/orte",
+        params={"sort_by": "name", "sort_sprache_id": str(de.id), "limit": 1},
+    )
+    second_page = client.get(
+        "/orte",
+        params={"sort_by": "name", "sort_sprache_id": str(de.id), "limit": 1, "offset": 1},
+    )
+    descending = client.get(
+        "/orte",
+        params={"sort_by": "name", "sort_sprache_id": str(de.id), "sort_order": "desc"},
+    )
+
+    assert first_page.json()[0]["namen"][0]["ortsname"] == "Alwernia"
+    assert second_page.json()[0]["namen"][0]["ortsname"] == "Przemyśl"
+    assert descending.json()[0]["namen"][0]["ortsname"] == "Zamość"
+
+
 def test_ort_validation(client, user_h):
     assert client.post("/orte", json={"lat": "91"}, headers=user_h).status_code == 422
     assert client.post("/orte", json={"kreis_id": "00000000-0000-0000-0000-000000000000"}, headers=user_h).status_code == 422

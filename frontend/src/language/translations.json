@@ -55,6 +55,7 @@
     "First name": "Vorname",
     "Fit to width": "An Breite anpassen",
     "Forgot your password?": "Passwort vergessen?",
+    "Found %{found} of %{total} places.": "%{found} von %{total} Orten gefunden.",
     "GOV place search": "GOV-Ortssuche",
     "Grid square": "Planquadrat",
     "Home": "Startseite",

@@ -241,20 +241,21 @@ describe('OrteView', () => {
     karten: [{ id: 'm1', karte: 'Lück', koordinate: 'B5' }],
   }
 
-  function setup(orte) {
+  function setup(orte, total = orte.length) {
     return mockFetch({
       'GET /kreise': { body: [{ id: 'k1', gov_id: 'K', namen: [{ sprache_id: 's-de', kreisname: 'Kreis Przemyśl' }] }] },
       'GET /sprachen': { body: sprachen },
       'GET /orte': { body: orte },
+      'GET /orte/count': { body: { found: orte.length, total } },
     })
   }
 
-  async function mountHome(orte, language = 'de') {
-    setup(orte)
+  async function mountHome(orte, language = 'de', total = orte.length) {
+    const fetch = setup(orte, total)
     const pinia = (await import('pinia')).createPinia()
     ;(await import('pinia')).setActivePinia(pinia)
     useSettingsStore().sprachen = sprachen
-    return mountView(OrteView, { pinia, language })
+    return { ...(await mountView(OrteView, { pinia, language })), fetch }
   }
 
   it('searches without authentication and shows results with links', async () => {
@@ -303,5 +304,37 @@ describe('OrteView', () => {
   it('shows a message when nothing is found', async () => {
     const { wrapper } = await mountHome([])
     expect(wrapper.get('[data-test=empty]').text()).toBe('Keine Orte gefunden.')
+  })
+
+  it('sorts by name by default and sends new sort choices to the server', async () => {
+    const place = (id, name) => ({
+      ...ort,
+      id,
+      namen: [{ id: `name-${id}`, sprache_id: 's-de', ortsname: name }],
+    })
+    const { wrapper, fetch } = await mountHome([place('z', 'Zamość'), place('a', 'Alwernia')])
+    const placeRequests = () => fetch.calls.filter((call) => call.key === 'GET /orte')
+
+    expect(wrapper.get('th[aria-sort=ascending] [data-sort=name]').exists()).toBe(true)
+    expect(placeRequests()[0].url.searchParams.get('sort_by')).toBe('name')
+    expect(placeRequests()[0].url.searchParams.get('sort_order')).toBe('asc')
+    expect(placeRequests()[0].url.searchParams.get('sort_sprache_id')).toBe('s-de')
+
+    await wrapper.get('[data-sort=name]').trigger('click')
+    await vi.waitFor(() => expect(placeRequests().at(-1).url.searchParams.get('sort_order')).toBe('desc'))
+
+    expect(wrapper.get('th[aria-sort=descending] [data-sort=name]').exists()).toBe(true)
+    expect(wrapper.findAll('thead [data-sort]').map((button) => button.attributes('data-sort'))).toEqual([
+      'name',
+      'district',
+      'coordinates',
+      'maps',
+      'links',
+    ])
+  })
+
+  it('shows filtered result count and global total below the results', async () => {
+    const { wrapper } = await mountHome([ort], 'de', 12)
+    expect(wrapper.get('[data-test=result-count]').text()).toBe('1 von 12 Orten gefunden.')
   })
 })

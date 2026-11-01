@@ -219,6 +219,10 @@ msgstr "An Breite anpassen"
 msgid "Forgot your password?"
 msgstr "Passwort vergessen?"
 
+#: src/views/OrteView.vue
+msgid "Found %{found} of %{total} places."
+msgstr "%{found} von %{total} Orten gefunden."
+
 #: src/components/GovSuche.vue
 msgid "GOV place search"
 msgstr "GOV-Ortssuche"

@@ -19,20 +19,52 @@ const q = ref(typeof route.query.q === 'string' ? route.query.q : '')
 const kreisId = ref('')
 const offset = ref(0)
 const results = ref([])
+const foundCount = ref(0)
+const totalCount = ref(0)
 const searched = ref(false)
 const loading = ref(false)
 const error = ref('')
+const sortColumn = ref('name')
+const sortDirection = ref('asc')
 
 const language = computed(() => gettext.current)
+
+function toggleSort(column) {
+  if (sortColumn.value === column) {
+    sortDirection.value = sortDirection.value === 'asc' ? 'desc' : 'asc'
+  } else {
+    sortColumn.value = column
+    sortDirection.value = 'asc'
+  }
+  search(0)
+}
+
+function sortState(column) {
+  return sortColumn.value === column ? (sortDirection.value === 'asc' ? 'ascending' : 'descending') : 'none'
+}
 
 async function search(newOffset = 0) {
   offset.value = newOffset
   loading.value = true
   error.value = ''
   try {
-    results.value = await api('/orte', {
-      params: { q: q.value.trim(), kreis_id: kreisId.value, limit: LIMIT, offset: newOffset },
-    })
+    const params = { q: q.value.trim(), kreis_id: kreisId.value }
+    const [nextResults, counts] = await Promise.all([
+      api('/orte', {
+        params: {
+          ...params,
+          limit: LIMIT,
+          offset: newOffset,
+          sort_by: sortColumn.value,
+          sort_order: sortDirection.value,
+          sort_sprache_id: settings.sprachen.find((sprache) => sprache.sprache2 === language.value)?.id,
+        },
+      }),
+      api('/orte/count', { params }),
+    ])
+    results.value = nextResults
+    foundCount.value = counts.found
+    totalCount.value = counts.total
     searched.value = true
   } catch (e) {
     error.value = errorText(e)
@@ -95,11 +127,31 @@ onMounted(async () => {
       <table class="table table-hover align-middle">
         <thead>
           <tr>
-            <th>{{ $gettext('Place') }}</th>
-            <th>{{ $gettext('District') }}</th>
-            <th>{{ $gettext('Coordinates') }}</th>
-            <th>{{ $gettext('Maps') }}</th>
-            <th>{{ $gettext('Links') }}</th>
+            <th :aria-sort="sortState('name')">
+              <button class="btn btn-link p-0 fw-semibold text-body text-decoration-none" data-sort="name" type="button" :disabled="loading" @click="toggleSort('name')">
+                {{ $gettext('Place') }} <span aria-hidden="true">{{ sortColumn === 'name' ? (sortDirection === 'asc' ? '▲' : '▼') : '' }}</span>
+              </button>
+            </th>
+            <th :aria-sort="sortState('district')">
+              <button class="btn btn-link p-0 fw-semibold text-body text-decoration-none" data-sort="district" type="button" :disabled="loading" @click="toggleSort('district')">
+                {{ $gettext('District') }} <span aria-hidden="true">{{ sortColumn === 'district' ? (sortDirection === 'asc' ? '▲' : '▼') : '' }}</span>
+              </button>
+            </th>
+            <th :aria-sort="sortState('coordinates')">
+              <button class="btn btn-link p-0 fw-semibold text-body text-decoration-none" data-sort="coordinates" type="button" :disabled="loading" @click="toggleSort('coordinates')">
+                {{ $gettext('Coordinates') }} <span aria-hidden="true">{{ sortColumn === 'coordinates' ? (sortDirection === 'asc' ? '▲' : '▼') : '' }}</span>
+              </button>
+            </th>
+            <th :aria-sort="sortState('maps')">
+              <button class="btn btn-link p-0 fw-semibold text-body text-decoration-none" data-sort="maps" type="button" :disabled="loading" @click="toggleSort('maps')">
+                {{ $gettext('Maps') }} <span aria-hidden="true">{{ sortColumn === 'maps' ? (sortDirection === 'asc' ? '▲' : '▼') : '' }}</span>
+              </button>
+            </th>
+            <th :aria-sort="sortState('links')">
+              <button class="btn btn-link p-0 fw-semibold text-body text-decoration-none" data-sort="links" type="button" :disabled="loading" @click="toggleSort('links')">
+                {{ $gettext('Links') }} <span aria-hidden="true">{{ sortColumn === 'links' ? (sortDirection === 'asc' ? '▲' : '▼') : '' }}</span>
+              </button>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -148,6 +200,10 @@ onMounted(async () => {
         {{ $gettext('Next') }}
       </button>
     </div>
+
+    <p v-if="searched" class="small text-muted mt-2" data-test="result-count">
+      {{ $gettext('Found %{found} of %{total} places.', { found: foundCount, total: totalCount }) }}
+    </p>
 
   </div>
 </template>
