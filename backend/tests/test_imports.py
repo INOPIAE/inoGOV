@@ -60,8 +60,17 @@ def test_import_list_is_admin_only(client, admin_h, user_h):
     body = client.get("/imports", headers=admin_h).json()
     assert body == [
         {"key": "ImportLueck", "columns": ["place_name_pl", "district_name_pl", "coordinate"], "accepts": [".csv"]},
+        {"key": "ImportStumpp", "columns": ["place_name_pl", "district_name_pl", "coordinate"], "accepts": [".csv"]},
         {
             "key": "ImportLueckKoordinaten",
+            "columns": [
+                "Koordinate", "X1", "Y1", "X2", "Y2", "Breite_px", "Hoehe_px",
+                "Laenge_von", "Laenge_bis", "Breite_von", "Breite_bis",
+            ],
+            "accepts": [".xlsx", ".csv"],
+        },
+        {
+            "key": "ImportStumppKoordinaten",
             "columns": [
                 "Koordinate", "X1", "Y1", "X2", "Y2", "Breite_px", "Hoehe_px",
                 "Laenge_von", "Laenge_bis", "Breite_von", "Breite_bis",
@@ -98,6 +107,59 @@ def test_imports_place_with_existing_district(client, admin_h, db, pl, admin):
     assert (ref.ort_id, ref.koordinate, ref.karte) == (ort.id, "B5", "Lück")
     assert db.query(Kreis).count() == 1
     assert ort.created_by == admin.id and ref.created_by == admin.id
+
+
+def test_stumpp_import_uses_existing_german_district_and_map(client, admin_h, db, de, admin):
+    kreis = make_kreis(db, de, "Wolhynien")
+    report = upload(
+        client,
+        admin_h,
+        csv_bytes([("Nowa Huta", "  WOLHYNIEN  ", "A1")]),
+        key="ImportStumpp",
+        name="stumpp.csv",
+    ).json()
+
+    assert (report["total"], report["imported"], report["failed"]) == (1, 1, 0)
+    assert report["created_kreise"] == []
+    ort = places(db)["Nowa Huta"]
+    (name,) = db.query(Ortsname).all()
+    (reference,) = db.query(MapReference).all()
+    assert ort.kreis_id == kreis.id
+    assert name.sprache_id == de.id
+    assert (reference.ort_id, reference.karte, reference.koordinate) == (ort.id, "Stumpp", "A1")
+    assert ort.created_by == admin.id and reference.created_by == admin.id
+
+
+def test_stumpp_import_creates_german_district_and_continues_after_bad_row(client, admin_h, db, de):
+    report = upload(
+        client,
+        admin_h,
+        csv_bytes([("Ort 1", "Neuer Kreis", "A1"), ("Fehler", "Neuer Kreis", ""), ("Ort 2", "Neuer Kreis", "B2")]),
+        key="ImportStumpp",
+        name="stumpp.csv",
+    ).json()
+
+    assert (report["total"], report["imported"], report["failed"]) == (3, 2, 1)
+    assert report["errors"][0]["code"] == "empty_coordinate"
+    assert [district["name"] for district in report["created_kreise"]] == ["Neuer Kreis"]
+    assert db.query(Kreis).count() == 1
+    assert {name.ortsname for name in db.query(Ortsname).all()} == {"Ort 1", "Ort 2"}
+    assert all(name.sprache_id == de.id for name in db.query(Ortsname).all())
+    assert {reference.karte for reference in db.query(MapReference).all()} == {"Stumpp"}
+
+
+def test_stumpp_import_requires_german_language(client, admin_h, db, pl, archive_dir):
+    response = upload(
+        client,
+        admin_h,
+        csv_bytes([("Ort", "Kreis", "A1")]),
+        key="ImportStumpp",
+        name="stumpp.csv",
+    )
+
+    assert response.status_code == 422 and response.json()["detail"] == "no_german"
+    assert db.query(Ort).count() == 0
+    assert not archive_dir.exists()
 
 
 def test_header_row_is_skipped(client, admin_h, db, pl):

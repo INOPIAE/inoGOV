@@ -56,6 +56,50 @@ describe('ImportsView', () => {
     expect(wrapper.get('[data-test=description]').text()).toContain('"Lück"')
   })
 
+  it('shows the Stumpp coordinate-import description correctly in German', async () => {
+    const imports = [
+      ...INFO,
+      { key: 'ImportStumppKoordinaten', columns: [], accepts: ['.xlsx', '.csv'] },
+    ]
+    const { wrapper } = await mountImports(
+      { 'GET /imports': { body: imports } },
+      { language: 'de' },
+    )
+    await wrapper.get('#import-key').setValue('ImportStumppKoordinaten')
+
+    const description = wrapper.get('[data-test=description]').text()
+    expect(description).toContain('Karte „Stumpp“')
+    expect(description).not.toContain('Lück')
+    expect(description).toContain('Bereits vorhandene Planquadrate mit derselben Koordinate werden aktualisiert.')
+  })
+
+  it('explains Lück coordinate updates in German', async () => {
+    const imports = [...INFO, { key: 'ImportLueckKoordinaten', columns: [], accepts: ['.xlsx', '.csv'] }]
+    const { wrapper } = await mountImports(
+      { 'GET /imports': { body: imports } },
+      { language: 'de' },
+    )
+    await wrapper.get('#import-key').setValue('ImportLueckKoordinaten')
+
+    const description = wrapper.get('[data-test=description]').text()
+    expect(description).toContain('Karte „Lück“')
+    expect(description).not.toContain('Stumpp')
+    expect(description).toContain('Bereits vorhandene Planquadrate mit derselben Koordinate werden aktualisiert.')
+  })
+
+  it('shows the simple Stumpp import description in German', async () => {
+    const imports = [...INFO, { key: 'ImportStumpp', columns: [], accepts: ['.csv'] }]
+    const { wrapper } = await mountImports(
+      { 'GET /imports': { body: imports } },
+      { language: 'de' },
+    )
+    await wrapper.get('#import-key').setValue('ImportStumpp')
+
+    const description = wrapper.get('[data-test=description]').text()
+    expect(description).toContain('deutscher Ortsname')
+    expect(description).toContain('Karte „Stumpp“')
+  })
+
   it('cannot start without a file', async () => {
     const { wrapper, fetch } = await mountImports({})
     expect(wrapper.get('button[type=submit]').attributes('disabled')).toBeDefined()

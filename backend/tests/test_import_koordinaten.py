@@ -39,8 +39,8 @@ def text(rows, sep="\t", encoding="utf-8"):
     return ("\n".join(sep.join("" if c is None else str(c) for c in row) for row in rows) + "\n").encode(encoding)
 
 
-def upload(client, headers, content, name="koordinaten.xlsx"):
-    return client.post(f"/imports/{KEY}", files={"file": (name, content)}, headers=headers)
+def upload(client, headers, content, name="koordinaten.xlsx", key=KEY):
+    return client.post(f"/imports/{key}", files={"file": (name, content)}, headers=headers)
 
 
 def grid(db):
@@ -59,6 +59,41 @@ def test_imports_excel_file(client, admin_h, db, admin):
     assert [float(v) for v in (a1.laenge_von, a1.laenge_bis, a1.breite_von, a1.breite_bis)] == [42, 42.5, 51, 50]
     assert float(squares["B1"].laenge_bis) == 43
     assert a1.created_by == admin.id and image.created_by == admin.id
+
+
+def test_stumpp_coordinate_import_stores_its_image_and_updates_existing_square(client, admin_h, db):
+    key = "ImportStumppKoordinaten"
+    first = upload(client, admin_h, xlsx(sheet([A1])), key=key).json()
+    second_row = ["A1", 40, 40, 300, 200, 260, 160, 42, 42.5, 51, 50]
+    second = upload(
+        client,
+        admin_h,
+        xlsx(sheet([second_row], width=3000, height=2000)),
+        key=key,
+    ).json()
+
+    image = db.query(MapImage).filter_by(karte="Stumpp").one()
+    square = db.query(MapGrid).filter_by(karte="Stumpp").one()
+    assert (first["imported"], first["updated"]) == (1, 0)
+    assert (second["imported"], second["updated"]) == (1, 1)
+    assert (image.filename, image.width_px, image.height_px) == (
+        "Karte_OstWolhynien_Stumpp.gif", 3000, 2000
+    )
+    assert (square.koordinate, square.x1, square.y1, square.x2, square.y2) == ("A1", 40, 40, 300, 200)
+    assert db.query(MapGrid).filter_by(karte="Stumpp").count() == 1
+
+
+def test_stumpp_coordinate_import_aborts_without_required_header(client, admin_h, db):
+    response = upload(
+        client,
+        admin_h,
+        xlsx([["Bildbreite_px", 2000], ["Bildhoehe_px", 1362]]),
+        key="ImportStumppKoordinaten",
+    )
+
+    assert response.status_code == 422 and response.json()["detail"] == "no_header"
+    assert db.query(MapImage).count() == 0
+    assert db.query(MapGrid).count() == 0
 
 
 def test_text_paste_with_decimal_commas(client, admin_h, db):
@@ -87,11 +122,12 @@ def test_columns_may_be_in_any_order(client, admin_h, db):
 
 
 def test_image_size_is_stored_once_per_map_and_updated(client, admin_h, db):
-    upload(client, admin_h, xlsx(sheet([A1])))
-    upload(client, admin_h, xlsx(sheet([A1], width=3000, height=2000)))
+    first = upload(client, admin_h, xlsx(sheet([A1]))).json()
+    second = upload(client, admin_h, xlsx(sheet([A1], width=3000, height=2000))).json()
     (image,) = db.query(MapImage).all()
     assert (image.width_px, image.height_px) == (3000, 2000)
-    assert db.query(MapGrid).count() == 2  # Duplikate werden nicht geprüft
+    assert (first["updated"], second["updated"]) == (0, 1)
+    assert db.query(MapGrid).count() == 1
 
 
 def test_row_errors_are_reported_and_valid_rows_still_import(client, admin_h, db):

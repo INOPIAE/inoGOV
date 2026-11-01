@@ -38,12 +38,12 @@ function describe(importKey) {
   }
   if (importKey === 'ImportLueckKoordinaten') {
     return $gettext(
-      'Excel or CSV file with the image size (Bildbreite_px, Bildhoehe_px) followed by a table with the columns Koordinate, X1, Y1, X2, Y2, Breite_px, Hoehe_px, Laenge_von, Laenge_bis, Breite_von, Breite_bis. Every row defines a grid square of the map "Lück". Duplicates are not checked.',
+      'Excel or CSV file with the image size (Bildbreite_px, Bildhoehe_px) followed by a table with the columns Koordinate, X1, Y1, X2, Y2, Breite_px, Hoehe_px, Laenge_von, Laenge_bis, Breite_von, Breite_bis. Each row defines a grid square of the map "Lück". Existing squares with the same coordinate are updated.',
     )
   }
   if (importKey === 'ImportStumppKoordinaten') {
     return $gettext(
-      'Excel or CSV file with the image size (Bildbreite_px, Bildhoehe_px) followed by a table with the columns Koordinate, X1, Y1, X2, Y2, Breite_px, Hoehe_px, Laenge_von, Laenge_bis, Breite_von, Breite_bis. Every row defines a grid square of the map "Lück". Duplicates are not checked.',
+      'Excel or CSV file with the image size (Bildbreite_px, Bildhoehe_px) followed by a table with the columns Koordinate, X1, Y1, X2, Y2, Breite_px, Hoehe_px, Laenge_von, Laenge_bis, Breite_von, Breite_bis. Each row defines a grid square of the map "Stumpp". Existing squares with the same coordinate are updated.',
     )
   }
   return ''
