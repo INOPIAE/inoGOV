@@ -62,7 +62,7 @@ msgstr ""
 msgid "Assign"
 msgstr ""
 
-#: src/views/ManageKartenView.vue
+#: src/views/ManageKartenView.vue src/views/ManageOrteView.vue
 msgid "Assigned non-global online maps"
 msgstr ""
 
@@ -204,6 +204,10 @@ msgstr ""
 
 #: src/views/ManageKartenView.vue
 msgid "Edit online map"
+msgstr ""
+
+#: src/views/ManageKartenView.vue
+msgid "Edit place"
 msgstr ""
 
 #: src/views/UsersView.vue
@@ -398,6 +402,10 @@ msgstr ""
 msgid "Main navigation"
 msgstr ""
 
+#: src/views/ManageOrteView.vue
+msgid "Manage maps"
+msgstr ""
+
 #: src/components/SideNav.vue
 msgid "Management"
 msgstr ""
@@ -416,6 +424,10 @@ msgstr ""
 
 #: src/views/ManageKartenView.vue
 msgid "Map name"
+msgstr ""
+
+#: src/views/ManageOrteView.vue
+msgid "Map references"
 msgstr ""
 
 #: src/views/MapView.vue
@@ -462,7 +474,7 @@ msgstr ""
 msgid "No map data is available for this square."
 msgstr ""
 
-#: src/views/ManageKartenView.vue
+#: src/views/ManageKartenView.vue src/views/ManageOrteView.vue
 msgid "No map references yet."
 msgstr ""
 
@@ -470,7 +482,7 @@ msgstr ""
 msgid "No names available."
 msgstr ""
 
-#: src/views/ManageKartenView.vue
+#: src/views/ManageKartenView.vue src/views/ManageOrteView.vue
 msgid "No online map assignments yet."
 msgstr ""
 

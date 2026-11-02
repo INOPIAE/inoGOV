@@ -63,7 +63,7 @@ msgstr "Als Administrator müssen Sie OTP einrichten, bevor Sie fortfahren könn
 msgid "Assign"
 msgstr "Zuordnen"
 
-#: src/views/ManageKartenView.vue
+#: src/views/ManageKartenView.vue src/views/ManageOrteView.vue
 msgid "Assigned non-global online maps"
 msgstr "Zugeordnete nicht globale Onlinekarten"
 
@@ -206,6 +206,10 @@ msgstr "Bearbeiten"
 #: src/views/ManageKartenView.vue
 msgid "Edit online map"
 msgstr "Onlinekarte bearbeiten"
+
+#: src/views/ManageKartenView.vue
+msgid "Edit place"
+msgstr "Ort bearbeiten"
 
 #: src/views/UsersView.vue
 msgid "Edit user"
@@ -399,6 +403,10 @@ msgstr "Längengrad %{from} bis %{to}, Breitengrad %{latFrom} bis %{latTo}"
 msgid "Main navigation"
 msgstr "Hauptnavigation"
 
+#: src/views/ManageOrteView.vue
+msgid "Manage maps"
+msgstr "Karten verwalten"
+
 #: src/components/SideNav.vue
 msgid "Management"
 msgstr "Verwaltung"
@@ -418,6 +426,10 @@ msgstr "Kartenbild mit hervorgehobenem Planquadrat %{koordinate}"
 #: src/views/ManageKartenView.vue
 msgid "Map name"
 msgstr "Kartenname"
+
+#: src/views/ManageOrteView.vue
+msgid "Map references"
+msgstr "Kartenverweise"
 
 #: src/views/MapView.vue
 msgid "Map view"
@@ -463,7 +475,7 @@ msgstr "Keine Koordinaten gefunden"
 msgid "No map data is available for this square."
 msgstr "Für dieses Planquadrat liegen keine Kartendaten vor."
 
-#: src/views/ManageKartenView.vue
+#: src/views/ManageKartenView.vue src/views/ManageOrteView.vue
 msgid "No map references yet."
 msgstr "Noch keine Kartenverweise."
 
@@ -471,7 +483,7 @@ msgstr "Noch keine Kartenverweise."
 msgid "No names available."
 msgstr "Keine Namen verfügbar."
 
-#: src/views/ManageKartenView.vue
+#: src/views/ManageKartenView.vue src/views/ManageOrteView.vue
 msgid "No online map assignments yet."
 msgstr "Noch keine Onlinekarten zugeordnet."
 
@@ -962,4 +974,3 @@ msgstr "inoGOV unterstützt die Dokumentation historischer Orte und ihres geogra
 #: src/views/AboutView.vue
 msgid "inoGOV is licensed under the GNU Affero General Public License, version 3 or later."
 msgstr "inoGOV steht unter der GNU Affero General Public License, Version 3 oder höher."
-

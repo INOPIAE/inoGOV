@@ -1,11 +1,13 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 import { useGettext } from 'vue3-gettext'
+import { useRoute } from 'vue-router'
 import { api } from '../api'
 import { useErrors } from '../composables/useErrors'
 import { useSettingsStore } from '../stores/settings'
 
 const gettext = useGettext()
+const route = useRoute()
 const { $gettext } = gettext
 const { errorText } = useErrors()
 const settings = useSettingsStore()
@@ -134,6 +136,13 @@ onMounted(async () => {
   await guard(() => settings.loadReference())
   await loadList()
   await loadOnlineMaps()
+  if (typeof route.query.ort_id === 'string' && route.query.ort_id) {
+    await guard(async () => {
+      const selected = await api(`/orte/${route.query.ort_id}`)
+      ort.value = selected
+      await loadRegionalMaps(selected.id)
+    })
+  }
 })
 </script>
 
@@ -166,7 +175,16 @@ onMounted(async () => {
 
       <div v-if="ort" class="col-12 col-lg-7">
         <div class="card card-body">
-          <h2 class="h5">{{ label(ort) }}</h2>
+          <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
+            <h2 class="h5 mb-0">{{ label(ort) }}</h2>
+            <RouterLink
+              class="btn btn-sm btn-outline-primary"
+              :to="{ path: '/manage/orte', query: { ort_id: ort.id } }"
+              data-test="edit-place"
+            >
+              {{ $gettext('Edit place') }}
+            </RouterLink>
+          </div>
           <ul class="list-group mb-3">
             <li v-for="k in ort.karten" :key="k.id" class="list-group-item d-flex justify-content-between align-items-center">
               <span>{{ k.karte }} {{ k.koordinate }}</span>

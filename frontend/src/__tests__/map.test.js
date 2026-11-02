@@ -389,6 +389,37 @@ describe('ManageKartenView online maps', () => {
     )
   })
 
+  it('links the selected place to place management', async () => {
+    const { wrapper } = await mountManagement({})
+    await vi.waitFor(() => expect(wrapper.find('[data-test=list-item]').exists()).toBe(true))
+    await wrapper.get('[data-test=list-item]').trigger('click')
+
+    expect(wrapper.get('[data-test=edit-place]').attributes('href')).toBe('/manage/orte?ort_id=ort-1')
+  })
+
+  it('opens the requested place from the place-management link', async () => {
+    const fetch = mockFetch({
+      'GET /sprachen': { body: [{ id: 'de', sprache_land: 'Deutsch', sprache2: 'de' }] },
+      'GET /kreise': { body: [] },
+      'GET /orte': { body: [place] },
+      'GET /map-online': { body: [provider, globalProvider] },
+      'GET /regional-maps': { body: [] },
+      'GET /orte/ort-1': { body: place },
+    })
+    const pinia = createPinia()
+    setActivePinia(pinia)
+    useAuthStore().user = { username: 'editor', roles: ['user'] }
+    const { wrapper } = await mountView(ManageKartenView, {
+      pinia,
+      language: 'de',
+      route: `/manage/karten?ort_id=${place.id}`,
+    })
+    await vi.waitFor(() => expect(wrapper.get('h2').text()).toBe('Przemyśl'))
+
+    expect(fetch.calls.some((call) => call.key === 'GET /orte/ort-1')).toBe(true)
+    expect(wrapper.get('[data-test=list-item]').classes()).toContain('active')
+  })
+
   it('creates an online map provider', async () => {
     const { wrapper, fetch } = await mountManagement({
       'GET /map-online': { body: [] },

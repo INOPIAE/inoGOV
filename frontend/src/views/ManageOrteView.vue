@@ -1,6 +1,7 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 import { useGettext } from 'vue3-gettext'
+import { useRoute } from 'vue-router'
 import { api } from '../api'
 import { useErrors } from '../composables/useErrors'
 import { useSettingsStore } from '../stores/settings'
@@ -8,6 +9,7 @@ import NamesEditor from '../components/NamesEditor.vue'
 import GovSuche from '../components/GovSuche.vue'
 
 const gettext = useGettext()
+const route = useRoute()
 const { $gettext } = gettext
 const { errorText } = useErrors()
 const settings = useSettingsStore()
@@ -21,6 +23,10 @@ const error = ref('')
 const language = computed(() => gettext.current)
 const label = (ort) => settings.pickName(ort.namen, 'ortsname', language.value) || ort.gov_id || '?'
 const nameItems = computed(() => (form.value?.namen ?? []).map((n) => ({ id: n.id, sprache_id: n.sprache_id, text: n.ortsname })))
+const mapReferences = computed(() => form.value?.karten ?? [])
+const regionalMaps = computed(() =>
+  (form.value?.regional_maps ?? []).filter((assignment) => !assignment.map_online.global),
+)
 
 const empty = () => ({ id: null, gov_id: '', kreis_id: '', lat: '', lon: '', addition: '', comment: '', namen: [] })
 const toForm = (ort) => ({
@@ -104,6 +110,11 @@ const addGovPlace = (data) =>
 onMounted(async () => {
   await guard(() => settings.loadReference())
   await loadList()
+  if (typeof route.query.ort_id === 'string' && route.query.ort_id) {
+    await guard(async () => {
+      form.value = toForm(await api(`/orte/${route.query.ort_id}`))
+    })
+  }
 })
 </script>
 
@@ -173,6 +184,14 @@ onMounted(async () => {
           <div class="d-flex gap-2 mb-3">
             <button class="btn btn-primary" type="submit">{{ $gettext('Save') }}</button>
             <button v-if="form.id" class="btn btn-outline-danger" type="button" @click="remove">{{ $gettext('Delete') }}</button>
+            <RouterLink
+              v-if="form.id"
+              class="btn btn-outline-primary"
+              :to="{ path: '/manage/karten', query: { ort_id: form.id } }"
+              data-test="manage-maps"
+            >
+              {{ $gettext('Manage maps') }}
+            </RouterLink>
           </div>
           <NamesEditor
             v-if="form.id"
@@ -181,6 +200,23 @@ onMounted(async () => {
             @add="addName"
             @remove="removeName"
           />
+
+          <section v-if="form.id" class="mt-3" data-test="place-map-assignments">
+            <h2 class="h6">{{ $gettext('Map references') }}</h2>
+            <ul class="list-group mb-3">
+              <li v-for="map in mapReferences" :key="map.id" class="list-group-item">
+                {{ map.karte }} {{ map.koordinate }}
+              </li>
+              <li v-if="!mapReferences.length" class="list-group-item text-muted">{{ $gettext('No map references yet.') }}</li>
+            </ul>
+            <h3 class="h6">{{ $gettext('Assigned non-global online maps') }}</h3>
+            <ul class="list-group">
+              <li v-for="assignment in regionalMaps" :key="assignment.id" class="list-group-item">
+                {{ assignment.map_online.map_short }} · {{ assignment.map_online.mapname }}
+              </li>
+              <li v-if="!regionalMaps.length" class="list-group-item text-muted">{{ $gettext('No online map assignments yet.') }}</li>
+            </ul>
+          </section>
 
           <GovSuche
             v-if="form.id"

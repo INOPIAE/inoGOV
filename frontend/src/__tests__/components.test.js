@@ -335,6 +335,53 @@ describe('GovSuche', () => {
 })
 
 describe('ManageOrteView', () => {
+  it('opens the requested place from map management', async () => {
+    const place = {
+      id: 'o1', gov_id: 'GOV1', kreis_id: null, lat: null, lon: null, addition: null, comment: null,
+      coordinates_not_found: false, namen: [], karten: [], regional_maps: [],
+    }
+    const fetch = mockFetch({
+      'GET /sprachen': { body: [] },
+      'GET /kreise': { body: [] },
+      'GET /orte': { body: [place] },
+      'GET /orte/o1': { body: place },
+    })
+    const { wrapper } = await mountView(ManageOrteView, { route: '/manage/orte?ort_id=o1' })
+
+    expect(wrapper.get('#gov').element.value).toBe('GOV1')
+    expect(fetch.calls.some((call) => call.key === 'GET /orte/o1')).toBe(true)
+  })
+
+  it('shows map assignments and links to map management for the edited place', async () => {
+    const place = {
+      id: 'o1', gov_id: 'GOV1', kreis_id: null, lat: null, lon: null, addition: null, comment: null,
+      coordinates_not_found: false, namen: [],
+      karten: [{ id: 'k1', karte: 'Lück', koordinate: 'B1' }],
+      regional_maps: [
+        {
+          id: 'assignment-1',
+          map_online: { map_short: 'U75', mapname: 'Ukraine 75000', global: false },
+        },
+        {
+          id: 'assignment-global',
+          map_online: { map_short: 'OSM', mapname: 'OpenStreetMap', global: true },
+        },
+      ],
+    }
+    mockFetch({
+      'GET /sprachen': { body: [] },
+      'GET /kreise': { body: [] },
+      'GET /orte': { body: [place] },
+    })
+    const { wrapper } = await mountView(ManageOrteView)
+    await wrapper.get('[data-test=list-item]').trigger('click')
+
+    expect(wrapper.get('[data-test=manage-maps]').attributes('href')).toBe('/manage/karten?ort_id=o1')
+    expect(wrapper.get('[data-test=place-map-assignments]').text()).toContain('Lück B1')
+    expect(wrapper.get('[data-test=place-map-assignments]').text()).toContain('U75 · Ukraine 75000')
+    expect(wrapper.get('[data-test=place-map-assignments]').text()).not.toContain('OpenStreetMap')
+  })
+
   it('selects a GOV result and saves its identifier and coordinates', async () => {
     const place = {
       id: 'o1', gov_id: null, kreis_id: null, lat: null, lon: null, addition: null, comment: null,
