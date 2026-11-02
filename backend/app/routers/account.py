@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 from app import mail
 from app.config import settings
 from app.database import get_db
-from app.models import User
+from app.models import LegalAcception, LegalAcceptions, User
 from app.otp import OtpStart, finish_setup, start_setup
 from app.routers.auth import TokenResponse
 from app.schemas import clean_name
@@ -41,13 +41,16 @@ class SetupAccount(BaseModel):
     password: str = Field(min_length=8, max_length=128)
     first_name: str | None = Field(default=None, max_length=50)
     last_name: str | None = Field(default=None, max_length=50)
+    terms_accepted: bool
 
     _clean = field_validator("first_name", "last_name", mode="before")(clean_name)
 
     @model_validator(mode="after")
-    def need_a_name(self):
+    def validate_setup(self):
         if not (self.first_name or self.last_name):
             raise ValueError("first_name or last_name is required")
+        if not self.terms_accepted:
+            raise ValueError("terms must be accepted")
         return self
 
 
@@ -127,12 +130,27 @@ def setup_account(data: SetupAccount, db: Session = Depends(get_db)) -> TokenRes
     user, _ = user_from_link(db, data.token, {"invite"})
     if db.scalar(select(User.id).where(User.username == data.username, User.id != user.id)):
         raise HTTPException(status_code=409, detail="Benutzername bereits vergeben")
+    terms = db.scalar(
+        select(LegalAcception).where(
+            LegalAcception.legal_acception == "ToS",
+            LegalAcception.active,
+        )
+    )
+    if terms is None:
+        raise HTTPException(status_code=500, detail="Terms of Service acceptance type is not configured")
     user.username = data.username
     user.first_name = data.first_name
     user.last_name = data.last_name
     user.hashed_password = hash_password(data.password)
     user.last_login = datetime.now(UTC)
     user.last_modified_by = user.id
+    db.add(
+        LegalAcceptions(
+            user_id=user.id,
+            legal_acception_id=terms.id,
+            created_by=user.id,
+        )
+    )
     db.commit()
     return TokenResponse(access_token=create_access_token(str(user.id)))
 

@@ -16,7 +16,7 @@ from sqlalchemy.pool import StaticPool
 
 from app.database import get_db
 from app.main import app
-from app.models import Base, Role, User, UserRole
+from app.models import Base, LegalAcception, Role, User, UserRole
 from app.security import hash_password
 
 import app.security as security  # noqa: E402
@@ -38,6 +38,8 @@ def db():
     event.listen(engine, "begin", lambda conn: conn.exec_driver_sql("BEGIN"))
     Base.metadata.create_all(engine)
     with Session(engine) as session:
+        session.add(LegalAcception(legal_acception="ToS"))
+        session.commit()
         yield session
     engine.dispose()
 
@@ -85,5 +87,4 @@ def admin_h(client, admin):
 def user_h(client, db, roles):
     add_user(db, roles, "normal", "user")
     return auth(client, "normal")
-
 

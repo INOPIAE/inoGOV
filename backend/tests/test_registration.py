@@ -3,7 +3,7 @@ import re
 import pytest
 
 from app import mail
-from app.models import User
+from app.models import LegalAcception, LegalAcceptions, User
 
 
 @pytest.fixture
@@ -19,7 +19,7 @@ def invite_token(client, admin_h, mails):
 
 
 def setup(client, token, **fields):
-    body = {"token": token, "username": "neuer", "password": "passwort1", **fields}
+    body = {"token": token, "username": "neuer", "password": "passwort1", "terms_accepted": True, **fields}
     return client.post("/auth/setup-account", json=body)
 
 
@@ -69,6 +69,35 @@ def test_setup_stores_names(client, admin_h, db, mails, fields, expected):
     assert setup(client, token, **fields).status_code == 200
     user = db.query(User).filter(User.username == "neuer").one()
     assert (user.first_name, user.last_name) == expected
+
+
+def test_setup_records_terms_acceptance(client, admin_h, db, mails):
+    token = invite_token(client, admin_h, mails)
+    assert setup(client, token, first_name="Ann").status_code == 200
+
+    user = db.query(User).filter(User.username == "neuer").one()
+    terms = db.query(LegalAcception).filter(LegalAcception.legal_acception == "ToS").one()
+    acceptance = db.query(LegalAcceptions).filter(LegalAcceptions.user_id == user.id).one()
+    assert acceptance.legal_acception_id == terms.id
+    assert acceptance.created_by == user.id
+
+
+@pytest.mark.parametrize("consent", [None, False])
+def test_setup_requires_terms_acceptance(client, admin_h, db, mails, consent):
+    token = invite_token(client, admin_h, mails)
+    fields = {"first_name": "Ann"}
+    if consent is not None:
+        fields["terms_accepted"] = consent
+        response = setup(client, token, **fields)
+    else:
+        response = client.post(
+            "/auth/setup-account",
+            json={"token": token, "username": "neuer", "password": "passwort1", **fields},
+        )
+    assert response.status_code == 422
+    user = db.query(User).filter(User.email == "neu@example.com").one()
+    assert user.hashed_password is None
+    assert db.query(LegalAcceptions).filter(LegalAcceptions.user_id == user.id).count() == 0
 
 
 def test_failed_setup_does_not_consume_link(client, admin_h, mails):

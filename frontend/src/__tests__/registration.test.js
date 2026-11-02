@@ -22,12 +22,13 @@ describe('SetupAccountView', () => {
     }
   }
 
-  async function fill(wrapper, { first = '', last = '' } = {}) {
+  async function fill(wrapper, { first = '', last = '', accepted = true } = {}) {
     await wrapper.get('#username').setValue('neuer')
     await wrapper.get('#first-name').setValue(first)
     await wrapper.get('#last-name').setValue(last)
     await wrapper.get('#password').setValue('passwort1')
     await wrapper.get('#repeat').setValue('passwort1')
+    if (accepted) await wrapper.get('#terms-accepted').setValue(true)
   }
 
   it('asks the user for first and last name', async () => {
@@ -41,6 +42,20 @@ describe('SetupAccountView', () => {
     const fetch = mockFetch(routes())
     const { wrapper } = await mountView(SetupAccountView, { route: '/setup-account?token=tok' })
     await fill(wrapper)
+    expect(wrapper.get('button[type=submit]').attributes('disabled')).toBeDefined()
+    await wrapper.get('form').trigger('submit')
+    expect(fetch.calls.some((c) => c.key === 'POST /auth/setup-account')).toBe(false)
+  })
+
+  it('requires agreement to the linked terms before continuing', async () => {
+    const fetch = mockFetch(routes())
+    const { wrapper } = await mountView(SetupAccountView, { route: '/setup-account?token=tok' })
+    await fill(wrapper, { first: 'Ann', accepted: false })
+
+    expect(wrapper.get('#terms-accepted').attributes('required')).toBeDefined()
+    expect(wrapper.get('a[href="/terms"]').text()).toBe('Terms of Service')
+    expect(wrapper.get('a[href="/terms"]').attributes('target')).toBe('_blank')
+    expect(wrapper.get('a[href="/terms"]').attributes('rel')).toBe('noopener noreferrer')
     expect(wrapper.get('button[type=submit]').attributes('disabled')).toBeDefined()
     await wrapper.get('form').trigger('submit')
     expect(fetch.calls.some((c) => c.key === 'POST /auth/setup-account')).toBe(false)
@@ -68,6 +83,7 @@ describe('SetupAccountView', () => {
       token: 'tok',
       username: 'neuer',
       password: 'passwort1',
+      terms_accepted: true,
       ...expected,
     })
   })

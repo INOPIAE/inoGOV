@@ -19,9 +19,10 @@ const firstName = ref('')
 const lastName = ref('')
 const password = ref('')
 const repeat = ref('')
+const termsAccepted = ref(false)
 const error = ref('')
 const hasName = computed(() => !!(firstName.value.trim() || lastName.value.trim()))
-const canSubmit = computed(() => hasName.value && password.value === repeat.value)
+const canSubmit = computed(() => hasName.value && password.value === repeat.value && termsAccepted.value)
 // 'account' -> 'otp' (optional) -> fertig
 const step = ref('account')
 
@@ -46,6 +47,7 @@ async function submit() {
         password: password.value,
         first_name: firstName.value.trim() || null,
         last_name: lastName.value.trim() || null,
+        terms_accepted: termsAccepted.value,
       },
       auth: false,
     })
@@ -100,6 +102,14 @@ const finish = () => router.push('/')
           <label class="form-label" for="repeat">{{ $gettext('Repeat password') }}</label>
           <input id="repeat" v-model="repeat" type="password" class="form-control" autocomplete="new-password" required />
           <div v-if="repeat && repeat !== password" class="text-danger small">{{ $gettext('The passwords do not match.') }}</div>
+        </div>
+        <div class="form-check mb-3">
+          <input id="terms-accepted" v-model="termsAccepted" type="checkbox" class="form-check-input" required />
+          <label class="form-check-label" for="terms-accepted">
+            {{ $gettext('I agree to the') }}
+            <RouterLink to="/terms" target="_blank" rel="noopener noreferrer">{{ $gettext('Terms of Service') }}</RouterLink>.
+            {{ $gettext('Agreement is required to create an account.') }}
+          </label>
         </div>
         <button class="btn btn-primary w-100" type="submit" :disabled="!canSubmit">{{ $gettext('Continue') }}</button>
       </form>

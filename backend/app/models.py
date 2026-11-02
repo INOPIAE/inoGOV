@@ -77,6 +77,20 @@ class UserRole(AuditMixin, Base):
     role_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("role.id"), nullable=False)
 
 
+class LegalAcception(AuditMixin, Base):
+    __tablename__ = "legal_acception"
+
+    legal_acception: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
+
+
+class LegalAcceptions(AuditMixin, Base):
+    __tablename__ = "legal_acceptions"
+    __table_args__ = (UniqueConstraint("user_id", "legal_acception_id"),)
+
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("user.id"), nullable=False)
+    legal_acception_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("legal_acception.id"), nullable=False)
+
+
 class Sprache(AuditMixin, Base):
     __tablename__ = "sprache"
 

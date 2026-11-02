@@ -47,6 +47,10 @@ msgstr "Zusatz"
 msgid "Administrators cannot disable OTP."
 msgstr "Administratoren können OTP nicht deaktivieren."
 
+#: src/views/SetupAccountView.vue
+msgid "Agreement is required to create an account."
+msgstr "Für die Kontoerstellung ist die Zustimmung erforderlich."
+
 #: src/views/OrteView.vue
 msgid "All"
 msgstr "Alle"
@@ -302,6 +306,10 @@ msgstr "Planquadrat"
 #: src/components/SideNav.vue
 msgid "Home"
 msgstr "Startseite"
+
+#: src/views/SetupAccountView.vue
+msgid "I agree to the"
+msgstr "Ich stimme den"
 
 #: src/views/ForgotPasswordView.vue
 msgid "If the address is known, an email with a link has been sent."
@@ -759,7 +767,7 @@ msgstr "Statistiken"
 msgid "Status"
 msgstr "Status"
 
-#: src/views/InfoView.vue
+#: src/views/InfoView.vue src/views/SetupAccountView.vue
 msgid "Terms of Service"
 msgstr "Nutzungsbedingungen"
 
