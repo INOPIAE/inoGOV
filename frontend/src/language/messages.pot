@@ -270,6 +270,10 @@ msgstr ""
 msgid "Forgot your password?"
 msgstr ""
 
+#: src/views/InfoView.vue
+msgid "Forwarded to German version"
+msgstr ""
+
 #: src/views/OrteView.vue
 msgid "Found %{found} of %{total} places."
 msgstr ""
@@ -792,10 +796,6 @@ msgstr ""
 
 #: src/views/AboutView.vue
 msgid "The inoGOV source code is available on GitHub."
-msgstr ""
-
-#: src/views/InfoView.vue
-msgid "The legal notice will be published here."
 msgstr ""
 
 #: src/views/InfoView.vue

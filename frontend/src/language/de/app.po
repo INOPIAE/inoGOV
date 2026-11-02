@@ -271,6 +271,10 @@ msgstr "An Breite anpassen"
 msgid "Forgot your password?"
 msgstr "Passwort vergessen?"
 
+#: src/views/InfoView.vue
+msgid "Forwarded to German version"
+msgstr "Es wird die deutsche Version angezeigt."
+
 #: src/views/OrteView.vue
 msgid "Found %{found} of %{total} places."
 msgstr "%{found} von %{total} Orten gefunden."
@@ -794,10 +798,6 @@ msgstr "Die Kopfzeile mit „Koordinate“ wurde nicht gefunden."
 #: src/views/AboutView.vue
 msgid "The inoGOV source code is available on GitHub."
 msgstr "Der inoGOV-Quellcode ist auf GitHub verfügbar."
-
-#: src/views/InfoView.vue
-msgid "The legal notice will be published here."
-msgstr "Das Impressum wird hier veröffentlicht."
 
 #: src/views/InfoView.vue
 msgid "The legal text could not be loaded."

@@ -1,25 +1,35 @@
 
 <script setup>
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { marked } from 'marked'
 import DOMPurify from 'dompurify'
 
 const props = defineProps({ page: String })
-const { $gettext } = useGettext()
+const gettext = useGettext()
+const { $gettext } = gettext
+const language = computed(() => gettext.current)
 
 const legalHtml = ref('')
 const legalError = ref(false)
 const legalLoading = ref(false)
+const fallbackUsed = ref(false)
 
 // Dateien liegen im Verzeichnis public/legal/
 const legalFiles = {
+  imprint: {
+    file: (languageCode) => `/legal/imprint.${languageCode}.html`,
+    fallback: '/legal/imprint.de.html',
+    format: 'html',
+  },
   terms: {
-    file: '/legal/terms-of-service.de.html',
+    file: (languageCode) => `/legal/terms-of-service.${languageCode}.html`,
+    fallback: '/legal/terms-of-service.de.html',
     format: 'html',
   },
   privacy: {
-    file: '/legal/data-protection.de.html',
+    file: (languageCode) => `/legal/data-protection.${languageCode}.html`,
+    fallback: '/legal/data-protection.de.html',
     format: 'html',
   },
   license: {
@@ -35,7 +45,7 @@ const legalFiles = {
 const pages = computed(() => ({
   imprint: {
     title: $gettext('Imprint'),
-    text: $gettext('The legal notice will be published here.'),
+    text: '',
   },
   privacy: {
     title: $gettext('Privacy'),
@@ -70,6 +80,7 @@ async function loadLegalPage(page) {
 
   legalHtml.value = ''
   legalError.value = false
+  fallbackUsed.value = false
 
   if (!config) {
     legalLoading.value = false
@@ -79,13 +90,28 @@ async function loadLegalPage(page) {
   legalLoading.value = true
 
   try {
-    const response = await fetch(config.file)
+    const file = typeof config.file === 'function' ? config.file(language.value) : config.file
+    const candidates = [file]
+    if (config.fallback && config.fallback !== file) candidates.push(config.fallback)
+    let content
+    let lastError
 
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`)
+    for (const candidate of candidates) {
+      try {
+        const response = await fetch(candidate)
+        if (!response.ok) throw new Error(`HTTP ${response.status}`)
+        content = await response.text()
+        if (/<div\s+id=["']app["']\s*>\s*<\/div>/i.test(content)) {
+          throw new Error('SPA fallback returned instead of legal content')
+        }
+        fallbackUsed.value = candidate !== file
+        break
+      } catch (error) {
+        lastError = error
+      }
     }
 
-    const content = await response.text()
+    if (content === undefined) throw lastError ?? new Error('Legal text unavailable')
 
     if (config.format === 'markdown') {
       // Markdown formatieren und das erzeugte HTML bereinigen
@@ -107,16 +133,7 @@ async function loadLegalPage(page) {
   }
 }
 
-onMounted(() => {
-  loadLegalPage(props.page)
-})
-
-watch(
-  () => props.page,
-  (page) => {
-    loadLegalPage(page)
-  },
-)
+watch([() => props.page, language], ([page]) => loadLegalPage(page), { immediate: true })
 </script>
 
 <template>
@@ -134,11 +151,12 @@ watch(
         {{ $gettext('Loading...') }}
       </p>
 
-      <article
-        v-else-if="legalHtml"
-        class="legal-content"
-        v-html="legalHtml"
-      ></article>
+      <div v-else-if="legalHtml">
+        <div v-if="fallbackUsed" class="alert alert-info" role="status">
+          {{ $gettext('Forwarded to German version') }}
+        </div>
+        <article class="legal-content" data-test="legal-content" v-html="legalHtml"></article>
+      </div>
     </template>
 
     <p v-else>

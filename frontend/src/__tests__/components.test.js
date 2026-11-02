@@ -10,6 +10,7 @@ import ForgotPasswordView from '../views/ForgotPasswordView.vue'
 import ResetPasswordView from '../views/ResetPasswordView.vue'
 import HomeView from '../views/HomeView.vue'
 import AboutView from '../views/AboutView.vue'
+import InfoView from '../views/InfoView.vue'
 import OrteView from '../views/OrteView.vue'
 import ManageOrteView from '../views/ManageOrteView.vue'
 import OrteStatisticsView from '../views/OrteStatisticsView.vue'
@@ -225,6 +226,63 @@ describe('AboutView', () => {
     await vi.waitFor(() => expect(wrapper.find('[role=alert]').exists()).toBe(true))
 
     expect(wrapper.get('[role=alert]').text()).toBe('Der About-Text konnte nicht geladen werden.')
+  })
+})
+
+describe('InfoView imprint', () => {
+  it('loads the selected language and falls back to the German imprint', async () => {
+    const requested = []
+    vi.stubGlobal('fetch', vi.fn(async (url) => {
+      const path = new URL(url, window.location.origin).pathname
+      requested.push(path)
+      return path.endsWith('imprint.en.html')
+        ? new Response('<!doctype html><div id="app"></div><script type="module" src="/@vite/client"></script>', { status: 200 })
+        : new Response('<h2>Deutsches Impressum</h2>', { status: 200 })
+    }))
+
+    const { wrapper } = await mountView(InfoView, { language: 'en', props: { page: 'imprint' } })
+    await vi.waitFor(() => expect(wrapper.find('[data-test=legal-content]').exists()).toBe(true))
+
+    expect(requested).toEqual(['/legal/imprint.en.html', '/legal/imprint.de.html'])
+    expect(wrapper.get('[data-test=legal-content]').text()).toBe('Deutsches Impressum')
+    expect(wrapper.get('[role=status]').text()).toBe('Forwarded to German version')
+    expect(wrapper.get('h1').text()).toBe('Imprint')
+  })
+
+  it('loads the German imprint directly when German is selected', async () => {
+    const requested = []
+    vi.stubGlobal('fetch', vi.fn(async (url) => {
+      requested.push(new URL(url, window.location.origin).pathname)
+      return new Response('<p>Impressum</p>', { status: 200 })
+    }))
+
+    const { wrapper } = await mountView(InfoView, { language: 'de', props: { page: 'imprint' } })
+    await vi.waitFor(() => expect(wrapper.find('[data-test=legal-content]').exists()).toBe(true))
+
+    expect(requested).toEqual(['/legal/imprint.de.html'])
+    expect(wrapper.get('[data-test=legal-content]').text()).toBe('Impressum')
+    expect(wrapper.get('h1').text()).toBe('Impressum')
+  })
+
+  it.each([
+    ['terms', 'terms-of-service', 'Deutsche Nutzungsbedingungen'],
+    ['privacy', 'data-protection', 'Deutscher Datenschutz'],
+  ])('falls back to German for %s and shows a notice', async (page, stem, content) => {
+    const requested = []
+    vi.stubGlobal('fetch', vi.fn(async (url) => {
+      const path = new URL(url, window.location.origin).pathname
+      requested.push(path)
+      return path.endsWith('.en.html')
+        ? new Response('<!doctype html><div id="app"></div><script type="module" src="/@vite/client"></script>', { status: 200 })
+        : new Response(`<h2>${content}</h2>`, { status: 200 })
+    }))
+
+    const { wrapper } = await mountView(InfoView, { language: 'en', props: { page } })
+    await vi.waitFor(() => expect(wrapper.find('[data-test=legal-content]').exists()).toBe(true))
+
+    expect(requested).toEqual([`/legal/${stem}.en.html`, `/legal/${stem}.de.html`])
+    expect(wrapper.get('[role=status]').text()).toBe('Forwarded to German version')
+    expect(wrapper.get('[data-test=legal-content]').text()).toBe(content)
   })
 })
 
