@@ -7,8 +7,8 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.deps import read_access, require_editor
-from app.models import Kreis, Kreisname, MapReference, Ort, Ortsname, User
-from app.routers.common import apply_changes, ensure_sprache, get_active
+from app.models import Kreis, Kreisname, MapOnline, MapReference, Ort, Ortsname, RegionalMap, User
+from app.routers.common import apply_changes, ensure_sprache, get_active, sync_global_maps_for_place
 from app.schemas_geo import (
     KarteIn,
     KarteOut,
@@ -18,6 +18,7 @@ from app.schemas_geo import (
     OrtsnameOut,
     OrtUpdate,
     OrtStatistics,
+    RegionalMapOut,
 )
 
 router = APIRouter(prefix="/orte", tags=["orte"])
@@ -27,11 +28,27 @@ def to_out(db: Session, orte: list[Ort]) -> list[OrtOut]:
     ids = [o.id for o in orte]
     names = db.scalars(select(Ortsname).where(Ortsname.ort_id.in_(ids), Ortsname.active)).all()
     maps = db.scalars(select(MapReference).where(MapReference.ort_id.in_(ids), MapReference.active)).all()
+    regional_maps = db.scalars(
+        select(RegionalMap)
+        .join(MapOnline, MapOnline.id == RegionalMap.map_online_id)
+        .where(RegionalMap.ort_id.in_(ids), RegionalMap.active, MapOnline.active)
+        .order_by(
+            case(
+                (MapOnline.map_short == "U75", 0),
+                (MapOnline.map_short == "U100", 1),
+                (MapOnline.map_short == "OSM", 2),
+                (MapOnline.map_short == "GM", 3),
+                else_=4,
+            ),
+            MapOnline.map_short,
+        )
+    ).all()
     result = []
     for ort in orte:
         out = OrtOut.model_validate(ort)
         out.namen = [OrtsnameOut.model_validate(n) for n in names if n.ort_id == ort.id]
         out.karten = [KarteOut.model_validate(m) for m in maps if m.ort_id == ort.id]
+        out.regional_maps = [RegionalMapOut.model_validate(m) for m in regional_maps if m.ort_id == ort.id]
         result.append(out)
     return result
 
@@ -198,6 +215,7 @@ def create_ort(data: OrtCreate, user: User = Depends(require_editor), db: Sessio
     db.flush()
     db.add_all(Ortsname(ort_id=ort.id, created_by=user.id, **n.model_dump()) for n in data.namen)
     db.add_all(MapReference(ort_id=ort.id, created_by=user.id, **k.model_dump()) for k in data.karten)
+    sync_global_maps_for_place(db, ort, user.id)
     db.commit()
     return to_out(db, [ort])[0]
 
@@ -213,6 +231,7 @@ def update_ort(
     changes = data.model_dump(exclude_unset=True)
     ensure_kreis(db, changes.get("kreis_id"))
     apply_changes(ort, changes, user.id)
+    sync_global_maps_for_place(db, ort, user.id)
     db.commit()
     return to_out(db, [ort])[0]
 

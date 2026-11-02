@@ -86,6 +86,47 @@ class KarteOut(ORM):
     karte: str | None
 
 
+class MapOnlineCreate(BaseModel):
+    mapname: str = Field(min_length=1, max_length=50)
+    map_short: str = Field(min_length=1, max_length=10)
+    map_url_basis: str = Field(min_length=1, max_length=255)
+    map_url_pattern: str = Field(min_length=1, max_length=255)
+    global_: bool = Field(default=False, alias="global")
+
+    model_config = ConfigDict(populate_by_name=True)
+
+
+class MapOnlineUpdate(BaseModel):
+    mapname: str | None = Field(default=None, min_length=1, max_length=50)
+    map_short: str | None = Field(default=None, min_length=1, max_length=10)
+    map_url_basis: str | None = Field(default=None, min_length=1, max_length=255)
+    map_url_pattern: str | None = Field(default=None, min_length=1, max_length=255)
+    global_: bool | None = Field(default=None, alias="global")
+
+    model_config = ConfigDict(populate_by_name=True)
+
+
+class MapOnlineOut(ORM):
+    id: uuid.UUID
+    mapname: str
+    map_short: str
+    map_url_basis: str
+    map_url_pattern: str
+    global_: bool = Field(validation_alias="global_map", serialization_alias="global")
+
+
+class RegionalMapCreate(BaseModel):
+    ort_id: uuid.UUID
+    map_online_id: uuid.UUID
+
+
+class RegionalMapOut(ORM):
+    id: uuid.UUID
+    ort_id: uuid.UUID
+    map_online_id: uuid.UUID
+    map_online: MapOnlineOut
+
+
 class OrtCreate(BaseModel):
     kreis_id: uuid.UUID | None = None
     gov_id: str | None = Field(default=None, max_length=20)
@@ -119,6 +160,7 @@ class OrtOut(ORM):
     coordinates_not_found: bool = False
     namen: list[OrtsnameOut] = []
     karten: list[KarteOut] = []
+    regional_maps: list[RegionalMapOut] = []
 
 class OrtStatistics(ORM):
     total: int

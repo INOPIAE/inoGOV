@@ -9,6 +9,7 @@ import { mockFetch, mountView } from '../test-utils'
 import MapView from '../views/MapView.vue'
 import OrteView from '../views/OrteView.vue'
 import ImportsView from '../views/ImportsView.vue'
+import ManageKartenView from '../views/ManageKartenView.vue'
 
 const SQUARE = {
   karte: 'Lück',
@@ -230,6 +231,15 @@ describe('search results link to the map', () => {
               { id: 'm1', karte: 'Lück', koordinate: 'B5' },
               { id: 'm2', karte: 'Stumpf', koordinate: null },
             ],
+            regional_maps: [{
+              id: 'rm1',
+              map_online: {
+                map_short: 'U75',
+                mapname: 'Ukraine 75000',
+                map_url_basis: 'https://etomesto.com/map-ukraine_spezialkarte-uk-750/',
+                map_url_pattern: '?y={lat}&x={lon}',
+              },
+            }],
           },
         ],
       },
@@ -246,6 +256,155 @@ describe('search results link to the map', () => {
     expect(links[0].attributes('target')).toBe('_blank')
     expect(links[0].attributes('rel')).toBe('noopener')
     expect(wrapper.get('[data-test=result]').text()).toContain('Stumpf')
+    expect(wrapper.find('[data-test=online-map-link]').exists()).toBe(false)
+  })
+
+  it('renders regional online maps in configured order and applies their URL patterns', async () => {
+    const mapOnline = (id, map_short, map_url_basis, map_url_pattern) => ({
+      id,
+      map_short,
+      mapname: map_short,
+      map_url_basis,
+      map_url_pattern,
+      global: ['OSM', 'GM'].includes(map_short),
+    })
+    const regional_maps = [
+      { id: 'rm-gm', map_online: mapOnline('gm', 'GM', 'https://google.com/maps', '?q={lat},{lon}&ll={lat},{lon}&z=12') },
+      { id: 'rm-osm', map_online: mapOnline('osm', 'OSM', 'https://www.openstreetmap.org/', '?mlat={lat}&mlon={lon}#map=9/{lat}/{lon}') },
+      { id: 'rm-u100', map_online: mapOnline('u100', 'U100', 'https://etomesto.com/map-ukraine_zapad/', '?y={lat}&x={lon}') },
+      { id: 'rm-u75', map_online: mapOnline('u75', 'U75', 'https://etomesto.com/map-ukraine_spezialkarte-uk-750/', '?y={lat}&x={lon}') },
+    ]
+    mockFetch({
+      'GET /kreise': { body: [] },
+      'GET /sprachen': { body: [{ id: 's', sprache2: 'de' }] },
+      'GET /orte': {
+        body: [{
+          id: 'o1', kreis_id: null, gov_id: 'GOV1', lat: '49.5', lon: '22.5',
+          namen: [{ id: 'n', sprache_id: 's', ortsname: 'Przemyśl' }],
+          karten: [],
+          regional_maps,
+        }],
+      },
+      'GET /orte/count': { body: { found: 1, total: 1 } },
+    })
+    const { wrapper } = await mountView(OrteView)
+    const links = wrapper.findAll('[data-test=online-map-link]')
+
+    expect(links.map((link) => link.text())).toEqual(['U75', 'U100', 'OSM', 'GM'])
+    expect(links.map((link) => link.attributes('href'))).toEqual([
+      'https://etomesto.com/map-ukraine_spezialkarte-uk-750/?y=49.5&x=22.5',
+      'https://etomesto.com/map-ukraine_zapad/?y=49.5&x=22.5',
+      'https://www.openstreetmap.org/?mlat=49.5&mlon=22.5#map=9/49.5/22.5',
+      'https://google.com/maps?q=49.5,22.5&ll=49.5,22.5&z=12',
+    ])
+    expect(wrapper.get('[data-test=result]').find('a').text()).toContain('GOV')
+  })
+})
+
+describe('ManageKartenView online maps', () => {
+  const place = {
+    id: 'ort-1',
+    gov_id: 'GOV1',
+    kreis_id: null,
+    lat: '49.5',
+    lon: '22.5',
+    namen: [{ id: 'name-1', sprache_id: 'de', ortsname: 'Przemyśl' }],
+    karten: [],
+    regional_maps: [],
+  }
+  const provider = {
+    id: 'map-u75',
+    mapname: 'Ukraine 75000',
+    map_short: 'U75',
+    map_url_basis: 'https://etomesto.com/map-ukraine_spezialkarte-uk-750/',
+    map_url_pattern: '?y={lat}&x={lon}',
+    global: false,
+  }
+  const globalProvider = {
+    id: 'map-osm',
+    mapname: 'OpenStreetMap',
+    map_short: 'OSM',
+    map_url_basis: 'https://www.openstreetmap.org/',
+    map_url_pattern: '?mlat={lat}&mlon={lon}',
+    global: true,
+  }
+
+  async function mountManagement(routes) {
+    const fetch = mockFetch({
+      'GET /sprachen': { body: [{ id: 'de', sprache_land: 'Deutsch', sprache2: 'de' }] },
+      'GET /kreise': { body: [] },
+      'GET /orte': { body: [place] },
+      'GET /map-online': { body: [provider, globalProvider] },
+      'GET /regional-maps': { body: [] },
+      ...routes,
+    })
+    const pinia = createPinia()
+    setActivePinia(pinia)
+    useAuthStore().user = { username: 'editor', roles: ['user'] }
+    const mounted = await mountView(ManageKartenView, { pinia, language: 'de' })
+    return { fetch, ...mounted }
+  }
+
+  it('assigns an online map to the selected place', async () => {
+    const { wrapper, fetch } = await mountManagement({
+      'POST /regional-maps': { body: { id: 'assignment-1', ort_id: place.id, map_online_id: provider.id, map_online: provider } },
+    })
+    await vi.waitFor(() => expect(wrapper.find('[data-test=list-item]').exists()).toBe(true))
+    await wrapper.get('[data-test=list-item]').trigger('click')
+    expect(
+      wrapper.findAll('#regional-map-provider option').map((option) => option.attributes('value')).filter(Boolean),
+    ).toEqual([provider.id])
+    await wrapper.get('#regional-map-provider').setValue(provider.id)
+    await wrapper.get('[data-test=regional-map-form]').trigger('submit')
+    await vi.waitFor(() => expect(fetch.calls.some((call) => call.key === 'POST /regional-maps')).toBe(true))
+
+    const request = fetch.calls.find((call) => call.key === 'POST /regional-maps')
+    expect(request.body).toEqual({ ort_id: place.id, map_online_id: provider.id })
+  })
+
+  it('shows only non-global assignments under the translated heading', async () => {
+    const regionalAssignment = {
+      id: 'regional-1',
+      map_online_id: provider.id,
+      map_online: provider,
+    }
+    const globalAssignment = {
+      id: 'global-1',
+      map_online_id: globalProvider.id,
+      map_online: globalProvider,
+    }
+    const { wrapper } = await mountManagement({
+      'GET /regional-maps': { body: [globalAssignment, regionalAssignment] },
+    })
+    await vi.waitFor(() => expect(wrapper.find('[data-test=list-item]').exists()).toBe(true))
+    await wrapper.get('[data-test=list-item]').trigger('click')
+    await vi.waitFor(() => expect(wrapper.findAll('[data-test=regional-online-assignment]')).toHaveLength(1))
+
+    expect(wrapper.get('[data-test=regional-maps-heading]').text()).toBe(
+      'Zugeordnete nicht globale Onlinekarten',
+    )
+    expect(wrapper.get('[data-test=regional-online-assignment]').text()).toContain('U75 · Ukraine 75000')
+    expect(wrapper.findAll('[data-test=regional-online-assignment]').map((item) => item.text())).not.toContain(
+      'OSM · OpenStreetMap',
+    )
+  })
+
+  it('creates an online map provider', async () => {
+    const { wrapper, fetch } = await mountManagement({
+      'GET /map-online': { body: [] },
+      'POST /map-online': { body: globalProvider },
+    })
+    await wrapper.get('[data-test=new-online-map]').trigger('click')
+    await wrapper.get('#mapname').setValue('OpenStreetMap')
+    await wrapper.get('#map-short').setValue('OSM')
+    await wrapper.get('#map-url-basis').setValue('https://www.openstreetmap.org/')
+    await wrapper.get('#map-url-pattern').setValue('?mlat={lat}&mlon={lon}')
+    await wrapper.get('#map-global').setValue(true)
+    await wrapper.get('[data-test=online-map-form]').trigger('submit')
+    await vi.waitFor(() => expect(fetch.calls.some((call) => call.key === 'POST /map-online')).toBe(true))
+
+    const request = fetch.calls.find((call) => call.key === 'POST /map-online')
+    expect(request.body).toMatchObject({ map_short: 'OSM', global: true })
   })
 })
 

@@ -59,6 +59,14 @@ msgstr "Alle Kreise"
 msgid "As an administrator you must set up OTP before you can continue."
 msgstr "Als Administrator müssen Sie OTP einrichten, bevor Sie fortfahren können."
 
+#: src/views/ManageKartenView.vue
+msgid "Assign"
+msgstr "Zuordnen"
+
+#: src/views/ManageKartenView.vue
+msgid "Assigned non-global online maps"
+msgstr "Zugeordnete nicht globale Onlinekarten"
+
 #: src/views/ResetPasswordView.vue src/views/SetupAccountView.vue
 msgid "At least 8 characters."
 msgstr "Mindestens 8 Zeichen."
@@ -74,6 +82,10 @@ msgstr "Authentifizierung fehlgeschlagen."
 #: src/views/ForgotPasswordView.vue
 msgid "Back to login"
 msgstr "Zurück zur Anmeldung"
+
+#: src/views/ManageKartenView.vue
+msgid "Base URL"
+msgstr "Basis-URL"
 
 #: src/views/ImportsView.vue
 msgid "Bildbreite_px / Bildhoehe_px are missing or invalid."
@@ -155,7 +167,7 @@ msgstr "Aktuelles Passwort"
 msgid "Current password (required to change the email address)"
 msgstr "Aktuelles Passwort (zum Ändern der E-Mail-Adresse erforderlich)"
 
-#: src/views/ManageKreiseView.vue src/views/ManageOrteView.vue
+#: src/views/ManageKartenView.vue src/views/ManageKreiseView.vue src/views/ManageOrteView.vue
 msgid "Delete"
 msgstr "Löschen"
 
@@ -190,6 +202,10 @@ msgstr "Kreise"
 #: src/views/UsersView.vue
 msgid "Edit"
 msgstr "Bearbeiten"
+
+#: src/views/ManageKartenView.vue
+msgid "Edit online map"
+msgstr "Onlinekarte bearbeiten"
 
 #: src/views/UsersView.vue
 msgid "Edit user"
@@ -262,6 +278,14 @@ msgstr "%{found} von %{total} Orten gefunden."
 #: src/components/GovSuche.vue
 msgid "GOV place search"
 msgstr "GOV-Ortssuche"
+
+#: src/views/ManageKartenView.vue
+msgid "Global"
+msgstr "Global"
+
+#: src/views/ManageKartenView.vue
+msgid "Global map"
+msgstr "Globale Karte"
 
 #: src/views/ManageKartenView.vue
 msgid "Grid square"
@@ -375,7 +399,7 @@ msgstr "Hauptnavigation"
 msgid "Management"
 msgstr "Verwaltung"
 
-#: src/views/ManageKartenView.vue src/views/OrteView.vue
+#: src/views/ManageKartenView.vue
 msgid "Map"
 msgstr "Karte"
 
@@ -386,6 +410,10 @@ msgstr "Karte „%{karte}“, Planquadrat %{koordinate}"
 #: src/views/MapView.vue
 msgid "Map image with the highlighted square %{koordinate}"
 msgstr "Kartenbild mit hervorgehobenem Planquadrat %{koordinate}"
+
+#: src/views/ManageKartenView.vue
+msgid "Map name"
+msgstr "Kartenname"
 
 #: src/views/MapView.vue
 msgid "Map view"
@@ -406,6 +434,10 @@ msgstr "Neuer Kreis"
 #: src/views/ImportsView.vue
 msgid "New districts created (Polish name)"
 msgstr "Neu angelegte Kreise (polnischer Name)"
+
+#: src/views/ManageKartenView.vue
+msgid "New online map"
+msgstr "Neue Onlinekarte"
 
 #: src/views/AccountView.vue src/views/ResetPasswordView.vue
 msgid "New password"
@@ -435,6 +467,10 @@ msgstr "Noch keine Kartenverweise."
 msgid "No names available."
 msgstr "Keine Namen verfügbar."
 
+#: src/views/ManageKartenView.vue
+msgid "No online map assignments yet."
+msgstr "Noch keine Onlinekarten zugeordnet."
+
 #: src/views/OrteView.vue
 msgid "No places found."
 msgstr "Keine Orte gefunden."
@@ -450,10 +486,6 @@ msgstr "Nicht gefunden."
 #: src/components/AppFooter.vue
 msgid "Not signed in"
 msgstr "Nicht angemeldet"
-
-#: src/views/OrteView.vue
-msgid "OSM"
-msgstr "OSM"
 
 #: src/views/AccountView.vue
 msgid "OTP has been disabled."
@@ -478,6 +510,14 @@ msgstr "Einmalcode"
 #: src/views/AccountView.vue
 msgid "One-time code (OTP)"
 msgstr "Einmalcode (OTP)"
+
+#: src/views/ManageKartenView.vue
+msgid "Online map"
+msgstr "Onlinekarte"
+
+#: src/views/ManageKartenView.vue
+msgid "Online map providers"
+msgstr "Onlinekartenanbieter"
 
 #: src/views/AccountView.vue src/views/LoginView.vue src/views/SetupAccountView.vue
 msgid "Password"
@@ -555,6 +595,10 @@ msgstr "QR-Code für die Authenticator-App"
 msgid "Really delete this district?"
 msgstr "Diesen Kreis wirklich löschen?"
 
+#: src/views/ManageKartenView.vue
+msgid "Really delete this online map?"
+msgstr "Diese Onlinekarte wirklich löschen?"
+
 #: src/views/ManageOrteView.vue
 msgid "Really delete this place?"
 msgstr "Diesen Ort wirklich löschen?"
@@ -607,7 +651,7 @@ msgstr "Zeileninhalt"
 msgid "Rows with errors are skipped and listed below. Duplicates are not checked."
 msgstr "Zeilen mit Fehlern werden übersprungen und unten aufgelistet. Auf Duplikate wird nicht geprüft."
 
-#: src/views/AccountView.vue src/views/ManageKreiseView.vue src/views/ManageOrteView.vue src/views/ResetPasswordView.vue src/views/UsersView.vue
+#: src/views/AccountView.vue src/views/ManageKartenView.vue src/views/ManageKreiseView.vue src/views/ManageOrteView.vue src/views/ResetPasswordView.vue src/views/UsersView.vue
 msgid "Save"
 msgstr "Speichern"
 
@@ -619,7 +663,7 @@ msgstr "Speichern Sie zuerst den Kreis, danach können Namen hinzugefügt werden
 msgid "Save the place first, then add names."
 msgstr "Speichern Sie zuerst den Ort, danach können Namen hinzugefügt werden."
 
-#: src/views/ManageKreiseView.vue src/views/ManageOrteView.vue src/views/UsersView.vue
+#: src/views/ManageKartenView.vue src/views/ManageKreiseView.vue src/views/ManageOrteView.vue src/views/UsersView.vue
 msgid "Saved."
 msgstr "Gespeichert."
 
@@ -651,6 +695,10 @@ msgstr "Suche läuft..."
 msgid "Secret key"
 msgstr "Geheimer Schlüssel"
 
+#: src/views/ManageKartenView.vue
+msgid "Select online map"
+msgstr "Onlinekarte auswählen"
+
 #: src/views/ForgotPasswordView.vue
 msgid "Send link"
 msgstr "Link senden"
@@ -666,6 +714,10 @@ msgstr "OTP einrichten"
 #: src/views/SetupAccountView.vue
 msgid "Set up your account"
 msgstr "Konto einrichten"
+
+#: src/views/ManageKartenView.vue
+msgid "Short name"
+msgstr "Kürzel"
 
 #: src/components/AppFooter.vue
 msgid "Signed in as %{user} (%{roles})"
@@ -810,6 +862,10 @@ msgstr "Zu viele Fehlversuche. Bitte versuchen Sie es später erneut."
 #: src/composables/useErrors.js
 msgid "Too many failed attempts. Try again in %{minutes} minute(s)."
 msgstr "Zu viele Fehlversuche. Versuchen Sie es in %{minutes} Minute(n) erneut."
+
+#: src/views/ManageKartenView.vue
+msgid "URL pattern"
+msgstr "URL-Muster"
 
 #: src/views/ImportsView.vue
 msgid "Unexpected error while saving this row."

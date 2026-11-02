@@ -9,13 +9,14 @@ from sqlalchemy import (
     Index,
     Integer,
     Numeric,
+    Index,
     String,
     UniqueConstraint,
     Uuid,
     func,
     text,
 )
-from sqlalchemy.orm import DeclarativeBase, Mapped, declared_attr, mapped_column
+from sqlalchemy.orm import DeclarativeBase, Mapped, declared_attr, mapped_column, relationship
 
 
 class Base(DeclarativeBase):
@@ -164,3 +165,27 @@ class MapGrid(AuditMixin, Base):
     laenge_bis: Mapped[Decimal] = mapped_column(Numeric(9, 6), nullable=False)
     breite_von: Mapped[Decimal] = mapped_column(Numeric(9, 6), nullable=False)
     breite_bis: Mapped[Decimal] = mapped_column(Numeric(9, 6), nullable=False)
+
+
+class MapOnline(AuditMixin, Base):
+    __tablename__ = "map_online"
+
+    mapname: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
+    map_short: Mapped[str] = mapped_column(String(10), unique=True, nullable=False)
+    map_url_basis: Mapped[str] = mapped_column(String(255), nullable=False)
+    map_url_pattern: Mapped[str] = mapped_column(String(255), nullable=False)
+    global_map: Mapped[bool] = mapped_column(
+        "global", Boolean, default=False, server_default=text("false"), nullable=False
+    )
+
+
+class RegionalMap(AuditMixin, Base):
+    __tablename__ = "regional_map"
+    __table_args__ = (
+        UniqueConstraint("ort_id", "map_online_id", name="uq_regional_map_ort_map"),
+        Index("ix_regional_map_ort_id", "ort_id"),
+    )
+
+    ort_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("ort.id"), nullable=False)
+    map_online_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("map_online.id"), nullable=False)
+    map_online: Mapped[MapOnline] = relationship(lazy="joined")

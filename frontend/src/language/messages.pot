@@ -58,6 +58,14 @@ msgstr ""
 msgid "As an administrator you must set up OTP before you can continue."
 msgstr ""
 
+#: src/views/ManageKartenView.vue
+msgid "Assign"
+msgstr ""
+
+#: src/views/ManageKartenView.vue
+msgid "Assigned non-global online maps"
+msgstr ""
+
 #: src/views/ResetPasswordView.vue src/views/SetupAccountView.vue
 msgid "At least 8 characters."
 msgstr ""
@@ -72,6 +80,10 @@ msgstr ""
 
 #: src/views/ForgotPasswordView.vue
 msgid "Back to login"
+msgstr ""
+
+#: src/views/ManageKartenView.vue
+msgid "Base URL"
 msgstr ""
 
 #: src/views/ImportsView.vue
@@ -154,7 +166,7 @@ msgstr ""
 msgid "Current password (required to change the email address)"
 msgstr ""
 
-#: src/views/ManageKreiseView.vue src/views/ManageOrteView.vue
+#: src/views/ManageKartenView.vue src/views/ManageKreiseView.vue src/views/ManageOrteView.vue
 msgid "Delete"
 msgstr ""
 
@@ -188,6 +200,10 @@ msgstr ""
 
 #: src/views/UsersView.vue
 msgid "Edit"
+msgstr ""
+
+#: src/views/ManageKartenView.vue
+msgid "Edit online map"
 msgstr ""
 
 #: src/views/UsersView.vue
@@ -260,6 +276,14 @@ msgstr ""
 
 #: src/components/GovSuche.vue
 msgid "GOV place search"
+msgstr ""
+
+#: src/views/ManageKartenView.vue
+msgid "Global"
+msgstr ""
+
+#: src/views/ManageKartenView.vue
+msgid "Global map"
 msgstr ""
 
 #: src/views/ManageKartenView.vue
@@ -374,7 +398,7 @@ msgstr ""
 msgid "Management"
 msgstr ""
 
-#: src/views/ManageKartenView.vue src/views/OrteView.vue
+#: src/views/ManageKartenView.vue
 msgid "Map"
 msgstr ""
 
@@ -384,6 +408,10 @@ msgstr ""
 
 #: src/views/MapView.vue
 msgid "Map image with the highlighted square %{koordinate}"
+msgstr ""
+
+#: src/views/ManageKartenView.vue
+msgid "Map name"
 msgstr ""
 
 #: src/views/MapView.vue
@@ -404,6 +432,10 @@ msgstr ""
 
 #: src/views/ImportsView.vue
 msgid "New districts created (Polish name)"
+msgstr ""
+
+#: src/views/ManageKartenView.vue
+msgid "New online map"
 msgstr ""
 
 #: src/views/AccountView.vue src/views/ResetPasswordView.vue
@@ -434,6 +466,10 @@ msgstr ""
 msgid "No names available."
 msgstr ""
 
+#: src/views/ManageKartenView.vue
+msgid "No online map assignments yet."
+msgstr ""
+
 #: src/views/OrteView.vue
 msgid "No places found."
 msgstr ""
@@ -448,10 +484,6 @@ msgstr ""
 
 #: src/components/AppFooter.vue
 msgid "Not signed in"
-msgstr ""
-
-#: src/views/OrteView.vue
-msgid "OSM"
 msgstr ""
 
 #: src/views/AccountView.vue
@@ -476,6 +508,14 @@ msgstr ""
 
 #: src/views/AccountView.vue
 msgid "One-time code (OTP)"
+msgstr ""
+
+#: src/views/ManageKartenView.vue
+msgid "Online map"
+msgstr ""
+
+#: src/views/ManageKartenView.vue
+msgid "Online map providers"
 msgstr ""
 
 #: src/views/AccountView.vue src/views/LoginView.vue src/views/SetupAccountView.vue
@@ -554,6 +594,10 @@ msgstr ""
 msgid "Really delete this district?"
 msgstr ""
 
+#: src/views/ManageKartenView.vue
+msgid "Really delete this online map?"
+msgstr ""
+
 #: src/views/ManageOrteView.vue
 msgid "Really delete this place?"
 msgstr ""
@@ -606,7 +650,7 @@ msgstr ""
 msgid "Rows with errors are skipped and listed below. Duplicates are not checked."
 msgstr ""
 
-#: src/views/AccountView.vue src/views/ManageKreiseView.vue src/views/ManageOrteView.vue src/views/ResetPasswordView.vue src/views/UsersView.vue
+#: src/views/AccountView.vue src/views/ManageKartenView.vue src/views/ManageKreiseView.vue src/views/ManageOrteView.vue src/views/ResetPasswordView.vue src/views/UsersView.vue
 msgid "Save"
 msgstr ""
 
@@ -618,7 +662,7 @@ msgstr ""
 msgid "Save the place first, then add names."
 msgstr ""
 
-#: src/views/ManageKreiseView.vue src/views/ManageOrteView.vue src/views/UsersView.vue
+#: src/views/ManageKartenView.vue src/views/ManageKreiseView.vue src/views/ManageOrteView.vue src/views/UsersView.vue
 msgid "Saved."
 msgstr ""
 
@@ -650,6 +694,10 @@ msgstr ""
 msgid "Secret key"
 msgstr ""
 
+#: src/views/ManageKartenView.vue
+msgid "Select online map"
+msgstr ""
+
 #: src/views/ForgotPasswordView.vue
 msgid "Send link"
 msgstr ""
@@ -664,6 +712,10 @@ msgstr ""
 
 #: src/views/SetupAccountView.vue
 msgid "Set up your account"
+msgstr ""
+
+#: src/views/ManageKartenView.vue
+msgid "Short name"
 msgstr ""
 
 #: src/components/AppFooter.vue
@@ -808,6 +860,10 @@ msgstr ""
 
 #: src/composables/useErrors.js
 msgid "Too many failed attempts. Try again in %{minutes} minute(s)."
+msgstr ""
+
+#: src/views/ManageKartenView.vue
+msgid "URL pattern"
 msgstr ""
 
 #: src/views/ImportsView.vue
