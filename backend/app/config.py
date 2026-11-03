@@ -24,6 +24,7 @@ class Settings(BaseSettings):
     import_archive_dir: str = "import_archive"
     import_max_mb: int = 10
     frontend_url: str = "http://localhost:5173"
+    api_server_url: str = "/api"
     cors_origins: str = "http://localhost:5173"
     password_reset_minutes: int = 60
     admin_link_hours: int = 24

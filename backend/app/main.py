@@ -10,19 +10,18 @@ app = FastAPI(
     version="1.0.0",
     terms_of_service=f"{settings.frontend_url.rstrip('/')}/terms",
     servers=[
-        {"url": "/api", "description": "inoGOV API"}
+        {"url": settings.api_server_url, "description": "inoGOV API"}
     ],
     openapi_tags=[
         {"name": "auth", "description": "Authentication and user management"},
         {"name": "users", "description": "User management and profile"},
-        {"name": "account", "description": "Account management"},
         {"name": "sprachen", "description": "Language management"},
         {"name": "kreise", "description": "District management"},
         {"name": "orte", "description": "Place management"},
         {"name": "imports", "description": "Data import management"},
         {"name": "maps", "description": "Map management"},
         {"name": "online maps", "description": "Online map providers and regional assignments"},
-        {"name": "gov_suche", "description": "GOV search functionality"},
+        {"name": "GOV-Suche", "description": "GOV search functionality"},
     ]
 )
 app.add_middleware(

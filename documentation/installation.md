@@ -65,6 +65,7 @@ Copy-Item .env.example .env
 | `ADMIN_OTP_REQUIRED` | `true`: administrators must set up OTP before they can continue | true |
 | `FRONTEND_URL` | Base URL used in links inside emails | http://localhost:5173 |
 | `CORS_ORIGINS` | Allowed browser origins, comma separated | http://localhost:5173 |
+| `API_SERVER_URL` | Server URL shown in the OpenAPI docs | /api |
 | `PASSWORD_RESET_MINUTES` | Validity of the "forgot password" link | 60 |
 | `ADMIN_LINK_HOURS` | Validity of invitation and admin reset links | 24 |
 | `IMPORT_ARCHIVE_DIR` | Folder where processed import files and their protocol are stored | import_archive |
