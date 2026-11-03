@@ -149,6 +149,7 @@ function selectPlace(result) {
       {{ gettext.$gettext('No results found.') }}
     </p>
 
+    <div v-if="results.length" class="gov-results">
     <div v-for="result in results" :key="result.id" class="card mb-3">
       <div class="card-body">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
@@ -199,5 +200,13 @@ function selectPlace(result) {
         </p>
       </div>
     </div>
+    </div>
   </section>
 </template>
+
+<style scoped>
+.gov-results {
+  max-height: 50vh;
+  overflow-y: auto;
+}
+</style>

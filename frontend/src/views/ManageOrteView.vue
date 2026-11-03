@@ -143,7 +143,7 @@ onMounted(async () => {
           <button class="btn btn-outline-primary" type="submit">{{ $gettext('Search') }}</button>
         </form>
         <button class="btn btn-primary mb-2" @click="form = empty()">{{ $gettext('New place') }}</button>
-        <div class="list-group">
+        <div class="list-group scroll-area">
           <button
             v-for="ort in list"
             :key="ort.id"
@@ -265,3 +265,10 @@ onMounted(async () => {
     </div>
   </div>
 </template>
+
+<style scoped>
+.scroll-area {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+</style>
