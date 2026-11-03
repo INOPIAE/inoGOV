@@ -34,6 +34,7 @@ function logout() {
           <li class="nav-item"><router-link class="nav-link" to="/manage/orte">{{ $gettext('Places') }}</router-link></li>
           <li class="nav-item"><router-link class="nav-link" to="/manage/kreise">{{ $gettext('Districts') }}</router-link></li>
           <li class="nav-item"><router-link class="nav-link" to="/manage/karten">{{ $gettext('Maps') }}</router-link></li>
+          <li class="nav-item"><router-link class="nav-link" to="/gov-nearby">{{ $gettext('GOV nearby search') }}</router-link></li>
           <li v-if="auth.isAdmin" class="nav-item">
             <router-link class="nav-link" to="/manage/imports">{{ $gettext('Imports') }}</router-link>
           </li>
@@ -42,7 +43,6 @@ function logout() {
         <template v-if="auth.isLoggedIn">
           <li class="nav-heading">{{ $gettext('Users') }}</li>
           <li class="nav-item"><router-link class="nav-link" to="/account">{{ $gettext('My account') }}</router-link></li>
-          <li class="nav-item"><router-link class="nav-link" to="/gov-nearby">{{ $gettext('GOV nearby search') }}</router-link></li>
           <li v-if="auth.isAdmin" class="nav-item">
             <router-link class="nav-link" to="/users">{{ $gettext('User management') }}</router-link>
           </li>
