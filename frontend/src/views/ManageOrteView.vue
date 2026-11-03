@@ -7,9 +7,11 @@ import { useErrors } from '../composables/useErrors'
 import { useSettingsStore } from '../stores/settings'
 import NamesEditor from '../components/NamesEditor.vue'
 import GovSuche from '../components/GovSuche.vue'
+import { useGovSelectionStore } from '../stores/govSelection'
 
 const gettext = useGettext()
 const route = useRoute()
+const govSelection = useGovSelectionStore()
 const { $gettext } = gettext
 const { errorText } = useErrors()
 const settings = useSettingsStore()
@@ -24,6 +26,16 @@ const language = computed(() => gettext.current)
 const label = (ort) => settings.pickName(ort.namen, 'ortsname', language.value) || ort.gov_id || '?'
 const nameItems = computed(() => (form.value?.namen ?? []).map((n) => ({ id: n.id, sprache_id: n.sprache_id, text: n.ortsname })))
 const mapReferences = computed(() => form.value?.karten ?? [])
+const selectedGov = computed(() =>
+  form.value?.id && govSelection.ortId === form.value.id && govSelection.govId ? govSelection : null,
+)
+const nearbyQuery = computed(() => {
+  const query = { ort_id: form.value.id }
+  if (form.value.lat !== '' && form.value.lat !== null) query.lat = String(form.value.lat)
+  if (form.value.lon !== '' && form.value.lon !== null) query.lon = String(form.value.lon)
+  if (form.value.gov_id) query.gov_id = form.value.gov_id
+  return query
+})
 const regionalMaps = computed(() =>
   (form.value?.regional_maps ?? []).filter((assignment) => !assignment.map_online.global),
 )
@@ -192,6 +204,14 @@ onMounted(async () => {
             >
               {{ $gettext('Manage maps') }}
             </RouterLink>
+            <RouterLink
+              v-if="form.id"
+              class="btn btn-outline-secondary"
+              :to="{ path: '/gov-nearby', query: nearbyQuery }"
+              data-test="gov-nearby"
+            >
+              {{ $gettext('GOV nearby search') }}
+            </RouterLink>
           </div>
           <NamesEditor
             v-if="form.id"
@@ -215,6 +235,21 @@ onMounted(async () => {
                 {{ assignment.map_online.map_short }} · {{ assignment.map_online.mapname }}
               </li>
               <li v-if="!regionalMaps.length" class="list-group-item text-muted">{{ $gettext('No online map assignments yet.') }}</li>
+            </ul>
+          </section>
+
+          <section v-if="selectedGov" class="mt-3" data-test="gov-selection">
+            <h2 class="h6">{{ $gettext('Selected GOV place') }}</h2>
+            <p class="mb-1">
+              <strong>GOV-ID:</strong> {{ selectedGov.govId }}
+              <template v-if="selectedGov.lat !== null && selectedGov.lon !== null">
+                · {{ selectedGov.lat }}, {{ selectedGov.lon }}
+              </template>
+            </p>
+            <ul class="list-unstyled small">
+              <li v-for="(name, index) in selectedGov.names" :key="index">
+                {{ name.value }} <span class="text-muted">({{ name.lang || '?' }})</span>
+              </li>
             </ul>
           </section>
 

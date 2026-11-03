@@ -1,15 +1,24 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
+import { useRoute, useRouter } from 'vue-router'
 import { api } from '../api'
 import { useErrors } from '../composables/useErrors'
 import { boundingRange, distanceOptions } from '../composables/govBox'
+import { useGovSelectionStore } from '../stores/govSelection'
 
 const gettext = useGettext()
+const route = useRoute()
+const router = useRouter()
+const govSelection = useGovSelectionStore()
 const { errorText } = useErrors()
 
-const latitude = ref('')
-const longitude = ref('')
+const queryValue = (key) => (typeof route.query[key] === 'string' ? route.query[key] : '')
+const ortId = queryValue('ort_id')
+const govId = queryValue('gov_id')
+
+const latitude = ref(queryValue('lat'))
+const longitude = ref(queryValue('lon'))
 const latDistance = ref(0.05)
 const lonDistance = ref(0.05)
 const latitude0 = ref('')
@@ -24,12 +33,17 @@ const error = ref('')
 watch([latitude, latDistance], () => {
   if (latitude.value === '' || Number.isNaN(Number(latitude.value))) return
   ;[latitude0.value, latitude1.value] = boundingRange(latitude.value, latDistance.value)
-})
+}, { immediate: true })
 
 watch([longitude, lonDistance], () => {
   if (longitude.value === '' || Number.isNaN(Number(longitude.value))) return
   ;[longitude0.value, longitude1.value] = boundingRange(longitude.value, lonDistance.value)
-})
+}, { immediate: true })
+
+function selectResult(result) {
+  govSelection.select(ortId, result)
+  router.push({ path: '/manage/orte', query: { ort_id: ortId } })
+}
 
 const hasArea = () =>
   [latitude0, latitude1, longitude0, longitude1].every((v) => v.value !== '' && !Number.isNaN(Number(v.value)))
@@ -60,6 +74,7 @@ async function search() {
 <template>
   <div>
     <h1 class="h3 mb-3">{{ gettext.$gettext('GOV nearby search') }}</h1>
+    <p v-if="govId" class="mb-3" data-test="current-gov-id"><strong>GOV-ID:</strong> {{ govId }}</p>
 
     <form class="row g-3 mb-3 nearby-search" @submit.prevent="search">
       <div class="col-md-3">
@@ -84,19 +99,19 @@ async function search() {
       </div>
 
       <div class="col-md-3">
-        <label class="form-label" for="nearby-latitude0">latitude0</label>
+        <label class="form-label" for="nearby-latitude0">{{ gettext.$gettext('Latitude start') }}</label>
         <input id="nearby-latitude0" v-model="latitude0" class="form-control" inputmode="decimal" />
       </div>
       <div class="col-md-3">
-        <label class="form-label" for="nearby-latitude1">latitude1</label>
+        <label class="form-label" for="nearby-latitude1">{{ gettext.$gettext('Latitude end') }}</label>
         <input id="nearby-latitude1" v-model="latitude1" class="form-control" inputmode="decimal" />
       </div>
       <div class="col-md-3">
-        <label class="form-label" for="nearby-longitude0">longitude0</label>
+        <label class="form-label" for="nearby-longitude0">{{ gettext.$gettext('Longitude start') }}</label>
         <input id="nearby-longitude0" v-model="longitude0" class="form-control" inputmode="decimal" />
       </div>
       <div class="col-md-3">
-        <label class="form-label" for="nearby-longitude1">longitude1</label>
+        <label class="form-label" for="nearby-longitude1">{{ gettext.$gettext('Longitude end') }}</label>
         <input id="nearby-longitude1" v-model="longitude1" class="form-control" inputmode="decimal" />
       </div>
 
@@ -121,6 +136,15 @@ async function search() {
           <small v-if="result.position" class="text-muted">
             {{ result.position.lat }}, {{ result.position.lon }}
           </small>
+          <button
+            v-if="ortId"
+            type="button"
+            class="btn btn-sm btn-outline-primary"
+            data-test="select-result"
+            @click="selectResult(result)"
+          >
+            {{ gettext.$gettext('Select') }}
+          </button>
         </div>
         <ul class="list-group">
           <li v-for="(name, index) in result.name" :key="`${result.id}-${index}`" class="list-group-item">

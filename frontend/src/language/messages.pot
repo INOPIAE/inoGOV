@@ -286,7 +286,7 @@ msgstr ""
 msgid "Found %{found} of %{total} places."
 msgstr ""
 
-#: src/components/SideNav.vue src/views/GovNearbyView.vue
+#: src/components/SideNav.vue src/views/GovNearbyView.vue src/views/ManageOrteView.vue
 msgid "GOV nearby search"
 msgstr ""
 
@@ -378,6 +378,14 @@ msgstr ""
 msgid "Latitude distance"
 msgstr ""
 
+#: src/views/GovNearbyView.vue
+msgid "Latitude end"
+msgstr ""
+
+#: src/views/GovNearbyView.vue
+msgid "Latitude start"
+msgstr ""
+
 #: src/views/AboutView.vue src/views/InfoView.vue
 msgid "License"
 msgstr ""
@@ -416,6 +424,14 @@ msgstr ""
 
 #: src/views/GovNearbyView.vue
 msgid "Longitude distance"
+msgstr ""
+
+#: src/views/GovNearbyView.vue
+msgid "Longitude end"
+msgstr ""
+
+#: src/views/GovNearbyView.vue
+msgid "Longitude start"
 msgstr ""
 
 #: src/components/SideNav.vue
@@ -730,8 +746,16 @@ msgstr ""
 msgid "Secret key"
 msgstr ""
 
+#: src/views/GovNearbyView.vue
+msgid "Select"
+msgstr ""
+
 #: src/views/ManageKartenView.vue
 msgid "Select online map"
+msgstr ""
+
+#: src/views/ManageOrteView.vue
+msgid "Selected GOV place"
 msgstr ""
 
 #: src/views/ForgotPasswordView.vue
