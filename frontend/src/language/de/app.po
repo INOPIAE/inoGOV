@@ -287,6 +287,10 @@ msgstr "Es wird die deutsche Version angezeigt."
 msgid "Found %{found} of %{total} places."
 msgstr "%{found} von %{total} Orten gefunden."
 
+#: src/components/SideNav.vue src/views/GovNearbyView.vue
+msgid "GOV nearby search"
+msgstr "GOV-Umgebungssuche"
+
 #: src/components/GovSuche.vue
 msgid "GOV place search"
 msgstr "GOV-Ortssuche"
@@ -367,9 +371,13 @@ msgstr "Sprache"
 msgid "Last name"
 msgstr "Nachname"
 
-#: src/views/ManageOrteView.vue
+#: src/views/GovNearbyView.vue src/views/ManageOrteView.vue
 msgid "Latitude"
 msgstr "Breitengrad"
+
+#: src/views/GovNearbyView.vue
+msgid "Latitude distance"
+msgstr "Abstand Breite"
 
 #: src/views/AboutView.vue src/views/InfoView.vue
 msgid "License"
@@ -399,13 +407,17 @@ msgstr "Anmelden"
 msgid "Log out"
 msgstr "Abmelden"
 
-#: src/views/ManageOrteView.vue
+#: src/views/GovNearbyView.vue src/views/ManageOrteView.vue
 msgid "Longitude"
 msgstr "Längengrad"
 
 #: src/views/MapView.vue
 msgid "Longitude %{from} to %{to}, latitude %{latFrom} to %{latTo}"
 msgstr "Längengrad %{from} bis %{to}, Breitengrad %{latFrom} bis %{latTo}"
+
+#: src/views/GovNearbyView.vue
+msgid "Longitude distance"
+msgstr "Abstand Länge"
 
 #: src/components/SideNav.vue
 msgid "Main navigation"
@@ -487,7 +499,7 @@ msgstr "Für dieses Planquadrat liegen keine Kartendaten vor."
 msgid "No map references yet."
 msgstr "Noch keine Kartenverweise."
 
-#: src/components/GovSuche.vue
+#: src/components/GovSuche.vue src/views/GovNearbyView.vue
 msgid "No names available."
 msgstr "Keine Namen verfügbar."
 
@@ -499,7 +511,7 @@ msgstr "Noch keine Onlinekarten zugeordnet."
 msgid "No places found."
 msgstr "Keine Orte gefunden."
 
-#: src/components/GovSuche.vue
+#: src/components/GovSuche.vue src/views/GovNearbyView.vue
 msgid "No results found."
 msgstr "Keine Ergebnisse gefunden."
 
@@ -695,7 +707,7 @@ msgstr "Gespeichert."
 msgid "Scan the QR code with your authenticator app or enter the key manually."
 msgstr "Scannen Sie den QR-Code mit Ihrer Authenticator-App oder geben Sie den Schlüssel manuell ein."
 
-#: src/components/GovSuche.vue src/views/HomeView.vue src/views/ManageKartenView.vue src/views/ManageKreiseView.vue src/views/ManageOrteView.vue src/views/OrteView.vue
+#: src/components/GovSuche.vue src/views/GovNearbyView.vue src/views/HomeView.vue src/views/ManageKartenView.vue src/views/ManageKreiseView.vue src/views/ManageOrteView.vue src/views/OrteView.vue
 msgid "Search"
 msgstr "Suchen"
 
@@ -711,7 +723,7 @@ msgstr "Suche fehlgeschlagen."
 msgid "Search places"
 msgstr "Orte suchen"
 
-#: src/components/GovSuche.vue
+#: src/components/GovSuche.vue src/views/GovNearbyView.vue
 msgid "Searching..."
 msgstr "Suche läuft..."
 
@@ -982,3 +994,4 @@ msgstr "inoGOV unterstützt die Dokumentation historischer Orte und ihres geogra
 #: src/views/AboutView.vue
 msgid "inoGOV is licensed under the GNU Affero General Public License, version 3 or later."
 msgstr "inoGOV steht unter der GNU Affero General Public License, Version 3 oder höher."
+

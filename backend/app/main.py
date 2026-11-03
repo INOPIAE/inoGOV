@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
-from app.routers import account, auth, gov_suche, imports, kreise, maps, online_maps, orte, sprachen, users
+from app.routers import account, auth, gov_suche, gov_suche_nearby, imports, kreise, maps, online_maps, orte, sprachen, users
 
 app = FastAPI(
     title="inoGOV",
@@ -40,6 +40,7 @@ app.include_router(imports.router)
 app.include_router(maps.router)
 app.include_router(online_maps.router)
 app.include_router(gov_suche.router)
+app.include_router(gov_suche_nearby.router)
 
 
 @app.get("/health")

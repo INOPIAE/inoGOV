@@ -48,11 +48,16 @@ async def suche_orte(
             detail="Der Ortsname darf nicht leer sein."
         )
 
+    data = await fetch_gov(GOV_API_URL, {"placename": placename})
+    return normalize_gov_results(data)
+
+
+async def fetch_gov(url: str, params: dict) -> list:
     try:
         async with httpx.AsyncClient(timeout=20.0) as client:
             response = await client.get(
-                GOV_API_URL,
-                params={"placename": placename},
+                url,
+                params=params,
                 headers={"Accept": "application/json"}
             )
             response.raise_for_status()
@@ -88,6 +93,10 @@ async def suche_orte(
             detail="Unerwartetes Antwortformat der GOV-API."
         )
 
+    return data
+
+
+def normalize_gov_results(data: list) -> list[GovResult]:
     results = []
 
     for item in data:

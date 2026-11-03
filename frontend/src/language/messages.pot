@@ -286,6 +286,10 @@ msgstr ""
 msgid "Found %{found} of %{total} places."
 msgstr ""
 
+#: src/components/SideNav.vue src/views/GovNearbyView.vue
+msgid "GOV nearby search"
+msgstr ""
+
 #: src/components/GovSuche.vue
 msgid "GOV place search"
 msgstr ""
@@ -366,8 +370,12 @@ msgstr ""
 msgid "Last name"
 msgstr ""
 
-#: src/views/ManageOrteView.vue
+#: src/views/GovNearbyView.vue src/views/ManageOrteView.vue
 msgid "Latitude"
+msgstr ""
+
+#: src/views/GovNearbyView.vue
+msgid "Latitude distance"
 msgstr ""
 
 #: src/views/AboutView.vue src/views/InfoView.vue
@@ -398,12 +406,16 @@ msgstr ""
 msgid "Log out"
 msgstr ""
 
-#: src/views/ManageOrteView.vue
+#: src/views/GovNearbyView.vue src/views/ManageOrteView.vue
 msgid "Longitude"
 msgstr ""
 
 #: src/views/MapView.vue
 msgid "Longitude %{from} to %{to}, latitude %{latFrom} to %{latTo}"
+msgstr ""
+
+#: src/views/GovNearbyView.vue
+msgid "Longitude distance"
 msgstr ""
 
 #: src/components/SideNav.vue
@@ -486,7 +498,7 @@ msgstr ""
 msgid "No map references yet."
 msgstr ""
 
-#: src/components/GovSuche.vue
+#: src/components/GovSuche.vue src/views/GovNearbyView.vue
 msgid "No names available."
 msgstr ""
 
@@ -498,7 +510,7 @@ msgstr ""
 msgid "No places found."
 msgstr ""
 
-#: src/components/GovSuche.vue
+#: src/components/GovSuche.vue src/views/GovNearbyView.vue
 msgid "No results found."
 msgstr ""
 
@@ -694,7 +706,7 @@ msgstr ""
 msgid "Scan the QR code with your authenticator app or enter the key manually."
 msgstr ""
 
-#: src/components/GovSuche.vue src/views/HomeView.vue src/views/ManageKartenView.vue src/views/ManageKreiseView.vue src/views/ManageOrteView.vue src/views/OrteView.vue
+#: src/components/GovSuche.vue src/views/GovNearbyView.vue src/views/HomeView.vue src/views/ManageKartenView.vue src/views/ManageKreiseView.vue src/views/ManageOrteView.vue src/views/OrteView.vue
 msgid "Search"
 msgstr ""
 
@@ -710,7 +722,7 @@ msgstr ""
 msgid "Search places"
 msgstr ""
 
-#: src/components/GovSuche.vue
+#: src/components/GovSuche.vue src/views/GovNearbyView.vue
 msgid "Searching..."
 msgstr ""
 

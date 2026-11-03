@@ -1,7 +1,7 @@
 import httpx
 import pytest
 
-from app.routers import gov_suche
+from app.routers import gov_suche, gov_suche_nearby
 
 
 class FakeResponse:
@@ -77,6 +77,62 @@ def test_gov_search_trims_query_and_normalizes_results(client, monkeypatch):
     assert calls == [
         (gov_suche.GOV_API_URL, {"placename": "Przemyśl"}, {"Accept": "application/json"})
     ]
+
+
+NEARBY_PARAMS = {"latitude0": 50.6, "latitude1": 50.65, "longitude0": 25.2, "longitude1": 25.25}
+
+
+def test_gov_nearby_requires_login(client):
+    response = client.get("/gov_suche_nearby", params=NEARBY_PARAMS, headers={"Host": "localhost"})
+    assert response.status_code in (401, 403)
+
+
+def test_gov_nearby_returns_id_position_and_names(client, monkeypatch, user_h):
+    calls = mock_gov_client(
+        monkeypatch,
+        response=FakeResponse(
+            [
+                {
+                    "id": "LAWROWKO20OP",
+                    "position": {"lon": 25.2099, "lat": 50.6257, "type": "p"},
+                    "name": [{"lang": "deu", "value": "Lawriw"}],
+                    "population": [{"value": "1294"}],
+                }
+            ]
+        ),
+    )
+
+    response = client.get("/gov_suche_nearby", params=NEARBY_PARAMS, headers={**user_h, "Host": "localhost"})
+
+    assert response.status_code == 200
+    assert response.json() == [
+        {
+            "id": "LAWROWKO20OP",
+            "position": {"lon": 25.2099, "lat": 50.6257, "type": "p"},
+            "name": [{"lang": "deu", "value": "Lawriw"}],
+        }
+    ]
+    assert calls == [
+        (gov_suche_nearby.GOV_BOUNDING_BOX_URL, NEARBY_PARAMS, {"Accept": "application/json"})
+    ]
+
+
+def test_gov_nearby_rejects_inverted_area(client, monkeypatch, user_h):
+    calls = mock_gov_client(monkeypatch, response=FakeResponse([]))
+    params = {**NEARBY_PARAMS, "latitude0": 51}
+
+    response = client.get("/gov_suche_nearby", params=params, headers={**user_h, "Host": "localhost"})
+
+    assert response.status_code == 400
+    assert calls == []
+
+
+def test_gov_nearby_maps_request_failure(client, monkeypatch, user_h):
+    mock_gov_client(monkeypatch, error=httpx.TimeoutException("timeout"))
+
+    response = client.get("/gov_suche_nearby", params=NEARBY_PARAMS, headers={**user_h, "Host": "localhost"})
+
+    assert response.status_code == 504
 
 
 def test_gov_search_rejects_whitespace_only_query(client, monkeypatch):
