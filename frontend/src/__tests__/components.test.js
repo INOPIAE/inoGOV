@@ -335,6 +335,74 @@ describe('GovSuche', () => {
 })
 
 describe('ManageOrteView', () => {
+  it.each([
+    ['new', 'POST /orte'],
+    ['existing', 'PATCH /orte/o1'],
+  ])('normalizes coordinate input and saves it for a %s place', async (kind, saveKey) => {
+    const place = {
+      id: 'o1', gov_id: null, kreis_id: null, lat: null, lon: null, addition: null, comment: null,
+      coordinates_not_found: false, namen: [], karten: [], regional_maps: [],
+    }
+    const fetch = mockFetch({
+      'GET /sprachen': { body: [] },
+      'GET /kreise': { body: [] },
+      'GET /orte': { body: [place] },
+      'GET /orte/o1': { body: place },
+      [saveKey]: { body: place },
+    })
+    const { wrapper } = await mountView(ManageOrteView, {
+      language: 'de',
+      route: kind === 'existing' ? '/manage/orte?ort_id=o1' : '/manage/orte',
+    })
+    if (kind === 'new') await wrapper.get('button.btn-primary.mb-2').trigger('click')
+
+    expect(wrapper.get('#coordinate-hint').text()).toBe('Dezimalkommas werden automatisch in Dezimalpunkte umgewandelt.')
+    await wrapper.get('#lat').setValue('-49,8123')
+    await wrapper.get('#lon').setValue('22,5000')
+    expect(wrapper.get('#lat').element.value).toBe('-49.8123')
+    expect(wrapper.get('#lon').element.value).toBe('22.5000')
+    if (kind === 'existing') {
+      expect(wrapper.get('[data-test=gov-nearby]').attributes('href')).toBe('/gov-nearby?ort_id=o1&lat=-49.8123&lon=22.5000')
+    }
+
+    await wrapper.get('form.card').trigger('submit')
+    await vi.waitFor(() => expect(fetch.calls.some((call) => call.key === saveKey)).toBe(true))
+    expect(fetch.calls.find((call) => call.key === saveKey).body).toMatchObject({ lat: '-49.8123', lon: '22.5000' })
+  })
+
+  it('preserves decimal points and zero, and saves empty coordinates as null', async () => {
+    const place = {
+      id: 'o1', gov_id: null, kreis_id: null, lat: null, lon: null, addition: null, comment: null,
+      coordinates_not_found: false, namen: [], karten: [], regional_maps: [],
+    }
+    const fetch = mockFetch({
+      'GET /sprachen': { body: [] },
+      'GET /kreise': { body: [] },
+      'GET /orte': { body: [place] },
+      'GET /orte/o1': { body: place },
+      'PATCH /orte/o1': { body: place },
+    })
+    const { wrapper } = await mountView(ManageOrteView, { route: '/manage/orte?ort_id=o1' })
+    expect(wrapper.get('#coordinate-hint').text()).toBe('Decimal commas are automatically converted to decimal points.')
+    await wrapper.get('#lat').setValue('0.0')
+    await wrapper.get('#lat').setValue('0,0')
+    expect(wrapper.get('#lat').element.value).toBe('0.0')
+    const lat = wrapper.get('#lat')
+    lat.element.value = '10,02'
+    lat.element.setSelectionRange(3, 3)
+    await lat.trigger('input')
+    expect(lat.element.value).toBe('10.02')
+    expect(lat.element.selectionStart).toBe(3)
+    await lat.setValue('0.0')
+    await wrapper.get('#lon').setValue('12.3')
+    expect(wrapper.get('#lon').element.value).toBe('12.3')
+    await wrapper.get('#lon').setValue('')
+
+    await wrapper.get('form.card').trigger('submit')
+    await vi.waitFor(() => expect(fetch.calls.some((call) => call.key === 'PATCH /orte/o1')).toBe(true))
+    expect(fetch.calls.find((call) => call.key === 'PATCH /orte/o1').body).toMatchObject({ lat: '0.0', lon: null })
+  })
+
   it('opens the requested place from map management', async () => {
     const place = {
       id: 'o1', gov_id: 'GOV1', kreis_id: null, lat: null, lon: null, addition: null, comment: null,

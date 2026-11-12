@@ -170,6 +170,10 @@ msgstr ""
 msgid "Current password (required to change the email address)"
 msgstr ""
 
+#: src/views/ManageOrteView.vue
+msgid "Decimal commas are automatically converted to decimal points."
+msgstr ""
+
 #: src/views/ManageKartenView.vue src/views/ManageKreiseView.vue src/views/ManageOrteView.vue
 msgid "Delete"
 msgstr ""

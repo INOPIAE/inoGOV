@@ -171,6 +171,10 @@ msgstr "Aktuelles Passwort"
 msgid "Current password (required to change the email address)"
 msgstr "Aktuelles Passwort (zum Ändern der E-Mail-Adresse erforderlich)"
 
+#: src/views/ManageOrteView.vue
+msgid "Decimal commas are automatically converted to decimal points."
+msgstr "Dezimalkommas werden automatisch in Dezimalpunkte umgewandelt."
+
 #: src/views/ManageKartenView.vue src/views/ManageKreiseView.vue src/views/ManageOrteView.vue
 msgid "Delete"
 msgstr "Löschen"
@@ -1018,4 +1022,3 @@ msgstr "inoGOV unterstützt die Dokumentation historischer Orte und ihres geogra
 #: src/views/AboutView.vue
 msgid "inoGOV is licensed under the GNU Affero General Public License, version 3 or later."
 msgstr "inoGOV steht unter der GNU Affero General Public License, Version 3 oder höher."
-

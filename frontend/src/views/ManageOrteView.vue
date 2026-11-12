@@ -53,6 +53,18 @@ const toForm = (ort) => ({
 })
 const clean = (v) => (v === '' ? null : v)
 
+function updateCoordinate(field, event) {
+  const input = event.target
+  const value = input.value.replaceAll(',', '.')
+  if (value !== input.value) {
+    const start = input.selectionStart
+    const end = input.selectionEnd
+    input.value = value
+    input.setSelectionRange(start, end)
+  }
+  form.value[field] = value
+}
+
 async function guard(action) {
   message.value = error.value = ''
   try {
@@ -174,12 +186,13 @@ onMounted(async () => {
             </div>
             <div class="col-6">
               <label class="form-label" for="lat">{{ $gettext('Latitude') }}</label>
-              <input id="lat" v-model="form.lat" class="form-control" inputmode="decimal" />
+              <input id="lat" :value="form.lat" class="form-control" inputmode="decimal" aria-describedby="coordinate-hint" @input="updateCoordinate('lat', $event)" />
             </div>
             <div class="col-6">
               <label class="form-label" for="lon">{{ $gettext('Longitude') }}</label>
-              <input id="lon" v-model="form.lon" class="form-control" inputmode="decimal" />
+              <input id="lon" :value="form.lon" class="form-control" inputmode="decimal" aria-describedby="coordinate-hint" @input="updateCoordinate('lon', $event)" />
             </div>
+            <div id="coordinate-hint" class="col-12 form-text">{{ $gettext('Decimal commas are automatically converted to decimal points.') }}</div>
             <div class="col-12">
               <label class="form-label" for="addition">{{ $gettext('Addition') }}</label>
               <input id="addition" v-model="form.addition" class="form-control" maxlength="255" />
