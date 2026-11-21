@@ -22,9 +22,23 @@ async function loadAbout(languageCode) {
   try {
     const response = await fetch(`/home/about.${languageCode}.md`)
     if (!response.ok) throw new Error(`HTTP ${response.status}`)
+
     const markdown = await response.text()
     const html = await marked.parse(markdown)
-    if (request === loadRequest) aboutHtml.value = DOMPurify.sanitize(html)
+
+    const cleanHtml = DOMPurify.sanitize(html)
+
+    const doc = new DOMParser().parseFromString(cleanHtml, 'text/html')
+
+    doc.querySelectorAll('a[href]').forEach(link => {
+      link.setAttribute('target', '_blank')
+      link.setAttribute('rel', 'noopener noreferrer')
+    })
+
+    if (request === loadRequest) {
+      aboutHtml.value = doc.body.innerHTML
+    }
+
   } catch {
     if (request === loadRequest) error.value = true
   } finally {
